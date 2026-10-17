@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FAF6F0;
+  --background: #F7F2E7;
   --foreground: #1C1917;
+  --ink-border: #3F372E;
+  --ink-hairline: #C7B9A3;
+  --cinnabar: #9E2A2B;
   --font-geist-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-geist-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
@@ -12,14 +15,15 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-serif: "Songti SC", "STSong", "Noto Serif SC", Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-serif: "Songti SC", "STSong", "Noto Serif SC", "PMingLiU", Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #121316;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #131311;
+  --foreground: #E7E2D8;
+  --ink-border: #78716C;
+  --ink-hairline: #292524;
+  --cinnabar: #C83E31;
 }
 
 body {
@@ -27,3 +31,47 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans);
 }
+
+/* Classical Song/Ming Woodblock Double-Ruled Folio Frame (乌丝栏) */
+.woodblock-frame {
+  border: 2px solid var(--ink-border);
+  outline: 1px solid var(--ink-hairline);
+  outline-offset: -5px;
+}
+
+/* Vertical Chinese Typography (直排古籍版心) */
+.vertical-rl {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 0.16em;
+}
+
+/* Carved Cinnabar Seal Stamp (朱文/白文印章) */
+.seal-stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #9E2A2B;
+  color: #9E2A2B;
+  background-color: rgba(158, 42, 43, 0.06);
+  font-family: "STKaiti", "Kaiti SC", "Songti SC", Georgia, serif;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  box-shadow: inset 0 0 0 1px rgba(158, 42, 43, 0.25);
+}
+
+.seal-stamp-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #9E2A2B;
+  background-color: #9E2A2B;
+  color: #FAF6F0;
+  font-family: "STKaiti", "Kaiti SC", "Songti SC", Georgia, serif;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  box-shadow: inset 0 0 0 1.5px #FAF6F0;
+}
+

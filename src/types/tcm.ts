@@ -141,6 +141,14 @@ export interface MeridianChannel {
   pathwaySummaryZh: string;
   svgPathAnterior?: string;
   svgPathPosterior?: string;
+  svgInternalPath?: string;
+  channelNodes?: {
+    code: string;
+    zh: string;
+    x: number;
+    y: number;
+    view: 'anterior' | 'posterior';
+  }[];
   points3D: [number, number, number][];
 }
 
