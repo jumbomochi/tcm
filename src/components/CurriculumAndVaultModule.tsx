@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { LanguageMode } from '@/types/tcm';
 import { CURRICULUM_CHAPTERS, CURATED_VIDEOS } from '@/data/curriculumAndMediaData';
-import { renderProse, VermilionSeal } from './BilingualUi';
+import { renderProse, VermilionSeal, LabMetadataChips } from './BilingualUi';
 import {
   CheckCircle2,
   Circle,
@@ -213,25 +213,25 @@ export default function CurriculumAndVaultModule({
   };
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-8">
       {/* SECTION 1: GUIDED 5-CHAPTER CURRICULUM & SELF-CHECK QUIZ */}
-      <section className="woodblock-frame bg-[#FAF6F0] dark:bg-stone-950">
-        <div className="px-6 py-4 border-b-2 border-stone-800/80 dark:border-stone-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#F3ECE1] dark:bg-stone-900">
+      <section className="skills-surface overflow-hidden">
+        <div className="skills-lab-header px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <VermilionSeal text="杏林传习" variant="solid" />
+            <VermilionSeal text="Path 05 · 杏林传习" variant="solid" />
             <div>
-              <span className="text-[11px] font-mono uppercase tracking-widest text-stone-500 dark:text-stone-400">
-                VOLUME V.1 · FIVE-CHAPTER CLASSICAL STUDY CURRICULUM
-              </span>
-              <h2 className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100">
-                循序渐进五章导学 · Guided TCM Mastery Curriculum ({completedChapters.length}/{CURRICULUM_CHAPTERS.length})
+              <h2 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
+                循序渐进五章导学 · Guided TCM Mastery Curriculum ({completedChapters.length}/{CURRICULUM_CHAPTERS.length} Completed)
               </h2>
+              <p className="text-xs text-stone-600 dark:text-stone-400">
+                Complete each learning module and pass the mastery check to earn your TCM Skill Path milestones
+              </p>
             </div>
           </div>
 
-          <div className="w-full sm:w-48 bg-stone-300 dark:bg-stone-800 h-2 overflow-hidden border border-stone-800/40">
+          <div className="w-full sm:w-52 bg-stone-200 dark:bg-stone-800 h-2.5 rounded-full overflow-hidden">
             <div
-              className="bg-[#2D6A4F] h-full transition-all duration-300"
+              className="bg-[#2D6A4F] h-full rounded-full transition-all duration-300"
               style={{
                 width: `${(completedChapters.length / CURRICULUM_CHAPTERS.length) * 100}%`
               }}
@@ -239,8 +239,8 @@ export default function CurriculumAndVaultModule({
           </div>
         </div>
 
-        {/* Chapter Stepper Tabular Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-5 border-b-2 border-stone-800/60 dark:border-stone-700 divide-y md:divide-y-0 md:divide-x divide-stone-300 dark:divide-stone-800 bg-[#F7F1E6]/50 dark:bg-stone-900/50">
+        {/* Chapter Stepper Cards */}
+        <div className="px-6 py-4 bg-white/45 dark:bg-stone-900/45 border-b border-stone-200/70 dark:border-stone-800 grid grid-cols-1 md:grid-cols-5 gap-3">
           {CURRICULUM_CHAPTERS.map((ch) => {
             const isDone = completedChapters.includes(ch.id);
             const isSelected = ch.id === selectedChapterId;
@@ -251,14 +251,14 @@ export default function CurriculumAndVaultModule({
                   setSelectedChapterId(ch.id);
                   setSelectedQuizAnswer(null);
                 }}
-                className={`p-4 text-left transition flex flex-col justify-between ${
+                className={`p-4 rounded-[20px] text-left border transition flex flex-col justify-between ${
                   isSelected
-                    ? 'bg-[#FAF6F0] dark:bg-stone-950 border-b-2 border-b-[#B91C1C]'
-                    : 'hover:bg-stone-200/50 dark:hover:bg-stone-800/50'
+                    ? 'bg-white dark:bg-stone-800 border-2 border-[#B91C1C] dark:border-amber-400 shadow-sm'
+                    : 'bg-white/75 dark:bg-stone-800/50 border-stone-200/80 dark:border-stone-700 hover:bg-white'
                 }`}
               >
                 <div className="flex items-center justify-between text-xs font-mono text-amber-800 dark:text-amber-400 mb-1">
-                  <span>卷五·第{ch.chapterNumber}章</span>
+                  <span>MODULE 0{ch.chapterNumber}</span>
                   {isDone ? (
                     <CheckCircle2 className="w-4 h-4 text-[#2D6A4F] dark:text-emerald-400" />
                   ) : (
@@ -279,26 +279,34 @@ export default function CurriculumAndVaultModule({
         </div>
 
         {/* Active Chapter Details + Interactive Quiz Spread */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x-2 divide-stone-800/20 dark:divide-stone-800">
+        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-stone-200/80 dark:divide-stone-800">
           <div className="lg:col-span-7 p-6 sm:p-8 space-y-5">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-300 dark:border-stone-800 pb-4">
-              <h3 className="text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
-                {activeChapter.title.zh}
-                {lang !== 'zh' && (
-                  <span className="block text-sm font-sans font-normal text-stone-600 dark:text-stone-300 mt-0.5">
-                    {activeChapter.title.en}
-                  </span>
-                )}
-              </h3>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <LabMetadataChips
+                  chips={[
+                    { label: `Module 0${activeChapter.chapterNumber}`, tone: 'cinnabar' },
+                    { label: 'Guided Reading + Interactive Lab', tone: 'amber' }
+                  ]}
+                />
+                <h3 className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-2">
+                  {activeChapter.title.zh}
+                  {lang !== 'zh' && (
+                    <span className="block text-sm font-sans font-normal text-stone-600 dark:text-stone-300 mt-0.5">
+                      {activeChapter.title.en}
+                    </span>
+                  )}
+                </h3>
+              </div>
               <button
                 onClick={() => onToggleChapterComplete(activeChapter.id)}
-                className={`px-3.5 py-1.5 text-xs font-serif font-bold flex items-center gap-1.5 transition border ${
+                className={`px-4 py-2 rounded-full text-xs font-medium flex items-center gap-1.5 transition border ${
                   completedChapters.includes(activeChapter.id)
-                    ? 'bg-[#2D6A4F] text-white border-[#2D6A4F]'
-                    : 'border-stone-800/40 dark:border-stone-700 text-stone-800 dark:text-stone-200 hover:bg-[#2D6A4F] hover:text-white'
+                    ? 'bg-[#2D6A4F] text-white border-[#2D6A4F] shadow-2xs'
+                    : 'bg-white/85 dark:bg-stone-800 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 hover:bg-[#2D6A4F] hover:text-white'
                 }`}
               >
-                <CheckCircle2 className="w-3.5 h-3.5" />
+                <CheckCircle2 className="w-4 h-4" />
                 <span>
                   {completedChapters.includes(activeChapter.id)
                     ? '已修毕 · Completed'
@@ -316,9 +324,9 @@ export default function CurriculumAndVaultModule({
                   Core Classical Takeaways
                 </span>
               </div>
-              <div className="divide-y divide-stone-300 dark:divide-stone-800 border-y border-stone-300 dark:border-stone-800">
+              <div className="space-y-2.5">
                 {activeChapter.keyTakeaways.map((tk) => (
-                  <div key={tk.zh} className="py-3">
+                  <div key={tk.zh} className="skills-card p-4">
                     <div className="font-serif font-bold text-sm text-stone-900 dark:text-stone-100">
                       {tk.zh}{' '}
                       <span className="text-xs font-mono font-normal text-amber-800 dark:text-amber-400">
@@ -338,91 +346,93 @@ export default function CurriculumAndVaultModule({
             <div className="pt-2">
               <button
                 onClick={() => onNavigateModule(activeChapter.targetModule)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#B91C1C] text-amber-50 text-xs font-serif font-bold hover:bg-red-900 transition"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#B91C1C] text-white text-xs font-semibold hover:bg-red-900 transition shadow-sm"
               >
-                <span>进入第 {activeChapter.chapterNumber} 章交互图谱 · Open Interactive Folio</span>
+                <span>Launch Interactive Lab for Module 0{activeChapter.chapterNumber}</span>
                 <ArrowUpRight className="w-4 h-4" />
               </button>
             </div>
           </div>
 
-          {/* Right Page: Chapter Quiz Box */}
-          <div className="lg:col-span-5 p-6 sm:p-8 bg-[#F7F1E6]/40 dark:bg-stone-900/30 space-y-5">
-            <div className="flex items-center gap-2 border-b border-stone-300 dark:border-stone-800 pb-3">
-              <VermilionSeal text="随堂考校" variant="solid" />
-              <span className="text-xs font-serif font-bold uppercase tracking-wider text-stone-800 dark:text-amber-300">
-                Chapter Mastery Check (随堂辨证问答)
-              </span>
-            </div>
-
-            {renderProse(
-              lang,
-              activeChapter.quizQuestion.questionEn,
-              activeChapter.quizQuestion.questionZh
-            )}
-
-            <div className="divide-y divide-stone-300 dark:divide-stone-800 border border-stone-400/70 dark:border-stone-700">
-              {activeChapter.quizQuestion.options.map((opt, idx) => {
-                const isSelected = selectedQuizAnswer === idx;
-                const isCorrect = idx === activeChapter.quizQuestion.correctIndex;
-                let btnStyle =
-                  'bg-[#FAF6F0] dark:bg-stone-950 text-stone-800 dark:text-stone-200 hover:bg-stone-200/50';
-                if (selectedQuizAnswer !== null) {
-                  if (isCorrect) {
-                    btnStyle =
-                      'bg-emerald-950/15 dark:bg-emerald-950/50 text-[#2D6A4F] dark:text-emerald-200 font-bold border-l-4 border-l-[#2D6A4F]';
-                  } else if (isSelected) {
-                    btnStyle =
-                      'bg-red-950/15 dark:bg-red-950/50 text-[#B91C1C] dark:text-red-200 border-l-4 border-l-[#B91C1C]';
-                  }
-                }
-                return (
-                  <button
-                    key={opt.zh}
-                    onClick={() => setSelectedQuizAnswer(idx)}
-                    className={`w-full p-3 text-left text-xs transition ${btnStyle}`}
-                  >
-                    <div className="font-serif font-bold text-sm">{opt.zh}</div>
-                    {lang !== 'zh' && <div className="opacity-85 mt-0.5">{opt.en}</div>}
-                  </button>
-                );
-              })}
-            </div>
-
-            {selectedQuizAnswer !== null && (
-              <div className="border-l-2 border-amber-700 pl-3.5 text-xs space-y-1">
-                <div className="font-serif font-bold text-amber-900 dark:text-amber-300">
-                  {selectedQuizAnswer === activeChapter.quizQuestion.correctIndex
-                    ? '✓ 考校通过 · Correct'
-                    : '✗ 医理详析 · Review Explanation:'}
-                </div>
-                {renderProse(
-                  lang,
-                  activeChapter.quizQuestion.explanationEn,
-                  activeChapter.quizQuestion.explanationZh
-                )}
+          {/* Right Page: Chapter Quiz Card */}
+          <div className="lg:col-span-5 p-6 sm:p-8 bg-[#FAF6F0]/45 dark:bg-stone-950/45">
+            <div className="skills-card p-6 space-y-4">
+              <div className="flex items-center gap-2">
+                <VermilionSeal text="随堂考校" variant="solid" />
+                <span className="text-xs font-serif font-bold uppercase tracking-wider text-stone-800 dark:text-amber-300">
+                  Module Mastery Check
+                </span>
               </div>
-            )}
+
+              {renderProse(
+                lang,
+                activeChapter.quizQuestion.questionEn,
+                activeChapter.quizQuestion.questionZh
+              )}
+
+              <div className="space-y-2">
+                {activeChapter.quizQuestion.options.map((opt, idx) => {
+                  const isSelected = selectedQuizAnswer === idx;
+                  const isCorrect = idx === activeChapter.quizQuestion.correctIndex;
+                  let btnStyle =
+                    'bg-white/85 dark:bg-stone-900 border-stone-200/80 dark:border-stone-700 text-stone-800 dark:text-stone-200 hover:bg-white';
+                  if (selectedQuizAnswer !== null) {
+                    if (isCorrect) {
+                      btnStyle =
+                        'bg-emerald-950/10 dark:bg-emerald-950/50 border-[#2D6A4F] text-[#2D6A4F] dark:text-emerald-200 font-bold';
+                    } else if (isSelected) {
+                      btnStyle =
+                        'bg-red-950/10 dark:bg-red-950/50 border-[#B91C1C] text-[#B91C1C] dark:text-red-200';
+                    }
+                  }
+                  return (
+                    <button
+                      key={opt.zh}
+                      onClick={() => setSelectedQuizAnswer(idx)}
+                      className={`w-full p-3.5 rounded-2xl border text-left text-xs transition ${btnStyle}`}
+                    >
+                      <div className="font-serif font-bold text-sm">{opt.zh}</div>
+                      {lang !== 'zh' && <div className="opacity-85 mt-0.5">{opt.en}</div>}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {selectedQuizAnswer !== null && (
+                <div className="p-4 rounded-2xl bg-amber-900/8 dark:bg-amber-950/40 border border-amber-800/20 text-xs space-y-1">
+                  <div className="font-serif font-bold text-amber-900 dark:text-amber-300">
+                    {selectedQuizAnswer === activeChapter.quizQuestion.correctIndex
+                      ? '✓ 考校通过 · Correct'
+                      : '✗ 医理详析 · Review Explanation:'}
+                  </div>
+                  {renderProse(
+                    lang,
+                    activeChapter.quizQuestion.explanationEn,
+                    activeChapter.quizQuestion.explanationZh
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
 
       {/* SECTION 2: INTERACTIVE CONCEPT KNOWLEDGE GRAPH */}
-      <section className="woodblock-frame bg-[#FAF6F0] dark:bg-stone-950">
-        <div className="px-6 py-4 border-b-2 border-stone-800/80 dark:border-stone-700 flex items-center gap-3 bg-[#F3ECE1] dark:bg-stone-900">
-          <VermilionSeal text="理法方穴" />
+      <section className="skills-surface overflow-hidden">
+        <div className="skills-lab-header px-6 py-4 flex items-center gap-3">
+          <VermilionSeal text="理法方穴" variant="solid" />
           <div>
-            <span className="text-[11px] font-mono uppercase tracking-widest text-stone-500 dark:text-stone-400">
-              VOLUME V.2 · THEORY → PATTERN → ACUPOINT & FORMULA NETWORK
-            </span>
-            <h3 className="text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
-              中医理法方穴贯通图谱 · Interactive Systems Knowledge Graph
+            <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
+              中医理法方穴贯通图谱 · Interactive Theory → Pattern → Acupoint & Formula Network
             </h3>
+            <p className="text-xs text-stone-600 dark:text-stone-400">
+              Click any node in the graph to inspect how Zang-Fu physiology connects to clinical patterns, acupoints, and herbal formulas
+            </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x-2 divide-stone-800/20 dark:divide-stone-800 items-center">
-          <div className="lg:col-span-8 p-4 overflow-x-auto bg-[#F7F1E6]/40 dark:bg-stone-900/30">
+        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-stone-200/80 dark:divide-stone-800 items-center">
+          <div className="lg:col-span-8 p-6 overflow-x-auto bg-[#FAF6F0]/45 dark:bg-stone-950/45">
             <svg viewBox="0 0 720 410" className="w-full min-w-[540px] h-auto select-none">
               {/* Edges */}
               {KNOWLEDGE_GRAPH_EDGES.map(([fromId, toId, label]) => {
@@ -439,7 +449,7 @@ export default function CurriculumAndVaultModule({
                       y1={from.y}
                       x2={to.x}
                       y2={to.y}
-                      stroke={active ? '#B91C1C' : '#A8A29E'}
+                      stroke={active ? '#B91C1C' : '#C4B5A3'}
                       strokeWidth={active ? 2.5 : 1.5}
                     />
                     <rect
@@ -447,8 +457,9 @@ export default function CurriculumAndVaultModule({
                       y={my - 9}
                       width="84"
                       height="16"
+                      rx="8"
                       fill="#FAF6F0"
-                      stroke="#78716C"
+                      stroke="#D6C7B2"
                       strokeWidth="0.8"
                     />
                     <text
@@ -478,7 +489,8 @@ export default function CurriculumAndVaultModule({
                       y={node.y - 26}
                       width="156"
                       height="52"
-                      fill={isSelected ? node.color : '#FAF6F0'}
+                      rx="16"
+                      fill={isSelected ? node.color : '#FFFFFF'}
                       stroke={node.color}
                       strokeWidth={isSelected ? 3 : 2}
                     />
@@ -506,78 +518,80 @@ export default function CurriculumAndVaultModule({
             </svg>
           </div>
 
-          <div className="lg:col-span-4 p-6 sm:p-8 space-y-4">
-            <span
-              className="inline-block px-2.5 py-0.5 text-xs font-mono text-white"
-              style={{ backgroundColor: activeGraphNode.color }}
-            >
-              {activeGraphNode.category} Node
-            </span>
-            <h4 className="text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
-              {activeGraphNode.labelZh}
-              <span className="block text-sm font-sans font-normal text-stone-600 dark:text-stone-300">
-                {activeGraphNode.labelEn}
+          <div className="lg:col-span-4 p-6 sm:p-8">
+            <div className="skills-card p-6 space-y-4">
+              <span
+                className="inline-block px-3 py-0.5 rounded-full text-xs font-mono text-white"
+                style={{ backgroundColor: activeGraphNode.color }}
+              >
+                {activeGraphNode.category} Node
               </span>
-            </h4>
-            {renderProse(lang, activeGraphNode.summaryEn, activeGraphNode.summaryZh)}
-            <button
-              onClick={() => onNavigateModule(activeGraphNode.targetModule)}
-              className="w-full mt-2 py-2.5 px-3 bg-stone-900 dark:bg-amber-700 text-amber-50 text-xs font-serif font-bold hover:bg-[#B91C1C] transition flex items-center justify-center gap-1.5"
-            >
-              <span>跳转至对应图卷 · Jump to {activeGraphNode.category} Folio</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </button>
+              <h4 className="text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
+                {activeGraphNode.labelZh}
+                <span className="block text-sm font-sans font-normal text-stone-600 dark:text-stone-300">
+                  {activeGraphNode.labelEn}
+                </span>
+              </h4>
+              {renderProse(lang, activeGraphNode.summaryEn, activeGraphNode.summaryZh)}
+              <button
+                onClick={() => onNavigateModule(activeGraphNode.targetModule)}
+                className="w-full mt-2 py-2.5 px-4 rounded-full bg-stone-900 dark:bg-amber-700 text-amber-50 text-xs font-semibold hover:bg-[#B91C1C] transition flex items-center justify-center gap-1.5"
+              >
+                <span>Jump to {activeGraphNode.category} Interactive Lab</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
       {/* SECTION 3: RICH MEDIA LECTURE VAULT & PERSONAL STUDY NOTES */}
-      <section className="woodblock-frame bg-[#FAF6F0] dark:bg-stone-950">
-        <div className="px-6 py-4 border-b-2 border-stone-800/80 dark:border-stone-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#F3ECE1] dark:bg-stone-900">
+      <section className="skills-surface overflow-hidden">
+        <div className="skills-lab-header px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <VermilionSeal text="名师讲堂" variant="solid" />
             <div>
-              <span className="text-[11px] font-mono uppercase tracking-widest text-stone-500 dark:text-stone-400">
-                VOLUME V.3 · VERIFIED UNIVERSITY LECTURES & PERSONAL STUDY VAULT
-              </span>
-              <h3 className="text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
+              <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
                 名师公开课与读书医案札记 · University Video Theater & Study Notes
               </h3>
+              <p className="text-xs text-stone-600 dark:text-stone-400">
+                8 Verified University Courses (BUCM, CDUTCM, TUTCM, FJUTCM, Stanford, CMU) · In-App Player & Personal Study Vault
+              </p>
             </div>
           </div>
 
-          {/* Topic Filter Strip */}
-          <div className="inline-flex flex-wrap border border-stone-800/40 dark:border-stone-700 divide-x divide-stone-800/30 bg-[#FAF6F0] dark:bg-stone-950">
+          {/* Topic Filter Pills */}
+          <div className="flex flex-wrap gap-1.5">
             {['ALL', 'Foundations', 'Meridians', 'Diagnostics', 'Materia Medica', 'Formulas'].map(
               (tag) => (
                 <button
                   key={tag}
                   onClick={() => setVideoFilter(tag)}
-                  className={`px-2.5 py-1.5 text-[11px] font-serif font-bold transition ${
+                  className={`px-3 py-1 rounded-full text-xs font-medium transition border ${
                     videoFilter === tag
-                      ? 'bg-[#B91C1C] text-amber-50'
-                      : 'text-stone-700 dark:text-stone-300 hover:bg-stone-200/60'
+                      ? 'bg-[#B91C1C] text-white border-[#B91C1C] shadow-2xs'
+                      : 'bg-white/85 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-300/70 dark:border-stone-700 hover:bg-stone-100'
                   }`}
                 >
-                  {tag === 'ALL' ? '全部 (8)' : tag}
+                  {tag === 'ALL' ? 'All Courses (8)' : tag}
                 </button>
               )
             )}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x-2 divide-stone-800/20 dark:divide-stone-800">
+        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-stone-200/80 dark:divide-stone-800">
           {/* Left Page: Curated Bilingual Video Lectures */}
           <div className="lg:col-span-7 p-6 sm:p-8 space-y-6">
             {/* Embedded Interactive Video Theater */}
-            <div className="border-2 border-stone-800 dark:border-stone-700 bg-stone-950">
-              <div className="px-4 py-2.5 bg-stone-900 text-stone-100 flex flex-wrap items-center justify-between gap-2 border-b border-stone-800">
+            <div className="rounded-[24px] overflow-hidden border border-stone-300 dark:border-stone-700 bg-stone-950 shadow-md">
+              <div className="px-4 py-3 bg-stone-900 text-stone-100 flex flex-wrap items-center justify-between gap-2 border-b border-stone-800">
                 <div className="flex items-center gap-2 min-w-0">
                   <Tv className="w-4 h-4 text-amber-400 shrink-0" />
                   <span className="text-xs font-serif font-bold truncate">
                     正在播放: {activeVideo.titleZh}
                   </span>
-                  <span className="px-2 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-mono shrink-0">
+                  <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono shrink-0">
                     {activeVideo.platform} · {activeVideo.videoId}
                   </span>
                 </div>
@@ -605,7 +619,7 @@ export default function CurriculumAndVaultModule({
               </div>
 
               {/* Active Lecture Metadata & Multi-Episode Switcher for Bilibili University Courses */}
-              <div className="p-4 bg-[#FAF6F0] dark:bg-stone-900 border-t border-stone-300 dark:border-stone-800 space-y-3">
+              <div className="p-4 bg-[#FAF6F0] dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 space-y-3">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
                     <div className="text-xs font-mono text-amber-800 dark:text-amber-400">
@@ -624,7 +638,7 @@ export default function CurriculumAndVaultModule({
                     href={activeDirectUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="px-3 py-1.5 bg-[#B91C1C] text-amber-50 text-xs font-serif font-bold hover:bg-red-900 transition inline-flex items-center gap-1.5 shrink-0"
+                    className="px-3.5 py-1.5 rounded-full bg-[#B91C1C] text-white text-xs font-semibold hover:bg-red-900 transition inline-flex items-center gap-1.5 shrink-0"
                   >
                     <span>Watch on {activeVideo.platform}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -632,7 +646,7 @@ export default function CurriculumAndVaultModule({
                 </div>
 
                 {activeVideo.platform === 'Bilibili' && (
-                  <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-stone-300 dark:border-stone-800">
+                  <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-stone-200 dark:border-stone-800">
                     <span className="text-[11px] font-mono text-stone-500 mr-1">
                       分集选播 ({activeVideo.episodesCount || activeVideo.duration}):
                     </span>
@@ -640,10 +654,10 @@ export default function CurriculumAndVaultModule({
                       <button
                         key={ep}
                         onClick={() => setBilibiliPage(ep)}
-                        className={`px-2 py-0.5 text-[11px] font-mono border transition ${
+                        className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono transition ${
                           bilibiliPage === ep
-                            ? 'bg-[#B91C1C] text-white border-[#B91C1C] font-bold'
-                            : 'bg-stone-100 dark:bg-stone-800 border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-200'
+                            ? 'bg-[#B91C1C] text-white font-bold'
+                            : 'bg-stone-200/80 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-300'
                         }`}
                       >
                         P{ep}
@@ -654,17 +668,17 @@ export default function CurriculumAndVaultModule({
               </div>
             </div>
 
-            {/* Curated Video Collection Ledger */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 border-t border-l border-stone-400/70 dark:border-stone-700">
+            {/* Curated Video Collection Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {filteredVideos.map((vid) => {
                 const isPlaying = vid.id === activeVideo.id;
                 return (
                   <div
                     key={vid.id}
-                    className={`border-r border-b border-stone-400/70 dark:border-stone-700 transition flex flex-col justify-between ${
+                    className={`rounded-[20px] overflow-hidden border transition flex flex-col justify-between ${
                       isPlaying
-                        ? 'bg-[#F3ECE1] dark:bg-stone-800/90'
-                        : 'bg-[#FAF6F0] dark:bg-stone-900/50 hover:bg-stone-200/40'
+                        ? 'border-2 border-[#B91C1C] dark:border-amber-400 bg-white dark:bg-stone-800 shadow-sm'
+                        : 'border-stone-200/80 dark:border-stone-700 bg-white/80 dark:bg-stone-800/60 hover:shadow-md'
                     }`}
                   >
                     <div>
@@ -673,35 +687,35 @@ export default function CurriculumAndVaultModule({
                           setActiveVideoId(vid.id);
                           setBilibiliPage(1);
                         }}
-                        className="relative h-28 bg-stone-900 cursor-pointer group border-b border-stone-300 dark:border-stone-800"
+                        className="relative h-32 bg-stone-900 cursor-pointer group"
                       >
                         {vid.thumbnailIllustration && (
                           <img
                             src={vid.thumbnailIllustration}
                             alt={vid.titleEn}
-                            className="w-full h-full object-cover opacity-75 group-hover:opacity-60 transition"
+                            className="w-full h-full object-cover opacity-80 group-hover:opacity-65 transition"
                           />
                         )}
                         <div className="absolute inset-0 flex items-center justify-center">
                           <span
-                            className={`px-3 py-1 text-xs font-serif font-bold flex items-center gap-1.5 border transition ${
+                            className={`px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-md transition ${
                               isPlaying
-                                ? 'bg-[#2D6A4F] text-white border-emerald-400'
-                                : 'bg-stone-950/85 text-amber-100 border-amber-500/40 group-hover:bg-[#B91C1C] group-hover:text-white'
+                                ? 'bg-[#2D6A4F] text-white'
+                                : 'bg-stone-950/80 text-amber-100 group-hover:bg-[#B91C1C] group-hover:text-white'
                             }`}
                           >
-                            <Play className="w-3 h-3 fill-current" />
-                            <span>{isPlaying ? '正在播放 · Playing' : '堂内播放 · Play'}</span>
+                            <Play className="w-3.5 h-3.5 fill-current" />
+                            <span>{isPlaying ? 'Playing in Theater' : 'Play Course'}</span>
                           </span>
                         </div>
-                        <span className="absolute top-2 left-2 px-1.5 py-0.5 bg-stone-950/85 text-amber-200 text-[10px] font-mono">
+                        <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/80 text-amber-200 text-[10px] font-mono">
                           {vid.topicTag}
                         </span>
-                        <span className="absolute bottom-2 right-2 px-1.5 py-0.5 bg-[#B91C1C] text-white text-[10px] font-mono">
+                        <span className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-[#B91C1C] text-white text-[10px] font-mono">
                           {vid.platform} · {vid.videoId}
                         </span>
                       </div>
-                      <div className="p-3.5 space-y-1">
+                      <div className="p-4 space-y-1.5">
                         <div className="text-[10px] font-mono text-amber-800 dark:text-amber-400">
                           {vid.institution}
                         </div>
@@ -718,16 +732,16 @@ export default function CurriculumAndVaultModule({
                         </p>
                       </div>
                     </div>
-                    <div className="px-3.5 py-2 flex items-center justify-between gap-2 border-t border-stone-300/70 dark:border-stone-800 text-xs">
+                    <div className="px-4 py-2.5 flex items-center justify-between gap-2 border-t border-stone-200/70 dark:border-stone-700/70 text-xs">
                       <button
                         onClick={() => {
                           setActiveVideoId(vid.id);
                           setBilibiliPage(1);
                         }}
-                        className="inline-flex items-center gap-1 font-serif font-bold text-[#2D6A4F] dark:text-emerald-400 hover:underline"
+                        className="inline-flex items-center gap-1 font-semibold text-[#2D6A4F] dark:text-emerald-400 hover:underline"
                       >
                         <Play className="w-3 h-3 fill-current" />
-                        <span>{isPlaying ? '当前播放' : '载入播放器'}</span>
+                        <span>{isPlaying ? 'Active in Player' : 'Load in Player'}</span>
                       </button>
                       <a
                         href={vid.watchUrl}
@@ -746,28 +760,28 @@ export default function CurriculumAndVaultModule({
           </div>
 
           {/* Right Page: Personal Bookmarks & Study Notes Vault */}
-          <div className="lg:col-span-5 p-6 sm:p-8 bg-[#F7F1E6]/40 dark:bg-stone-900/30 space-y-8">
+          <div className="lg:col-span-5 p-6 sm:p-8 bg-[#FAF6F0]/45 dark:bg-stone-950/45 space-y-6">
             {/* Saved Bookmarks */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between border-b border-stone-300 dark:border-stone-800 pb-2.5">
+            <div className="skills-card p-5 space-y-3">
+              <div className="flex items-center justify-between border-b border-stone-200/80 dark:border-stone-700 pb-2.5">
                 <div className="flex items-center gap-2">
-                  <VermilionSeal text="藏书阁" />
+                  <VermilionSeal text="收藏夹" />
                   <h3 className="font-serif font-bold text-base text-stone-900 dark:text-stone-100">
-                    收藏夹 · Saved Bookmarks ({bookmarks.length})
+                    Saved Bookmarks ({bookmarks.length})
                   </h3>
                 </div>
               </div>
 
               {bookmarks.length === 0 ? (
-                <p className="text-xs text-stone-500 italic font-serif">
-                  尚未收藏条目。点击各卷之「藏卷 / 藏穴 / 藏药」即可收入此处。
+                <p className="text-xs text-stone-500 italic">
+                  No bookmarked items yet. Click &ldquo;Save&rdquo; or &ldquo;Bookmark&rdquo; on any Element, Acupoint, Pattern, or Herb to save it here.
                 </p>
               ) : (
-                <div className="divide-y divide-stone-300 dark:divide-stone-800 border-y border-stone-300 dark:border-stone-800 max-h-48 overflow-y-auto">
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
                   {bookmarks.map((bm) => (
                     <div
                       key={bm.id}
-                      className="flex items-center justify-between py-2.5 px-2 text-xs"
+                      className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-white/85 dark:bg-stone-900 border border-stone-200/80 dark:border-stone-700 text-xs"
                     >
                       <div>
                         <span className="font-serif font-bold text-stone-900 dark:text-stone-100">
@@ -790,7 +804,7 @@ export default function CurriculumAndVaultModule({
             </div>
 
             {/* Study Notes Journal */}
-            <div className="space-y-4 pt-4 border-t-2 border-stone-800/30 dark:border-stone-800">
+            <div className="skills-card p-5 space-y-4">
               <div className="flex items-center gap-2">
                 <VermilionSeal text="医案札记" variant="solid" />
                 <h3 className="font-serif font-bold text-base text-stone-900 dark:text-stone-100">
@@ -803,30 +817,30 @@ export default function CurriculumAndVaultModule({
                   type="text"
                   value={noteTitle}
                   onChange={(e) => setNoteTitle(e.target.value)}
-                  placeholder="札记标题 Note title (e.g., 逍遥散 vs 柴胡疏肝散)..."
-                  className="w-full border border-stone-400 dark:border-stone-700 bg-[#FAF6F0] dark:bg-stone-900 px-3 py-2 text-xs font-serif"
+                  placeholder="Note title (e.g., 逍遥散 vs 柴胡疏肝散)..."
+                  className="w-full rounded-2xl border border-stone-300 dark:border-stone-700 bg-white/85 dark:bg-stone-900 px-3.5 py-2 text-xs"
                 />
                 <textarea
                   rows={3}
                   value={noteContent}
                   onChange={(e) => setNoteContent(e.target.value)}
-                  placeholder="记录双语心得、配穴体悟或经典条文..."
-                  className="w-full border border-stone-400 dark:border-stone-700 bg-[#FAF6F0] dark:bg-stone-900 px-3 py-2 text-xs font-serif"
+                  placeholder="Write bilingual reflections, acupoint combinations, or classical quotes..."
+                  className="w-full rounded-2xl border border-stone-300 dark:border-stone-700 bg-white/85 dark:bg-stone-900 px-3.5 py-2 text-xs"
                 />
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-stone-900 dark:bg-amber-700 text-amber-50 text-xs font-serif font-bold hover:bg-[#B91C1C] transition"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-stone-900 dark:bg-amber-700 text-amber-50 text-xs font-semibold hover:bg-[#B91C1C] transition"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>录入札记 · Save Note to Vault</span>
+                  <span>Save Note to Vault</span>
                 </button>
               </form>
 
-              <div className="divide-y divide-stone-300 dark:divide-stone-800 border-t border-stone-300 dark:border-stone-800 max-h-60 overflow-y-auto">
+              <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
                 {notes.map((n) => (
                   <div
                     key={n.id}
-                    className="py-3 space-y-1 text-xs"
+                    className="p-3.5 rounded-2xl bg-white/85 dark:bg-stone-900 border border-stone-200/80 dark:border-stone-700 space-y-1 text-xs"
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-serif font-bold text-stone-900 dark:text-stone-100">
@@ -839,7 +853,7 @@ export default function CurriculumAndVaultModule({
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
-                    <p className="text-stone-700 dark:text-stone-300 whitespace-pre-wrap font-serif">
+                    <p className="text-stone-700 dark:text-stone-300 whitespace-pre-wrap">
                       {n.content}
                     </p>
                     <div className="text-[10px] font-mono text-stone-400">{n.createdAt}</div>

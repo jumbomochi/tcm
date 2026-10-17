@@ -22,9 +22,9 @@ import {
   Search,
   Moon,
   Sun,
-  Languages,
   Bookmark,
   Sparkles,
+  Award,
   X
 } from 'lucide-react';
 
@@ -236,214 +236,267 @@ export default function HomePage() {
 
   const navItems: {
     id: ActiveTab;
-    volZh: string;
+    trackBadge: string;
     labelZh: string;
     labelEn: string;
+    meta: string;
+    icon: React.ReactNode;
   }[] = [
     {
       id: 'foundations',
-      volZh: '卷一',
-      labelZh: '阴阳藏象 · 子午流注',
-      labelEn: 'I. Foundations & Qi Clock'
+      trackBadge: 'Path 01 · 卷一',
+      labelZh: '阴阳五行与藏象',
+      labelEn: 'Foundations & Qi Clock',
+      meta: '3 Interactive Labs · 20m',
+      icon: <Compass className="w-4 h-4" />
     },
     {
       id: 'meridians',
-      volZh: '卷二',
-      labelZh: '经络铜人 · 骨度取穴',
-      labelEn: 'II. 2D/3D Meridian & Acupoint Atlas'
+      trackBadge: 'Path 02 · 卷二',
+      labelZh: '3D 铜人经络与骨度取穴',
+      labelEn: '2D/3D Meridians Lab',
+      meta: '3D Bronze Statue · 25m',
+      icon: <Sparkles className="w-4 h-4" />
     },
     {
       id: 'diagnostics',
-      volZh: '卷三',
-      labelZh: '四诊合参 · 舌脉辨证',
-      labelEn: 'III. Tongue, Pulse & Pattern Sandbox'
+      trackBadge: 'Path 03 · 卷三',
+      labelZh: '四诊八纲辨证沙盒',
+      labelEn: 'Diagnostics & Case Lab',
+      meta: 'Clinical Sandbox · 20m',
+      icon: <Stethoscope className="w-4 h-4" />
     },
     {
       id: 'materia-medica',
-      volZh: '卷四',
-      labelZh: '本草饮片 · 君臣佐使',
-      labelEn: 'IV. Materia Medica & Formula Architecture'
+      trackBadge: 'Path 04 · 卷四',
+      labelZh: '本草饮片与君臣佐使',
+      labelEn: 'Materia Medica & Formulas',
+      meta: 'Pharmacopeia Lab · 20m',
+      icon: <Leaf className="w-4 h-4" />
     },
     {
       id: 'media-vault',
-      volZh: '卷五',
-      labelZh: '五章导学 · 名师讲堂',
-      labelEn: 'V. Curriculum, Graph & Lecture Theater'
+      trackBadge: 'Path 05 · 卷五',
+      labelZh: '五章导学与名师讲堂',
+      labelEn: 'Curriculum & Video Labs',
+      meta: '8 University Courses',
+      icon: <GraduationCap className="w-4 h-4" />
     }
   ];
 
   return (
     <div className={darkMode ? 'dark' : ''}>
-      <div className="min-h-screen bg-[#F7F2E7] dark:bg-[#131311] text-stone-900 dark:text-stone-100 transition-colors">
-        {/* Top Classical Woodblock Compendium Masthead */}
-        <header className="sticky top-0 z-40 backdrop-blur-md bg-[#F7F2E7]/95 dark:bg-[#131311]/95 border-b-2 border-stone-800 dark:border-stone-700">
-          <div className="border-b border-stone-400/60 dark:border-stone-800">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
-              {/* Brand Identity with Carved Vermilion Seal (朱文印章) */}
-              <div className="flex items-center gap-3.5">
-                <div className="seal-stamp-solid px-2 py-1.5 text-xs flex flex-col items-center justify-center leading-tight select-none">
-                  <span>内经</span>
-                  <span>图考</span>
-                </div>
-                <div className="border-l border-stone-400 dark:border-stone-700 pl-3.5">
-                  <div className="flex items-baseline gap-2.5">
-                    <h1 className="text-xl sm:text-2xl font-serif font-bold tracking-wider text-stone-950 dark:text-amber-100">
-                      本草与经络
-                    </h1>
-                    <span className="text-xs font-mono uppercase tracking-widest text-[#9E2A2B] dark:text-amber-400">
-                      THE NEIJING SCHOLAR
-                    </span>
-                  </div>
-                  <p className="text-[11px] font-serif text-stone-600 dark:text-stone-400">
-                    中英对照传统医学图谱 · Bilingual Classical Chinese Medicine Atlas & Interactive Compendium
-                  </p>
-                </div>
+      <div className="relative min-h-screen text-stone-900 dark:text-stone-100 transition-colors selection:bg-amber-900/20">
+        {/* Full-Page Fixed Classical Ink-Wash Landscape Background (山水云雾宣纸) */}
+        <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+          <img
+            src="/images/shanshui_bg.jpg"
+            alt=""
+            className="w-full h-full object-cover object-center scale-[1.02] opacity-85 dark:opacity-25 dark:invert transition-opacity duration-500"
+          />
+          {/* Atmospheric Veil so translucent frosted cards pop with crisp legibility */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F0]/55 via-[#FAF6F0]/72 to-[#F5EFE6]/82 dark:from-[#121110]/82 dark:via-[#141311]/88 dark:to-[#121110]/94" />
+        </div>
+
+        {/* Google Skills-Style Floating Frosted Top App Bar */}
+        <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#FAF6F0]/78 dark:bg-[#141311]/82 border-b border-stone-300/60 dark:border-stone-800/80">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+            {/* Brand Identity */}
+            <div className="flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#B91C1C] to-[#881313] text-[#FAF6F0] font-serif font-bold text-xs flex flex-col items-center justify-center leading-tight shadow-sm select-none">
+                <span>本草</span>
+                <span>经络</span>
               </div>
-
-              {/* Global Search + Language Mode + Dark Mode */}
-              <div className="flex flex-wrap items-center gap-2.5">
-                {/* Global Search Input */}
-                <div className="relative">
-                  <Search className="w-3.5 h-3.5 text-stone-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="检索 肝, ST36, 逍遥散, Qi..."
-                    className="pl-8 pr-7 py-1 border border-stone-500 dark:border-stone-600 bg-[#FAF6F0] dark:bg-stone-900 text-xs w-44 sm:w-60 font-serif focus:outline-none focus:border-[#9E2A2B]"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery('')}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-800"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-
-                  {/* Instant Search Dropdown */}
-                  {searchResults.length > 0 && (
-                    <div className="absolute right-0 mt-1 w-80 sm:w-96 bg-[#FAF6F0] dark:bg-stone-900 border-2 border-stone-800 dark:border-stone-600 shadow-xl divide-y divide-stone-300 dark:divide-stone-800 z-50">
-                      {searchResults.map((res, i) => (
-                        <button
-                          key={i}
-                          onClick={() => {
-                            setActiveTab(res.tab);
-                            setSearchQuery('');
-                          }}
-                          className="w-full text-left px-3.5 py-2.5 hover:bg-[#EFE6D5] dark:hover:bg-stone-800 transition flex items-start justify-between gap-2"
-                        >
-                          <div>
-                            <div className="font-serif font-bold text-xs text-stone-900 dark:text-stone-100">
-                              {res.title}
-                            </div>
-                            <div className="text-[11px] text-stone-600 dark:text-stone-400 line-clamp-1">
-                              {res.subtitle}
-                            </div>
-                          </div>
-                          <span className="seal-stamp px-1.5 py-0.5 text-[10px] shrink-0">
-                            {res.category}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-lg sm:text-xl font-serif font-bold tracking-wide text-stone-950 dark:text-amber-50">
+                    本草与经络 · The Neijing Scholar
+                  </h1>
+                  <span className="hidden md:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-900/10 dark:bg-amber-400/15 text-amber-900 dark:text-amber-300 text-[11px] font-medium">
+                    Interactive Learning & Lab Suite
+                  </span>
                 </div>
-
-                {/* Bilingual Language Switcher */}
-                <div className="inline-flex border border-stone-600 dark:border-stone-600 divide-x divide-stone-600 text-xs font-serif">
-                  {(
-                    [
-                      { id: 'dual', label: '双语对照' },
-                      { id: 'en', label: 'EN' },
-                      { id: 'zh', label: '純中文' }
-                    ] as const
-                  ).map((mode) => (
-                    <button
-                      key={mode.id}
-                      onClick={() => setLang(mode.id)}
-                      className={`px-2.5 py-1 transition ${
-                        lang === mode.id
-                          ? 'bg-[#9E2A2B] text-[#FAF6F0] font-bold'
-                          : 'bg-[#FAF6F0] dark:bg-stone-900 text-stone-800 dark:text-stone-300 hover:bg-stone-200/70 dark:hover:bg-stone-800'
-                      }`}
-                    >
-                      {mode.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Bookmark Count Quick Jump */}
-                <button
-                  onClick={() => setActiveTab('media-vault')}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 border border-stone-600 bg-[#FAF6F0] dark:bg-stone-900 text-xs font-serif hover:bg-[#EFE6D5] dark:hover:bg-stone-800 transition"
-                  title="藏书笺 · View Saved Bookmarks & Notes"
-                >
-                  <Bookmark className="w-3.5 h-3.5 text-[#9E2A2B]" />
-                  <span>书签 ({bookmarks.length})</span>
-                </button>
-
-                {/* Theme Mode Toggle */}
-                <button
-                  onClick={() => setDarkMode(!darkMode)}
-                  className="px-2 py-1 border border-stone-600 bg-[#FAF6F0] dark:bg-stone-900 text-stone-800 dark:text-amber-300 hover:bg-[#EFE6D5] dark:hover:bg-stone-800 transition text-xs font-serif flex items-center gap-1"
-                  aria-label="Toggle Rice-Paper Light / Inkstone Dark Mode"
-                >
-                  {darkMode ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-                  <span className="hidden sm:inline">{darkMode ? '宣纸昼读' : '端砚夜读'}</span>
-                </button>
+                <p className="text-xs text-stone-600 dark:text-stone-400">
+                  中英双语传统医学交互实训平台 · Guided Paths, 3D Meridians & Clinical Sandboxes
+                </p>
               </div>
             </div>
-          </div>
 
-          {/* Classical Five-Volume Folio Index Bar (五卷目录) */}
-          <nav className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 sm:grid-cols-5 divide-x divide-y sm:divide-y-0 divide-stone-400/70 dark:divide-stone-800 border-x border-stone-400/70 dark:border-stone-800">
+            {/* Right Controls: Learning Progress Pill + Search + Language + Bookmarks + Theme */}
+            <div className="flex flex-wrap items-center gap-2.5">
+              {/* Google Skills-Style Skill Badge / Progress Pill */}
+              <button
+                onClick={() => setActiveTab('media-vault')}
+                className="hidden xl:inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/85 dark:bg-stone-900/90 border border-stone-300/70 dark:border-stone-700/80 shadow-2xs hover:border-amber-700/50 transition text-xs"
+                title="View Guided Curriculum Progress"
+              >
+                <Award className="w-4 h-4 text-amber-700 dark:text-amber-400" />
+                <span className="font-medium text-stone-700 dark:text-stone-300">
+                  Skill Path: <strong>{completedChapters.length}/5</strong>
+                </span>
+                <div className="w-16 h-1.5 rounded-full bg-stone-200 dark:bg-stone-800 overflow-hidden">
+                  <div
+                    className="h-full bg-[#2D6A4F] rounded-full transition-all duration-300"
+                    style={{ width: `${(completedChapters.length / 5) * 100}%` }}
+                  />
+                </div>
+              </button>
+
+              {/* Rounded Pill Search Input */}
+              <div className="relative">
+                <Search className="w-3.5 h-3.5 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search 肝, ST36, 逍遥散, Qi..."
+                  className="pl-9 pr-8 py-1.5 rounded-full border border-stone-300/80 dark:border-stone-700 bg-white/85 dark:bg-stone-900/90 text-xs w-44 sm:w-60 focus:outline-none focus:ring-2 focus:ring-amber-700/30 transition"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+
+                {/* Instant Search Dropdown */}
+                {searchResults.length > 0 && (
+                  <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-[24px] bg-white/95 dark:bg-stone-900/95 backdrop-blur-xl border border-stone-200 dark:border-stone-700 shadow-2xl divide-y divide-stone-200/70 dark:divide-stone-800 overflow-hidden z-50">
+                    {searchResults.map((res, i) => (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          setActiveTab(res.tab);
+                          setSearchQuery('');
+                        }}
+                        className="w-full text-left px-4 py-3 hover:bg-amber-900/6 dark:hover:bg-stone-800 transition flex items-start justify-between gap-2"
+                      >
+                        <div>
+                          <div className="font-serif font-bold text-xs text-stone-900 dark:text-stone-100">
+                            {res.title}
+                          </div>
+                          <div className="text-[11px] text-stone-500 dark:text-stone-400 line-clamp-1 mt-0.5">
+                            {res.subtitle}
+                          </div>
+                        </div>
+                        <span className="seal-stamp text-[10px] shrink-0">
+                          {res.category}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Material 3 Segmented Pill Language Switcher */}
+              <div className="inline-flex p-0.5 rounded-full bg-stone-200/75 dark:bg-stone-800/90 border border-stone-300/60 dark:border-stone-700 text-xs">
+                {(
+                  [
+                    { id: 'dual', label: '双语 Bilingual' },
+                    { id: 'en', label: 'EN' },
+                    { id: 'zh', label: '中文' }
+                  ] as const
+                ).map((mode) => (
+                  <button
+                    key={mode.id}
+                    onClick={() => setLang(mode.id)}
+                    className={`px-3 py-1 rounded-full font-medium transition ${
+                      lang === mode.id
+                        ? 'bg-[#B91C1C] text-white shadow-2xs'
+                        : 'text-stone-700 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white'
+                    }`}
+                  >
+                    {mode.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Bookmark Pill */}
+              <button
+                onClick={() => setActiveTab('media-vault')}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/85 dark:bg-stone-900/90 border border-stone-300/70 dark:border-stone-700 text-xs font-medium hover:bg-stone-100 dark:hover:bg-stone-800 transition"
+                title="Saved Bookmarks & Study Notes"
+              >
+                <Bookmark className="w-3.5 h-3.5 text-[#B91C1C] dark:text-amber-400" />
+                <span>Saved ({bookmarks.length})</span>
+              </button>
+
+              {/* Theme Mode Toggle Pill */}
+              <button
+                onClick={() => setDarkMode(!darkMode)}
+                className="p-2 rounded-full bg-white/85 dark:bg-stone-900/90 border border-stone-300/70 dark:border-stone-700 text-stone-700 dark:text-amber-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition"
+                aria-label="Toggle Light / Dark Mode"
+                title={darkMode ? 'Switch to Rice-Paper Light Mode' : 'Switch to Inkstone Dark Mode'}
+              >
+                {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Google Skills Learning Path Track Selector Bar */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+          <nav className="skills-surface p-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
             {navItems.map((item) => {
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`px-3.5 py-2.5 text-left transition relative group ${
+                  className={`px-4 py-3 rounded-[22px] text-left transition-all flex flex-col justify-between gap-1.5 ${
                     isActive
-                      ? 'bg-[#231F1C] text-[#FAF6F0] dark:bg-amber-950/70 dark:text-amber-100'
-                      : 'bg-transparent text-stone-800 dark:text-stone-300 hover:bg-[#EDE3CE]/70 dark:hover:bg-stone-900'
+                      ? 'bg-gradient-to-br from-[#231F1C] to-[#362F2A] text-[#FAF6F0] dark:from-amber-900/80 dark:to-stone-900 shadow-md'
+                      : 'bg-transparent text-stone-800 dark:text-stone-300 hover:bg-stone-900/5 dark:hover:bg-stone-800/60'
                   }`}
                 >
-                  {isActive && (
-                    <span className="absolute top-0 left-0 right-0 h-[3px] bg-[#9E2A2B]" />
-                  )}
-                  <div className="flex items-center justify-between gap-1">
+                  <div className="flex items-center justify-between gap-2">
                     <span
-                      className={`text-[10px] font-serif tracking-widest px-1.5 py-0.2 border ${
+                      className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full ${
                         isActive
-                          ? 'border-[#9E2A2B] bg-[#9E2A2B] text-white'
-                          : 'border-stone-500 text-stone-600 dark:text-stone-400'
+                          ? 'bg-[#B91C1C] text-white font-semibold'
+                          : 'bg-amber-900/10 dark:bg-stone-800 text-amber-900 dark:text-amber-300'
                       }`}
                     >
-                      {item.volZh}
+                      {item.trackBadge}
                     </span>
-                    <span className="text-[10px] font-mono opacity-65">❖</span>
+                    <span className={isActive ? 'text-amber-300' : 'text-stone-500'}>
+                      {item.icon}
+                    </span>
                   </div>
-                  <div className="font-serif font-bold text-xs sm:text-sm mt-1 tracking-wide">
-                    {item.labelZh}
-                  </div>
-                  {lang !== 'zh' && (
-                    <div
-                      className={`text-[11px] truncate ${
-                        isActive ? 'text-amber-200/90' : 'text-stone-500 dark:text-stone-400'
-                      }`}
-                    >
-                      {item.labelEn}
+
+                  <div>
+                    <div className="font-serif font-bold text-sm leading-snug">
+                      {item.labelZh}
                     </div>
-                  )}
+                    {lang !== 'zh' && (
+                      <div
+                        className={`text-xs truncate ${
+                          isActive ? 'text-amber-100/90' : 'text-stone-600 dark:text-stone-400'
+                        }`}
+                      >
+                        {item.labelEn}
+                      </div>
+                    )}
+                  </div>
+
+                  <div
+                    className={`text-[10px] font-mono pt-1 border-t ${
+                      isActive
+                        ? 'border-white/15 text-amber-200/80'
+                        : 'border-stone-300/50 dark:border-stone-800 text-stone-500'
+                    }`}
+                  >
+                    {item.meta}
+                  </div>
                 </button>
               );
             })}
           </nav>
-        </header>
+        </div>
 
-        {/* Main Content Container */}
+        {/* Main Content Workspace */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           {activeTab === 'foundations' && (
             <FoundationsModule
@@ -492,17 +545,17 @@ export default function HomePage() {
           )}
         </main>
 
-        {/* Classical Woodblock Colophon Footer (牌记 / 跋尾) */}
-        <footer className="border-t-2 border-stone-800 dark:border-stone-700 mt-16 py-8 px-4 sm:px-6 text-xs text-stone-600 dark:text-stone-400 bg-[#EFE8D8]/60 dark:bg-stone-950">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 font-serif">
+        {/* Airy Footer */}
+        <footer className="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-4">
+          <div className="skills-surface px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-600 dark:text-stone-400">
             <div className="flex items-center gap-3">
-              <span className="seal-stamp px-2 py-0.5 text-[11px]">杏林书斋</span>
+              <span className="seal-stamp">杏林实训</span>
               <span>
-                <strong>《本草与经络 · The Neijing Scholar》</strong> — 传统中医学理法方穴交互图谱
+                <strong>《本草与经络 · The Neijing Scholar》</strong> — Interactive Traditional Chinese Medicine Learning & Lab Platform
               </span>
             </div>
-            <div>
-              据《黄帝内经》《针灸甲乙经》《伤寒杂病论》《神农本草经》编纂考订 · For Classical Scholarship & Educational Study
+            <div className="font-serif">
+              据《黄帝内经》《针灸甲乙经》《伤寒杂病论》《神农本草经》考订 · Educational & Scholarly Reference
             </div>
           </div>
         </footer>
