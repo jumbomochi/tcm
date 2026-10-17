@@ -15,15 +15,10 @@ import { KEY_ACUPOINTS } from '@/data/meridiansData';
 import { DIAGNOSTIC_CASES } from '@/data/diagnosticsData';
 import { ESSENTIAL_HERBS, CLASSIC_FORMULAS } from '@/data/materiaMedicaData';
 import {
-  Compass,
-  Stethoscope,
-  Leaf,
-  GraduationCap,
   Search,
   Moon,
   Sun,
   Bookmark,
-  Sparkles,
   Award,
   X
 } from 'lucide-react';
@@ -236,51 +231,39 @@ export default function HomePage() {
 
   const navItems: {
     id: ActiveTab;
-    trackBadge: string;
+    num: string;
     labelZh: string;
     labelEn: string;
-    meta: string;
-    icon: React.ReactNode;
   }[] = [
     {
       id: 'foundations',
-      trackBadge: 'Path 01 · 卷一',
+      num: '01',
       labelZh: '阴阳五行与藏象',
-      labelEn: 'Foundations & Qi Clock',
-      meta: '3 Interactive Labs · 20m',
-      icon: <Compass className="w-4 h-4" />
+      labelEn: 'Foundations & Qi Clock'
     },
     {
       id: 'meridians',
-      trackBadge: 'Path 02 · 卷二',
-      labelZh: '3D 铜人经络与骨度取穴',
-      labelEn: '2D/3D Meridians Lab',
-      meta: '3D Bronze Statue · 25m',
-      icon: <Sparkles className="w-4 h-4" />
+      num: '02',
+      labelZh: '经络铜人与骨度取穴',
+      labelEn: '2D/3D Meridians Lab'
     },
     {
       id: 'diagnostics',
-      trackBadge: 'Path 03 · 卷三',
+      num: '03',
       labelZh: '四诊八纲辨证沙盒',
-      labelEn: 'Diagnostics & Case Lab',
-      meta: 'Clinical Sandbox · 20m',
-      icon: <Stethoscope className="w-4 h-4" />
+      labelEn: 'Diagnostics & Case Lab'
     },
     {
       id: 'materia-medica',
-      trackBadge: 'Path 04 · 卷四',
+      num: '04',
       labelZh: '本草饮片与君臣佐使',
-      labelEn: 'Materia Medica & Formulas',
-      meta: 'Pharmacopeia Lab · 20m',
-      icon: <Leaf className="w-4 h-4" />
+      labelEn: 'Materia Medica & Formulas'
     },
     {
       id: 'media-vault',
-      trackBadge: 'Path 05 · 卷五',
+      num: '05',
       labelZh: '五章导学与名师讲堂',
-      labelEn: 'Curriculum & Video Labs',
-      meta: '8 University Courses',
-      icon: <GraduationCap className="w-4 h-4" />
+      labelEn: 'Curriculum & Video Lectures'
     }
   ];
 
@@ -292,70 +275,61 @@ export default function HomePage() {
           <img
             src="/images/shanshui_bg.jpg"
             alt=""
-            className="w-full h-full object-cover object-center scale-[1.02] opacity-85 dark:opacity-25 dark:invert transition-opacity duration-500"
+            className="w-full h-full object-cover object-center opacity-85 dark:opacity-22 dark:invert transition-opacity duration-500"
           />
-          {/* Atmospheric Veil so translucent frosted cards pop with crisp legibility */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F0]/55 via-[#FAF6F0]/72 to-[#F5EFE6]/82 dark:from-[#121110]/82 dark:via-[#141311]/88 dark:to-[#121110]/94" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F0]/55 via-[#FAF6F0]/75 to-[#F5EFE6]/85 dark:from-[#121110]/85 dark:via-[#141311]/90 dark:to-[#121110]/95" />
         </div>
 
-        {/* Google Skills-Style Floating Frosted Top App Bar */}
-        <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#FAF6F0]/78 dark:bg-[#141311]/82 border-b border-stone-300/60 dark:border-stone-800/80">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+        {/* Minimalist Top Bar + Integrated Underline Tab Strip (Zero Box-Grid Clutter) */}
+        <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FAF6F0]/82 dark:bg-[#141311]/85 border-b border-stone-300/70 dark:border-stone-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-3.5 pb-2 flex flex-wrap items-center justify-between gap-4">
             {/* Brand Identity */}
-            <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#B91C1C] to-[#881313] text-[#FAF6F0] font-serif font-bold text-xs flex flex-col items-center justify-center leading-tight shadow-sm select-none">
-                <span>本草</span>
-                <span>经络</span>
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-lg sm:text-xl font-serif font-bold tracking-wide text-stone-950 dark:text-amber-50">
-                    本草与经络 · The Neijing Scholar
-                  </h1>
-                  <span className="hidden md:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-900/10 dark:bg-amber-400/15 text-amber-900 dark:text-amber-300 text-[11px] font-medium">
-                    Interactive Learning & Lab Suite
-                  </span>
-                </div>
-                <p className="text-xs text-stone-600 dark:text-stone-400">
-                  中英双语传统医学交互实训平台 · Guided Paths, 3D Meridians & Clinical Sandboxes
-                </p>
+            <div className="flex items-center gap-3">
+              <span className="seal-stamp-solid text-xs">内经</span>
+              <div className="flex flex-wrap items-baseline gap-2.5">
+                <h1 className="text-lg sm:text-xl font-serif font-bold tracking-wide text-stone-950 dark:text-amber-50">
+                  本草与经络 · The Neijing Scholar
+                </h1>
+                <span className="hidden lg:inline text-xs font-mono text-stone-500 dark:text-stone-400">
+                  TCM Interactive Learning & Lab Platform
+                </span>
               </div>
             </div>
 
-            {/* Right Controls: Learning Progress Pill + Search + Language + Bookmarks + Theme */}
-            <div className="flex flex-wrap items-center gap-2.5">
-              {/* Google Skills-Style Skill Badge / Progress Pill */}
+            {/* Right Controls: Progress + Search + Language + Bookmarks + Theme */}
+            <div className="flex flex-wrap items-center gap-4 text-xs">
+              {/* Minimalist Progress Indicator */}
               <button
                 onClick={() => setActiveTab('media-vault')}
-                className="hidden xl:inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/85 dark:bg-stone-900/90 border border-stone-300/70 dark:border-stone-700/80 shadow-2xs hover:border-amber-700/50 transition text-xs"
+                className="hidden xl:inline-flex items-center gap-2 text-stone-600 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white transition"
                 title="View Guided Curriculum Progress"
               >
-                <Award className="w-4 h-4 text-amber-700 dark:text-amber-400" />
-                <span className="font-medium text-stone-700 dark:text-stone-300">
-                  Skill Path: <strong>{completedChapters.length}/5</strong>
+                <Award className="w-3.5 h-3.5 text-[#2D6A4F] dark:text-emerald-400" />
+                <span className="font-mono">
+                  PATH <strong>{completedChapters.length}/5</strong>
                 </span>
-                <div className="w-16 h-1.5 rounded-full bg-stone-200 dark:bg-stone-800 overflow-hidden">
+                <div className="w-14 h-1 bg-stone-300 dark:bg-stone-800 overflow-hidden">
                   <div
-                    className="h-full bg-[#2D6A4F] rounded-full transition-all duration-300"
+                    className="h-full bg-[#2D6A4F] transition-all duration-300"
                     style={{ width: `${(completedChapters.length / 5) * 100}%` }}
                   />
                 </div>
               </button>
 
-              {/* Rounded Pill Search Input */}
+              {/* Minimal Underline Search Input */}
               <div className="relative">
-                <Search className="w-3.5 h-3.5 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-stone-500 absolute left-0 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search 肝, ST36, 逍遥散, Qi..."
-                  className="pl-9 pr-8 py-1.5 rounded-full border border-stone-300/80 dark:border-stone-700 bg-white/85 dark:bg-stone-900/90 text-xs w-44 sm:w-60 focus:outline-none focus:ring-2 focus:ring-amber-700/30 transition"
+                  placeholder="Search 肝, ST36, 逍遥散..."
+                  className="pl-5 pr-5 py-1 border-b border-stone-400 dark:border-stone-700 bg-transparent text-xs w-40 sm:w-52 focus:outline-none focus:border-[#B91C1C] transition"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -363,7 +337,7 @@ export default function HomePage() {
 
                 {/* Instant Search Dropdown */}
                 {searchResults.length > 0 && (
-                  <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-[24px] bg-white/95 dark:bg-stone-900/95 backdrop-blur-xl border border-stone-200 dark:border-stone-700 shadow-2xl divide-y divide-stone-200/70 dark:divide-stone-800 overflow-hidden z-50">
+                  <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#FAF6F0] dark:bg-stone-900 border border-stone-300 dark:border-stone-700 shadow-xl divide-y divide-stone-200 dark:divide-stone-800 z-50">
                     {searchResults.map((res, i) => (
                       <button
                         key={i}
@@ -371,7 +345,7 @@ export default function HomePage() {
                           setActiveTab(res.tab);
                           setSearchQuery('');
                         }}
-                        className="w-full text-left px-4 py-3 hover:bg-amber-900/6 dark:hover:bg-stone-800 transition flex items-start justify-between gap-2"
+                        className="w-full text-left px-4 py-2.5 hover:bg-amber-900/6 dark:hover:bg-stone-800 transition flex items-start justify-between gap-2"
                       >
                         <div>
                           <div className="font-serif font-bold text-xs text-stone-900 dark:text-stone-100">
@@ -381,7 +355,7 @@ export default function HomePage() {
                             {res.subtitle}
                           </div>
                         </div>
-                        <span className="seal-stamp text-[10px] shrink-0">
+                        <span className="text-[10px] font-mono text-[#B91C1C] dark:text-amber-400 shrink-0">
                           {res.category}
                         </span>
                       </button>
@@ -390,114 +364,87 @@ export default function HomePage() {
                 )}
               </div>
 
-              {/* Material 3 Segmented Pill Language Switcher */}
-              <div className="inline-flex p-0.5 rounded-full bg-stone-200/75 dark:bg-stone-800/90 border border-stone-300/60 dark:border-stone-700 text-xs">
+              {/* Clean Text Language Switcher */}
+              <div className="inline-flex items-center gap-2 font-mono">
                 {(
                   [
-                    { id: 'dual', label: '双语 Bilingual' },
+                    { id: 'dual', label: '双语' },
                     { id: 'en', label: 'EN' },
                     { id: 'zh', label: '中文' }
                   ] as const
-                ).map((mode) => (
-                  <button
-                    key={mode.id}
-                    onClick={() => setLang(mode.id)}
-                    className={`px-3 py-1 rounded-full font-medium transition ${
-                      lang === mode.id
-                        ? 'bg-[#B91C1C] text-white shadow-2xs'
-                        : 'text-stone-700 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white'
-                    }`}
-                  >
-                    {mode.label}
-                  </button>
+                ).map((mode, idx) => (
+                  <React.Fragment key={mode.id}>
+                    {idx > 0 && <span className="text-stone-300 dark:text-stone-700">/</span>}
+                    <button
+                      onClick={() => setLang(mode.id)}
+                      className={`pb-0.5 transition ${
+                        lang === mode.id
+                          ? 'text-[#B91C1C] dark:text-amber-400 font-bold border-b-2 border-[#B91C1C] dark:border-amber-400'
+                          : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                      }`}
+                    >
+                      {mode.label}
+                    </button>
+                  </React.Fragment>
                 ))}
               </div>
 
-              {/* Bookmark Pill */}
+              {/* Bookmark Link */}
               <button
                 onClick={() => setActiveTab('media-vault')}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/85 dark:bg-stone-900/90 border border-stone-300/70 dark:border-stone-700 text-xs font-medium hover:bg-stone-100 dark:hover:bg-stone-800 transition"
+                className="inline-flex items-center gap-1 text-stone-600 dark:text-stone-300 hover:text-[#B91C1C] transition"
                 title="Saved Bookmarks & Study Notes"
               >
                 <Bookmark className="w-3.5 h-3.5 text-[#B91C1C] dark:text-amber-400" />
-                <span>Saved ({bookmarks.length})</span>
+                <span className="font-mono">({bookmarks.length})</span>
               </button>
 
-              {/* Theme Mode Toggle Pill */}
+              {/* Theme Mode Toggle */}
               <button
                 onClick={() => setDarkMode(!darkMode)}
-                className="p-2 rounded-full bg-white/85 dark:bg-stone-900/90 border border-stone-300/70 dark:border-stone-700 text-stone-700 dark:text-amber-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition"
+                className="text-stone-600 dark:text-amber-300 hover:text-stone-950 transition"
                 aria-label="Toggle Light / Dark Mode"
-                title={darkMode ? 'Switch to Rice-Paper Light Mode' : 'Switch to Inkstone Dark Mode'}
               >
                 {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
             </div>
           </div>
-        </header>
 
-        {/* Google Skills Learning Path Track Selector Bar */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
-          <nav className="skills-surface p-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
+          {/* Single Clean Horizontal Underline Tab Bar (Google Skills Style) */}
+          <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-6 sm:gap-8 overflow-x-auto no-scrollbar">
             {navItems.map((item) => {
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`px-4 py-3 rounded-[22px] text-left transition-all flex flex-col justify-between gap-1.5 ${
+                  className={`py-2.5 text-left whitespace-nowrap border-b-2 transition-colors flex items-baseline gap-2 ${
                     isActive
-                      ? 'bg-gradient-to-br from-[#231F1C] to-[#362F2A] text-[#FAF6F0] dark:from-amber-900/80 dark:to-stone-900 shadow-md'
-                      : 'bg-transparent text-stone-800 dark:text-stone-300 hover:bg-stone-900/5 dark:hover:bg-stone-800/60'
+                      ? 'border-[#B91C1C] dark:border-amber-400 text-stone-950 dark:text-amber-50'
+                      : 'border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <span
-                      className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                        isActive
-                          ? 'bg-[#B91C1C] text-white font-semibold'
-                          : 'bg-amber-900/10 dark:bg-stone-800 text-amber-900 dark:text-amber-300'
-                      }`}
-                    >
-                      {item.trackBadge}
-                    </span>
-                    <span className={isActive ? 'text-amber-300' : 'text-stone-500'}>
-                      {item.icon}
-                    </span>
-                  </div>
-
-                  <div>
-                    <div className="font-serif font-bold text-sm leading-snug">
-                      {item.labelZh}
-                    </div>
-                    {lang !== 'zh' && (
-                      <div
-                        className={`text-xs truncate ${
-                          isActive ? 'text-amber-100/90' : 'text-stone-600 dark:text-stone-400'
-                        }`}
-                      >
-                        {item.labelEn}
-                      </div>
-                    )}
-                  </div>
-
-                  <div
-                    className={`text-[10px] font-mono pt-1 border-t ${
-                      isActive
-                        ? 'border-white/15 text-amber-200/80'
-                        : 'border-stone-300/50 dark:border-stone-800 text-stone-500'
+                  <span
+                    className={`text-[11px] font-mono ${
+                      isActive ? 'text-[#B91C1C] dark:text-amber-400 font-bold' : 'opacity-60'
                     }`}
                   >
-                    {item.meta}
-                  </div>
+                    {item.num}
+                  </span>
+                  <span className="font-serif font-bold text-sm">{item.labelZh}</span>
+                  {lang !== 'zh' && (
+                    <span className="text-xs font-sans hidden md:inline opacity-80">
+                      {item.labelEn}
+                    </span>
+                  )}
                 </button>
               );
             })}
           </nav>
-        </div>
+        </header>
 
-        {/* Main Content Workspace */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        {/* Main Open-Canvas Content Workspace */}
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
           {activeTab === 'foundations' && (
             <FoundationsModule
               lang={lang}
@@ -545,18 +492,16 @@ export default function HomePage() {
           )}
         </main>
 
-        {/* Airy Footer */}
-        <footer className="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-4">
-          <div className="skills-surface px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-600 dark:text-stone-400">
-            <div className="flex items-center gap-3">
-              <span className="seal-stamp">杏林实训</span>
-              <span>
-                <strong>《本草与经络 · The Neijing Scholar》</strong> — Interactive Traditional Chinese Medicine Learning & Lab Platform
-              </span>
-            </div>
-            <div className="font-serif">
-              据《黄帝内经》《针灸甲乙经》《伤寒杂病论》《神农本草经》考订 · Educational & Scholarly Reference
-            </div>
+        {/* Minimalist Hairline Footer */}
+        <footer className="max-w-7xl mx-auto px-4 sm:px-6 py-8 border-t border-stone-300/70 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500 dark:text-stone-400">
+          <div className="flex items-center gap-3">
+            <span className="seal-stamp">杏林实训</span>
+            <span>
+              <strong>《本草与经络 · The Neijing Scholar》</strong> — Interactive Traditional Chinese Medicine Learning & Lab Platform
+            </span>
+          </div>
+          <div className="font-serif">
+            据《黄帝内经》《针灸甲乙经》《伤寒杂病论》《神农本草经》考订
           </div>
         </footer>
       </div>

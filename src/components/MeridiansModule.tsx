@@ -11,7 +11,7 @@ import { Bookmark, BookmarkCheck } from 'lucide-react';
 const Meridian3DCanvas = dynamic(() => import('./Meridian3DCanvas'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-[580px] rounded-[22px] bg-stone-950 text-amber-200 border border-stone-800 flex items-center justify-center font-serif text-sm">
+    <div className="w-full h-[580px] canvas-stage bg-stone-950 text-amber-200 flex items-center justify-center font-serif text-sm">
       正在铸造三维天圣针灸铜人 · Casting 3D Tiansheng Bronze Acupuncture Statue...
     </div>
   )
@@ -35,12 +35,12 @@ function RegionalAcupointCloseUp({
   accentColor: string;
 }) {
   return (
-    <div className="rounded-[18px] bg-[#F5EFE4]/90 dark:bg-stone-950 border border-stone-300/70 dark:border-stone-800 p-3.5 shadow-2xs">
+    <div className="canvas-stage p-3.5">
       <div className="flex items-center justify-between border-b border-stone-300/60 dark:border-stone-800 pb-2 mb-2.5">
         <span className="text-xs font-serif font-bold text-stone-900 dark:text-amber-100">
           局部骨度与同身寸取穴图 · Regional Anatomical Landmark Plate
         </span>
-        <span className="px-2 py-0.5 rounded-full bg-red-900/10 text-[10px] font-mono font-semibold text-[#9E2A2B] dark:text-amber-400">
+        <span className="text-[10px] font-mono font-semibold text-[#9E2A2B] dark:text-amber-400">
           {code} ANATOMY
         </span>
       </div>
@@ -278,9 +278,9 @@ export default function MeridiansModule({
   };
 
   return (
-    <div className="space-y-8">
-      {/* Google Skills Track Overview Card */}
-      <div className="skills-surface p-6 sm:p-8">
+    <div className="space-y-14">
+      {/* Unboxed Editorial Track Overview Header */}
+      <header className="pb-10 border-b border-stone-300/80 dark:border-stone-800">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-7 space-y-4">
             <LabMetadataChips
@@ -291,10 +291,10 @@ export default function MeridiansModule({
                 { label: '25 min', tone: 'stone' }
               ]}
             />
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-950 dark:text-amber-50 leading-snug">
+            <h2 className="text-2xl sm:text-4xl font-serif font-bold text-stone-950 dark:text-amber-50 leading-tight">
               十二正经、奇经八脉与骨度同身寸实训室
               {lang !== 'zh' && (
-                <span className="block text-base sm:text-lg font-sans font-normal text-stone-600 dark:text-stone-300 mt-1">
+                <span className="block text-base sm:text-xl font-sans font-normal text-stone-600 dark:text-stone-300 mt-2">
                   Anatomical Surface Pathways, Internal Organ Branches & Proportional Cun Landmarks
                 </span>
               )}
@@ -307,39 +307,42 @@ export default function MeridiansModule({
           </div>
 
           <div className="lg:col-span-5">
-            <div className="relative rounded-[24px] overflow-hidden border border-stone-300/70 dark:border-stone-700 shadow-md aspect-video bg-stone-200 dark:bg-stone-950">
+            <div className="relative rounded-md overflow-hidden border border-stone-300/80 dark:border-stone-700 shadow-xs aspect-video bg-stone-200 dark:bg-stone-950">
               <img
                 src="/images/meridian_scroll.jpg"
                 alt="Classical Meridian Scroll"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-4 py-3 text-xs text-amber-100 font-serif flex justify-between items-center">
+              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-4 py-2.5 text-xs text-amber-100 font-serif flex justify-between items-center">
                 <span>《明堂经络铜人图》· Imperial Bronze Acupoint Scroll</span>
                 <VermilionSeal text="针灸甲乙" variant="solid" />
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Google Skills Split-Screen Interactive Lab Workspace */}
-      <section className="skills-surface overflow-hidden">
-        {/* Lab Workspace Top Toolbar */}
-        <div className="skills-lab-header px-6 py-4 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <VermilionSeal text="天圣铜人" variant="solid" />
-            <div>
-              <h3 className="font-serif font-bold text-lg text-stone-950 dark:text-amber-50">
-                十四经脉与三维天圣铜人实训台 · 14-Channel & 3D Tongren Interactive Lab
-              </h3>
-              <p className="text-xs text-stone-600 dark:text-stone-400">
-                Select any channel pill below to trace its external course (实线), internal organ branch (虚线), and key acupoints
-              </p>
+      {/* Open Split-Screen Interactive Lab Workspace */}
+      <section className="space-y-8">
+        {/* Lab Workspace Top Header */}
+        <div className="pb-4 border-b border-stone-300/80 dark:border-stone-800 flex flex-wrap items-end justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2.5">
+              <VermilionSeal text="天圣铜人" variant="solid" />
+              <span className="text-xs font-mono uppercase tracking-widest text-stone-500">
+                14-Channel & 3D Bronze Tongren Atlas
+              </span>
             </div>
+            <h3 className="font-serif font-bold text-xl sm:text-2xl text-stone-950 dark:text-amber-50">
+              十四经脉与三维天圣铜人实训台 · 14-Channel & 3D Tongren Interactive Lab
+            </h3>
+            <p className="text-xs text-stone-600 dark:text-stone-400">
+              Select any channel tab below to trace its external course (实线), internal organ branch (虚线), and key acupoints
+            </p>
           </div>
 
-          {/* Segmented Pill Viewport Mode Switcher */}
-          <div className="inline-flex p-1 rounded-full bg-white/80 dark:bg-stone-900 border border-stone-300/70 dark:border-stone-700 text-xs">
+          {/* Minimalist Underline Viewport Mode Switcher */}
+          <div className="flex items-center gap-4 border-b border-stone-300 dark:border-stone-700 text-xs">
             {(
               [
                 { id: 'both', label: '双图并列 · Dual 2D + 3D' },
@@ -350,10 +353,10 @@ export default function MeridiansModule({
               <button
                 key={m.id}
                 onClick={() => setViewerMode(m.id)}
-                className={`px-3.5 py-1.5 rounded-full font-medium transition ${
+                className={`pb-2 font-medium transition border-b-2 -mb-px ${
                   viewerMode === m.id
-                    ? 'bg-stone-900 text-amber-50 dark:bg-amber-600 dark:text-stone-950 shadow-2xs'
-                    : 'text-stone-700 dark:text-stone-300 hover:text-stone-950'
+                    ? 'border-[#B91C1C] text-[#B91C1C] dark:text-amber-400 font-bold'
+                    : 'border-transparent text-stone-500 hover:text-stone-900 dark:hover:text-stone-200'
                 }`}
               >
                 {m.label}
@@ -362,14 +365,14 @@ export default function MeridiansModule({
           </div>
         </div>
 
-        {/* Sleek Channel Filter Chip Bar */}
-        <div className="px-6 py-3.5 bg-white/50 dark:bg-stone-900/50 border-b border-stone-200/70 dark:border-stone-800 flex flex-wrap items-center gap-1.5">
+        {/* Clean Underline Channel Selector Bar */}
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-stone-300/80 dark:border-stone-800">
           <button
             onClick={() => handleSelectMeridian('ALL')}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-serif font-bold transition border ${
+            className={`pb-2.5 text-xs font-serif transition border-b-2 -mb-px ${
               selectedMeridianId === 'ALL'
-                ? 'bg-[#B91C1C] text-white border-[#B91C1C] shadow-2xs'
-                : 'bg-white/85 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-300/70 dark:border-stone-700 hover:bg-stone-100'
+                ? 'border-[#B91C1C] text-[#B91C1C] dark:text-amber-400 font-bold'
+                : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-950'
             }`}
           >
             全经总览 · All 14
@@ -382,16 +385,16 @@ export default function MeridiansModule({
               <button
                 key={ch.id}
                 onClick={() => handleSelectMeridian(ch.id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-serif font-bold transition flex items-center gap-1.5 border ${
+                className={`pb-2.5 text-xs font-serif transition flex items-center gap-1.5 border-b-2 -mb-px ${
                   active
-                    ? 'text-white shadow-2xs'
-                    : 'bg-white/85 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-300/70 dark:border-stone-700 hover:bg-stone-100'
+                    ? 'text-stone-950 dark:text-amber-50 font-bold'
+                    : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-950'
                 }`}
-                style={active ? { backgroundColor: elColor, borderColor: elColor } : undefined}
+                style={active ? { borderColor: elColor } : undefined}
               >
                 <span
                   className="w-2 h-2 rounded-full shrink-0"
-                  style={{ backgroundColor: active ? '#FFFFFF' : elColor }}
+                  style={{ backgroundColor: elColor }}
                 />
                 <span className="font-mono text-[11px]">{ch.id}</span>
                 <span>{ch.name.zh.replace(/手|足|奇经八脉|\(|\)/g, '')}</span>
@@ -400,17 +403,17 @@ export default function MeridiansModule({
           })}
         </div>
 
-        {/* Split-Screen Lab Body: Left Interactive 2D/3D Canvases + Right Guided Documentation Drawer */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 divide-y xl:divide-y-0 xl:divide-x divide-stone-200/80 dark:divide-stone-800">
+        {/* Split-Screen Lab Body: Left Interactive 2D/3D Canvases + Right Open Documentation Column */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 xl:divide-x divide-stone-300/70 dark:divide-stone-800 items-start">
           {/* LEFT PANE: 2D Anatomical & Bone-Cun Atlas + 3D Bronze Statue */}
-          <div className="xl:col-span-7 p-5 sm:p-6 space-y-5 bg-[#FAF6F0]/45 dark:bg-stone-950/45">
+          <div className="xl:col-span-7 space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
               {/* 2D Multi-Layer Anatomical & Bone-Cun SVG Plate */}
               {(viewerMode === 'both' || viewerMode === '2d') && (
                 <div
                   className={`${
                     viewerMode === '2d' ? 'md:col-span-2' : ''
-                  } rounded-[22px] overflow-hidden border border-stone-300/80 dark:border-stone-700 bg-[#FAF6F0] dark:bg-stone-950 flex flex-col justify-between h-[580px] shadow-sm`}
+                  } canvas-stage overflow-hidden flex flex-col justify-between h-[580px]`}
                 >
                   {/* Plate Header & Layer Toggles */}
                   <div className="px-3.5 py-2.5 border-b border-stone-300/70 dark:border-stone-800 bg-[#F3ECE1]/85 dark:bg-stone-900 flex flex-wrap items-center justify-between gap-2">
@@ -418,33 +421,33 @@ export default function MeridiansModule({
                       平面经络骨度图 ({svgViewSide === 'anterior' ? '正视图 Anterior' : '背视图 Posterior'})
                     </span>
 
-                    <div className="flex flex-wrap items-center gap-1 text-[11px]">
+                    <div className="flex flex-wrap items-center gap-3 text-[11px]">
                       <button
                         onClick={() => setSvgViewSide('anterior')}
-                        className={`px-2.5 py-1 rounded-full font-medium transition ${
+                        className={`pb-0.5 border-b transition ${
                           svgViewSide === 'anterior'
-                            ? 'bg-[#B91C1C] text-white font-semibold'
-                            : 'bg-white/80 dark:bg-stone-800 text-stone-700 dark:text-stone-300'
+                            ? 'border-[#B91C1C] text-[#B91C1C] font-bold'
+                            : 'border-transparent text-stone-600 dark:text-stone-400'
                         }`}
                       >
                         正面 Front
                       </button>
                       <button
                         onClick={() => setSvgViewSide('posterior')}
-                        className={`px-2.5 py-1 rounded-full font-medium transition ${
+                        className={`pb-0.5 border-b transition ${
                           svgViewSide === 'posterior'
-                            ? 'bg-[#B91C1C] text-white font-semibold'
-                            : 'bg-white/80 dark:bg-stone-800 text-stone-700 dark:text-stone-300'
+                            ? 'border-[#B91C1C] text-[#B91C1C] font-bold'
+                            : 'border-transparent text-stone-600 dark:text-stone-400'
                         }`}
                       >
                         背面 Back
                       </button>
                       <button
                         onClick={() => setShowCunRulers(!showCunRulers)}
-                        className={`px-2.5 py-1 rounded-full font-medium transition ${
+                        className={`pb-0.5 border-b transition ${
                           showCunRulers
-                            ? 'bg-stone-800 text-amber-100'
-                            : 'bg-white/80 dark:bg-stone-800 text-stone-600'
+                            ? 'border-stone-900 text-stone-950 dark:text-amber-200 font-bold'
+                            : 'border-transparent text-stone-500'
                         }`}
                         title="Toggle Proportional Bone-Cun Rulers (骨度分寸)"
                       >
@@ -452,10 +455,10 @@ export default function MeridiansModule({
                       </button>
                       <button
                         onClick={() => setShowInternalBranches(!showInternalBranches)}
-                        className={`px-2.5 py-1 rounded-full font-medium transition ${
+                        className={`pb-0.5 border-b transition ${
                           showInternalBranches
-                            ? 'bg-stone-800 text-amber-100'
-                            : 'bg-white/80 dark:bg-stone-800 text-stone-600'
+                            ? 'border-stone-900 text-stone-950 dark:text-amber-200 font-bold'
+                            : 'border-transparent text-stone-500'
                         }`}
                         title="Toggle Internal Organ Branches (体内络属支脉)"
                       >
@@ -727,15 +730,15 @@ export default function MeridiansModule({
                       <span>┈┈ 体内络属 Internal Organ Branch</span>
                       <span>● 核心要穴 Click Point</span>
                     </div>
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex flex-wrap gap-x-3 gap-y-1">
                       {KEY_ACUPOINTS.map((pt) => (
                         <button
                           key={pt.code}
                           onClick={() => handleSelectPoint(pt.code)}
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-mono transition border ${
+                          className={`pb-0.5 text-[10px] font-mono transition border-b ${
                             pt.code === selectedAcupointCode
-                              ? 'bg-[#B91C1C] text-white border-[#B91C1C] font-bold shadow-2xs'
-                              : 'bg-white/85 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700 hover:border-[#B91C1C]'
+                              ? 'border-[#B91C1C] text-[#B91C1C] font-bold'
+                              : 'border-transparent text-stone-700 dark:text-stone-300 hover:text-[#B91C1C]'
                           }`}
                         >
                           {pt.code} {pt.name.zh}
@@ -748,7 +751,7 @@ export default function MeridiansModule({
 
               {/* 3D Sculpted Bronze Statue Viewer */}
               {(viewerMode === 'both' || viewerMode === '3d') && (
-                <div className={`${viewerMode === '3d' ? 'md:col-span-2' : ''} rounded-[22px] overflow-hidden shadow-sm`}>
+                <div className={`${viewerMode === '3d' ? 'md:col-span-2' : ''} canvas-stage overflow-hidden`}>
                   <Meridian3DCanvas
                     meridians={MERIDIAN_CHANNELS}
                     acupoints={KEY_ACUPOINTS}
@@ -761,10 +764,10 @@ export default function MeridiansModule({
             </div>
           </div>
 
-          {/* RIGHT PANE: Google Skills Lab Guide & Acupoint Monograph */}
-          <div className="xl:col-span-5 p-6 sm:p-7 space-y-6">
-            {/* Part A: Active Meridian Channel Card */}
-            <div className="skills-card p-5 space-y-3">
+          {/* RIGHT PANE: Unboxed Meridian & Acupoint Monograph Column */}
+          <div className="xl:col-span-5 xl:pl-8 space-y-8 divide-y divide-stone-300/70 dark:divide-stone-800">
+            {/* Part A: Active Meridian Channel Section */}
+            <div className="space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <VermilionSeal text={activeChannel.polarity === 'Yin' ? '阴经' : '阳经'} />
@@ -783,7 +786,7 @@ export default function MeridiansModule({
                 )}
               </h4>
 
-              <div className="rounded-xl px-3.5 py-2 bg-white/75 dark:bg-stone-900/75 border border-stone-200/80 dark:border-stone-700 text-xs font-serif text-stone-800 dark:text-stone-200">
+              <div className="border-l-2 border-stone-500 pl-3 py-0.5 text-xs font-serif text-stone-800 dark:text-stone-200">
                 <strong>循行走向 (Trajectory): </strong>
                 {lang === 'zh' ? activeChannel.flowDirectionZh : activeChannel.flowDirectionEn}
               </div>
@@ -792,17 +795,17 @@ export default function MeridiansModule({
 
               {activeChannel.channelNodes && (
                 <div className="pt-1">
-                  <div className="text-[11px] font-mono uppercase tracking-wider text-stone-500 mb-1.5">
+                  <div className="text-[11px] font-mono uppercase tracking-wider text-stone-500 mb-1">
                     本经沿线标志要穴 · Channel Landmark Nodes:
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {activeChannel.channelNodes.map((n) => (
-                      <span
-                        key={n.code}
-                        className="px-2.5 py-0.5 rounded-full border border-stone-300/80 dark:border-stone-700 bg-white/80 dark:bg-stone-900 text-xs font-serif"
-                      >
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs font-serif">
+                    {activeChannel.channelNodes.map((n, idx) => (
+                      <span key={n.code} className="text-stone-800 dark:text-stone-200">
                         <strong className="font-mono text-[#B91C1C] dark:text-amber-400">{n.code}</strong>{' '}
                         {n.zh}
+                        {idx < activeChannel.channelNodes!.length - 1 && (
+                          <span className="ml-3 text-stone-300">·</span>
+                        )}
                       </span>
                     ))}
                   </div>
@@ -811,7 +814,7 @@ export default function MeridiansModule({
             </div>
 
             {/* Part B: Active Acupoint Monograph & Regional Anatomy Plate */}
-            <div className="skills-card p-5 space-y-4">
+            <div className="pt-6 space-y-5">
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
@@ -841,12 +844,12 @@ export default function MeridiansModule({
                       'Meridians & Acupoints'
                     )
                   }
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-stone-300 dark:border-stone-700 bg-white/85 dark:bg-stone-900 text-xs font-medium hover:bg-amber-50 transition"
+                  className="inline-flex items-center gap-1.5 pb-1 border-b border-stone-400 hover:border-[#B91C1C] text-xs font-medium text-stone-700 dark:text-stone-300 transition"
                 >
                   {bookmarks.includes(`acupoint-${activePoint.code}`) ? (
                     <>
                       <BookmarkCheck className="w-3.5 h-3.5 text-[#B91C1C]" />
-                      <span>Saved</span>
+                      <span className="text-[#B91C1C] font-bold">Saved</span>
                     </>
                   ) : (
                     <>
@@ -871,14 +874,14 @@ export default function MeridiansModule({
                   骨度标准定位与同身寸取穴法 · Anatomical Location & Cun Method
                 </div>
                 {renderProse(lang, activePoint.locationEn, activePoint.locationZh)}
-                <div className="rounded-xl text-xs font-serif text-stone-800 dark:text-stone-200 bg-white/75 dark:bg-stone-900/75 p-3 border border-stone-200/80 dark:border-stone-700">
+                <div className="text-xs font-serif text-stone-800 dark:text-stone-200 pt-1">
                   <strong>同身寸简便取穴 (Clinical Finger-Cun): </strong>
                   {lang === 'zh' ? activePoint.cunGuideZh : activePoint.cunGuideEn}
                 </div>
               </div>
 
               {/* Character Etymology */}
-              <div className="space-y-1.5 pt-2 border-t border-stone-200/80 dark:border-stone-700/80">
+              <div className="space-y-1.5 pt-3 border-t border-stone-300/60 dark:border-stone-800">
                 <div className="text-xs font-serif font-bold uppercase tracking-wider text-stone-600 dark:text-stone-400">
                   穴名考源 · Character Etymology
                 </div>
@@ -886,11 +889,11 @@ export default function MeridiansModule({
               </div>
 
               {/* Core Therapeutic Actions & Clinical Indications */}
-              <div className="space-y-2.5 pt-2 border-t border-stone-200/80 dark:border-stone-700/80">
+              <div className="space-y-2.5 pt-3 border-t border-stone-300/60 dark:border-stone-800">
                 <div className="text-xs font-serif font-bold uppercase tracking-wider text-stone-600 dark:text-stone-400">
                   功用与临床主治 · Therapeutic Actions & Indications
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-x-4 gap-y-2">
                   {activePoint.actions.map((act) => (
                     <TermBadge key={act.zh} term={act} lang={lang} size="sm" />
                   ))}

@@ -14,9 +14,7 @@ import {
   Clock,
   ArrowRight,
   Bookmark,
-  BookmarkCheck,
-  RefreshCw,
-  AlertTriangle
+  BookmarkCheck
 } from 'lucide-react';
 
 interface FoundationsModuleProps {
@@ -61,95 +59,89 @@ export default function FoundationsModule({
   const activeClock = QI_CLOCK_HOURS[selectedClockIdx] || QI_CLOCK_HOURS[0];
 
   return (
-    <div className="space-y-8">
-      {/* Google Skills Track Overview Card */}
-      <div className="skills-surface p-6 sm:p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-7 space-y-4">
-            <LabMetadataChips
-              chips={[
-                { label: 'Path 01 · 中医基础理论', tone: 'cinnabar' },
-                { label: '3 Interactive Labs', tone: 'amber' },
-                { label: 'Foundational Level', tone: 'jade' },
-                { label: '20 min', tone: 'stone' }
-              ]}
-            />
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 tracking-wide">
-              阴阳五行、藏象与子午流注实训
-              {lang !== 'zh' && (
-                <span className="block text-base sm:text-lg font-sans font-normal text-stone-600 dark:text-stone-400 mt-1">
-                  Yin-Yang, Five Elements, Zang-Fu Systems & The 24-Hour Qi Clock
-                </span>
-              )}
-            </h2>
-            {renderProse(
-              lang,
-              'Traditional Chinese Medicine views the human body as a microcosm of nature (天人合一). Rather than isolating anatomical parts, it tracks how Vital Substances (Qi 气, Blood 血, Jing 精, Fluids 津液) transform and circulate through five interconnected functional systems.',
-              '中医学以“天人相应”整体观为核心，不孤立看待局部解剖，而是通过阴阳消长、五行生克制化，洞察气、血、精、津液在五脏六腑与十二时辰中的动态流转。'
+    <div className="space-y-16">
+      {/* UNBOXED EDITORIAL HERO DIRECTLY ON CANVAS */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center pb-12 border-b border-stone-300/80 dark:border-stone-800">
+        <div className="lg:col-span-7 space-y-4">
+          <LabMetadataChips
+            chips={[
+              { label: 'Path 01 · 中医基础理论', tone: 'cinnabar' },
+              { label: '3 Interactive Labs', tone: 'amber' },
+              { label: 'Foundational Level', tone: 'jade' },
+              { label: '20 min', tone: 'stone' }
+            ]}
+          />
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-stone-950 dark:text-stone-100 tracking-wide leading-tight">
+            阴阳五行、藏象与子午流注
+            {lang !== 'zh' && (
+              <span className="block text-lg sm:text-xl font-sans font-normal text-stone-600 dark:text-stone-400 mt-1.5">
+                Yin-Yang, Five Elements, Zang-Fu Systems & The 24-Hour Qi Clock
+              </span>
             )}
-          </div>
+          </h2>
+          {renderProse(
+            lang,
+            'Traditional Chinese Medicine views the human body as a microcosm of nature (天人合一). Rather than isolating anatomical parts, it tracks how Vital Substances (Qi 气, Blood 血, Jing 精, Fluids 津液) transform and circulate through five interconnected functional systems.',
+            '中医学以“天人相应”整体观为核心，不孤立看待局部解剖，而是通过阴阳消长、五行生克制化，洞察气、血、精、津液在五脏六腑与十二时辰中的动态流转。'
+          )}
+        </div>
 
-          <div className="lg:col-span-5">
-            <div className="relative rounded-[24px] overflow-hidden border border-stone-300/70 dark:border-stone-700 shadow-md aspect-video bg-stone-200 dark:bg-stone-900">
-              <img
-                src="/images/wuxing_scroll.jpg"
-                alt="Wu Xing Classical Scroll"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-4 py-3 text-xs text-amber-100 font-serif flex justify-between items-center">
-                <span>《五行生克与五脏应象图》· Classical Five-Element Scroll</span>
-                <VermilionSeal text="宣纸工笔" variant="solid" />
-              </div>
+        <div className="lg:col-span-5">
+          <div className="relative overflow-hidden border border-stone-300 dark:border-stone-700 shadow-md aspect-video bg-stone-200 dark:bg-stone-900">
+            <img
+              src="/images/wuxing_scroll.jpg"
+              alt="Wu Xing Classical Scroll"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 py-2.5 text-xs text-amber-100 font-serif flex justify-between items-center">
+              <span>《五行生克与五脏应象图》· Classical Five-Element Scroll</span>
+              <VermilionSeal text="宣纸工笔" variant="solid" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* LAB 01: WU XING DYNAMIC ENGINE — SPLIT-SCREEN LAB WORKSPACE */}
-      <section className="skills-surface overflow-hidden">
-        <div className="skills-lab-header px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <VermilionSeal text="Lab 01 · 五行生克" variant="solid" />
-            <div>
-              <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
-                五行生克乘侮图解 · Wu Xing Dynamic Cycle Engine
-              </h3>
-              <p className="text-xs text-stone-600 dark:text-stone-400">
-                Click any element node on the left to inspect its Zang-Fu correspondences and clinical cycles on the right
-              </p>
+      {/* SECTION 01: WU XING DYNAMIC ENGINE — OPEN EDITORIAL LAYOUT */}
+      <section className="space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-300/80 dark:border-stone-800 pb-4">
+          <div>
+            <div className="text-xs font-mono uppercase tracking-widest text-[#B91C1C] dark:text-amber-400">
+              LAB 01 · FIVE-PHASE SYSTEMIC DYNAMICS
             </div>
+            <h3 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
+              五行生克乘侮图解 · Wu Xing Dynamic Cycle Engine
+            </h3>
           </div>
 
-          <div className="inline-flex p-1 rounded-full bg-white/80 dark:bg-stone-900 border border-stone-300/70 dark:border-stone-700">
+          {/* Minimalist Underline Tab Toggle */}
+          <div className="flex items-center gap-6 text-xs font-serif">
             <button
               onClick={() => setCycleMode('sheng-ke')}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition flex items-center gap-1.5 ${
+              className={`pb-1.5 border-b-2 transition ${
                 cycleMode === 'sheng-ke'
-                  ? 'bg-stone-900 text-amber-50 dark:bg-amber-600 dark:text-stone-950 shadow-2xs'
-                  : 'text-stone-600 dark:text-stone-300 hover:text-stone-950'
+                  ? 'border-stone-900 dark:border-amber-400 text-stone-950 dark:text-amber-200 font-bold'
+                  : 'border-transparent text-stone-500 hover:text-stone-900'
               }`}
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>生理生克 · Generating & Controlling</span>
+              生理生克 · Generating & Controlling
             </button>
             <button
               onClick={() => setCycleMode('pathology')}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition flex items-center gap-1.5 ${
+              className={`pb-1.5 border-b-2 transition ${
                 cycleMode === 'pathology'
-                  ? 'bg-[#B91C1C] text-white shadow-2xs'
-                  : 'text-stone-600 dark:text-stone-300 hover:text-stone-950'
+                  ? 'border-[#B91C1C] text-[#B91C1C] dark:text-red-400 font-bold'
+                  : 'border-transparent text-stone-500 hover:text-stone-900'
               }`}
             >
-              <AlertTriangle className="w-3.5 h-3.5" />
-              <span>病理乘侮 · Overacting & Rebellion</span>
+              病理乘侮 · Overacting & Rebellion
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-stone-200/80 dark:divide-stone-800">
-          {/* Left Lab Canvas: Interactive SVG Pentagram */}
-          <div className="lg:col-span-5 p-6 flex flex-col items-center justify-between bg-[#FAF6F0]/55 dark:bg-stone-950/45">
-            <div className="w-full max-w-[380px] aspect-square relative rounded-[24px] bg-white/75 dark:bg-stone-900/80 border border-stone-200/80 dark:border-stone-800 p-3 shadow-2xs">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          {/* Left: Single-Layer Interactive SVG Stage */}
+          <div className="lg:col-span-5 flex flex-col items-center">
+            <div className="w-full max-w-[380px] aspect-square canvas-stage p-3">
               <svg viewBox="0 0 400 400" className="w-full h-full select-none">
                 <defs>
                   <marker
@@ -176,7 +168,6 @@ export default function FoundationsModule({
                   </marker>
                 </defs>
 
-                {/* Outer Generating Ring (相生) */}
                 <circle
                   cx="200"
                   cy="202"
@@ -187,7 +178,6 @@ export default function FoundationsModule({
                   strokeDasharray="5 4"
                 />
 
-                {/* Generating (相生) Lines */}
                 {WUXING_ELEMENTS.map((el) => {
                   const from = ELEMENT_COORDS[el.key];
                   const to = ELEMENT_COORDS[el.generates];
@@ -216,7 +206,6 @@ export default function FoundationsModule({
                   );
                 })}
 
-                {/* Controlling (相克) Inner Star Lines */}
                 {WUXING_ELEMENTS.map((el) => {
                   const from = ELEMENT_COORDS[el.key];
                   const to = ELEMENT_COORDS[el.controls];
@@ -246,7 +235,6 @@ export default function FoundationsModule({
                   );
                 })}
 
-                {/* Element Nodes */}
                 {WUXING_ELEMENTS.map((el) => {
                   const pos = ELEMENT_COORDS[el.key];
                   const isSelected = el.key === selectedElementKey;
@@ -303,7 +291,7 @@ export default function FoundationsModule({
               </svg>
             </div>
 
-            <div className="w-full pt-4 flex flex-wrap justify-center gap-4 text-xs text-stone-600 dark:text-stone-400">
+            <div className="pt-3 flex flex-wrap justify-center gap-6 text-xs text-stone-600 dark:text-stone-400">
               <span className="inline-flex items-center gap-1.5">
                 <span className="w-3.5 h-0.5 bg-[#2D6A4F] inline-block" />
                 <span>相生 · Generating (Mother → Child)</span>
@@ -315,159 +303,153 @@ export default function FoundationsModule({
             </div>
           </div>
 
-          {/* Right Guide Pane: Active Element Details */}
-          <div className="lg:col-span-7 p-6 sm:p-8 space-y-5">
-            <div className="skills-card p-5 space-y-5">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div className="flex items-center gap-3.5">
-                  <span
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-serif font-bold text-2xl shadow-xs"
-                    style={{ backgroundColor: activeElement.colorHex }}
-                  >
-                    {activeElement.name.zh}
-                  </span>
-                  <div>
-                    <h4 className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100">
-                      {activeElement.name.zh}行 · {activeElement.name.en} Phase ({activeElement.name.pinyin})
-                    </h4>
-                    <p className="text-xs font-mono text-stone-500 dark:text-stone-400">
-                      Zang: {activeElement.zangOrgan.zh} ({activeElement.zangOrgan.en}) · Fu: {activeElement.fuOrgan.zh} ({activeElement.fuOrgan.en})
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() =>
-                    onToggleBookmark(
-                      `wuxing-${activeElement.key}`,
-                      `${activeElement.name.zh}行 · ${activeElement.name.en} Element`,
-                      'Foundations'
-                    )
-                  }
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-stone-300 dark:border-stone-700 bg-white/85 dark:bg-stone-900 text-xs font-medium hover:bg-amber-50 transition"
+          {/* Right: Unboxed Open Typography & Hairline Definition List */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-stone-300/70 dark:border-stone-800 pb-4">
+              <div className="flex items-baseline gap-3">
+                <span
+                  className="font-serif font-bold text-3xl"
+                  style={{ color: activeElement.colorHex }}
                 >
-                  {bookmarks.includes(`wuxing-${activeElement.key}`) ? (
-                    <>
-                      <BookmarkCheck className="w-3.5 h-3.5 text-[#B91C1C]" />
-                      <span>Saved</span>
-                    </>
-                  ) : (
-                    <>
-                      <Bookmark className="w-3.5 h-3.5" />
-                      <span>Bookmark</span>
-                    </>
-                  )}
-                </button>
+                  {activeElement.name.zh}行
+                </span>
+                <div>
+                  <h4 className="text-xl sm:text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 inline">
+                    {activeElement.name.en} Phase ({activeElement.name.pinyin})
+                  </h4>
+                  <span className="block sm:inline sm:ml-3 text-xs font-mono text-stone-500">
+                    Zang: {activeElement.zangOrgan.zh} ({activeElement.zangOrgan.en}) · Fu: {activeElement.fuOrgan.zh} ({activeElement.fuOrgan.en})
+                  </span>
+                </div>
               </div>
 
-              {renderProse(lang, activeElement.physiologyEn, activeElement.physiologyZh)}
-
-              {/* 8-Correspondence Pill Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                {[
-                  { label: '五脏 Zang', val: activeElement.zangOrgan },
-                  { label: '六腑 Fu', val: activeElement.fuOrgan },
-                  { label: '五官 Orifice', val: activeElement.senseOrgan },
-                  { label: '五体 Tissue', val: activeElement.tissue },
-                  { label: '五志 Emotion', val: activeElement.emotion },
-                  { label: '五味 Flavor', val: activeElement.taste },
-                  { label: '五季 Season', val: activeElement.season },
-                  { label: '五气 Climate', val: activeElement.climate }
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="p-3 rounded-2xl bg-white/85 dark:bg-stone-900/85 border border-stone-200/80 dark:border-stone-700/80"
-                  >
-                    <div className="text-[10px] font-mono uppercase text-stone-500">{item.label}</div>
-                    <div className="font-serif font-bold text-sm text-stone-900 dark:text-stone-100 mt-0.5">
-                      {item.val.zh}{' '}
-                      <span className="font-sans font-normal text-xs text-stone-600 dark:text-stone-400">
-                        · {item.val.en}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Cycle Mode Cards */}
-              {cycleMode === 'sheng-ke' ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="p-4 rounded-2xl bg-emerald-900/6 dark:bg-emerald-950/35 border border-emerald-800/20 space-y-1">
-                    <div className="text-xs font-serif font-bold text-[#2D6A4F] dark:text-emerald-400 flex items-center gap-1.5">
-                      <ArrowRight className="w-3.5 h-3.5" />
-                      <span>
-                        相生 (Generates Child): {activeElement.name.zh}生
-                        {WUXING_ELEMENTS.find((e) => e.key === activeElement.generates)?.name.zh}
-                      </span>
-                    </div>
-                    <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed">
-                      Nourishes{' '}
-                      <strong>
-                        {WUXING_ELEMENTS.find((e) => e.key === activeElement.generates)?.name.en} (
-                        {WUXING_ELEMENTS.find((e) => e.key === activeElement.generates)?.zangOrgan.en})
-                      </strong>
-                      . Clinical rule: &ldquo;In Deficiency, tonify the Mother (虚则补其母).&rdquo;
-                    </p>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-red-900/6 dark:bg-red-950/35 border border-red-800/20 space-y-1">
-                    <div className="text-xs font-serif font-bold text-[#B91C1C] dark:text-red-400 flex items-center gap-1.5">
-                      <ArrowRight className="w-3.5 h-3.5" />
-                      <span>
-                        相克 (Controls Target): {activeElement.name.zh}克
-                        {WUXING_ELEMENTS.find((e) => e.key === activeElement.controls)?.name.zh}
-                      </span>
-                    </div>
-                    <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed">
-                      Restrains{' '}
-                      <strong>
-                        {WUXING_ELEMENTS.find((e) => e.key === activeElement.controls)?.name.en} (
-                        {WUXING_ELEMENTS.find((e) => e.key === activeElement.controls)?.zangOrgan.en})
-                      </strong>{' '}
-                      from becoming excessive and maintains physiological equilibrium.
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <div className="p-4 rounded-2xl bg-red-900/8 dark:bg-red-950/40 border border-red-800/25 space-y-1">
-                    <div className="text-xs font-serif font-bold text-[#B91C1C] dark:text-red-400 uppercase tracking-wider">
-                      相乘 · Overacting Pathology (Bullying the Controlled Organ)
-                    </div>
-                    {renderProse(lang, activeElement.overactingDescEn, activeElement.overactingDescZh)}
-                  </div>
-                  <div className="p-4 rounded-2xl bg-amber-900/8 dark:bg-amber-950/40 border border-amber-800/25 space-y-1">
-                    <div className="text-xs font-serif font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider">
-                      相侮 · Counter-Acting Pathology (Rebelling Against the Controller)
-                    </div>
-                    {renderProse(lang, activeElement.counteractingDescEn, activeElement.counteractingDescZh)}
-                  </div>
-                </div>
-              )}
+              <button
+                onClick={() =>
+                  onToggleBookmark(
+                    `wuxing-${activeElement.key}`,
+                    `${activeElement.name.zh}行 · ${activeElement.name.en} Element`,
+                    'Foundations'
+                  )
+                }
+                className="inline-flex items-center gap-1.5 text-xs font-mono text-stone-600 dark:text-stone-400 hover:text-[#B91C1C] transition"
+              >
+                {bookmarks.includes(`wuxing-${activeElement.key}`) ? (
+                  <>
+                    <BookmarkCheck className="w-3.5 h-3.5 text-[#B91C1C]" />
+                    <span>Saved</span>
+                  </>
+                ) : (
+                  <>
+                    <Bookmark className="w-3.5 h-3.5" />
+                    <span>Bookmark</span>
+                  </>
+                )}
+              </button>
             </div>
+
+            {renderProse(lang, activeElement.physiologyEn, activeElement.physiologyZh)}
+
+            {/* Unboxed Hairline Definition List (Replaces 8 Mini-Cards) */}
+            <dl className="grid grid-cols-2 sm:grid-cols-4 gap-y-4 gap-x-6 py-4 border-y border-stone-300/80 dark:border-stone-800">
+              {[
+                { label: '五脏 Zang', val: activeElement.zangOrgan },
+                { label: '六腑 Fu', val: activeElement.fuOrgan },
+                { label: '五官 Orifice', val: activeElement.senseOrgan },
+                { label: '五体 Tissue', val: activeElement.tissue },
+                { label: '五志 Emotion', val: activeElement.emotion },
+                { label: '五味 Flavor', val: activeElement.taste },
+                { label: '五季 Season', val: activeElement.season },
+                { label: '五气 Climate', val: activeElement.climate }
+              ].map((item) => (
+                <div key={item.label}>
+                  <dt className="text-[10px] font-mono uppercase tracking-wider text-stone-500">
+                    {item.label}
+                  </dt>
+                  <dd className="font-serif font-bold text-sm text-stone-900 dark:text-stone-100 mt-0.5">
+                    {item.val.zh}{' '}
+                    <span className="font-sans font-normal text-xs text-stone-600 dark:text-stone-400">
+                      · {item.val.en}
+                    </span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            {/* Unboxed Left-Border Callouts for Cycles */}
+            {cycleMode === 'sheng-ke' ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="border-l-2 border-[#2D6A4F] pl-4 space-y-1">
+                  <div className="text-xs font-serif font-bold text-[#2D6A4F] dark:text-emerald-400 flex items-center gap-1.5">
+                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>
+                      相生 (Generates Child): {activeElement.name.zh}生
+                      {WUXING_ELEMENTS.find((e) => e.key === activeElement.generates)?.name.zh}
+                    </span>
+                  </div>
+                  <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed">
+                    Nourishes{' '}
+                    <strong>
+                      {WUXING_ELEMENTS.find((e) => e.key === activeElement.generates)?.name.en} (
+                      {WUXING_ELEMENTS.find((e) => e.key === activeElement.generates)?.zangOrgan.en})
+                    </strong>
+                    . Clinical rule: &ldquo;In Deficiency, tonify the Mother (虚则补其母).&rdquo;
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#B91C1C] pl-4 space-y-1">
+                  <div className="text-xs font-serif font-bold text-[#B91C1C] dark:text-red-400 flex items-center gap-1.5">
+                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>
+                      相克 (Controls Target): {activeElement.name.zh}克
+                      {WUXING_ELEMENTS.find((e) => e.key === activeElement.controls)?.name.zh}
+                    </span>
+                  </div>
+                  <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed">
+                    Restrains{' '}
+                    <strong>
+                      {WUXING_ELEMENTS.find((e) => e.key === activeElement.controls)?.name.en} (
+                      {WUXING_ELEMENTS.find((e) => e.key === activeElement.controls)?.zangOrgan.en})
+                    </strong>{' '}
+                    from becoming excessive and maintains physiological equilibrium.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="border-l-2 border-[#B91C1C] pl-4 space-y-1">
+                  <div className="text-xs font-serif font-bold text-[#B91C1C] dark:text-red-400 uppercase tracking-wider">
+                    相乘 · Overacting Pathology (Bullying the Controlled Organ)
+                  </div>
+                  {renderProse(lang, activeElement.overactingDescEn, activeElement.overactingDescZh)}
+                </div>
+                <div className="border-l-2 border-amber-700 pl-4 space-y-1">
+                  <div className="text-xs font-serif font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider">
+                    相侮 · Counter-Acting Pathology (Rebelling Against the Controller)
+                  </div>
+                  {renderProse(lang, activeElement.counteractingDescEn, activeElement.counteractingDescZh)}
+                </div>
+              </div>
+            )}
 
             <ClassicalQuoteCard quote={activeElement.classicalQuote} lang={lang} />
           </div>
         </div>
       </section>
 
-      {/* LAB 02: ZANG-FU WESTERN VS TCM BRIDGE */}
-      <section className="skills-surface overflow-hidden">
-        <div className="skills-lab-header px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <VermilionSeal text="Lab 02 · 藏象学说" variant="solid" />
-            <div>
-              <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
-                五脏藏象与中西医对照 · Zang-Fu Systems Bridge
-              </h3>
-              <p className="text-xs text-stone-600 dark:text-stone-400">
-                Compare Western anatomical scope with TCM functional responsibilities and disharmony patterns
-              </p>
+      {/* SECTION 02: ZANG-FU WESTERN VS TCM BRIDGE — OPEN EDITORIAL COLUMNS */}
+      <section className="pt-12 border-t border-stone-300/80 dark:border-stone-800 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-300/80 dark:border-stone-800 pb-4">
+          <div>
+            <div className="text-xs font-mono uppercase tracking-widest text-[#B91C1C] dark:text-amber-400">
+              LAB 02 · ZANG-FU FUNCTIONAL SYSTEMS VS. ANATOMY
             </div>
+            <h3 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
+              五脏藏象与中西医对照 · Zang-Fu Systems Bridge
+            </h3>
           </div>
 
-          {/* Rounded Organ Pill Selector */}
-          <div className="flex flex-wrap gap-1.5">
+          {/* Clean Underline Tab Bar for the 5 Zang Organs */}
+          <div className="flex flex-wrap gap-6">
             {ZANG_FU_ORGANS.map((org) => {
               const elColor = WUXING_ELEMENTS.find((e) => e.key === org.element)?.colorHex || '#2D6A4F';
               const active = org.id === selectedOrganId;
@@ -475,92 +457,83 @@ export default function FoundationsModule({
                 <button
                   key={org.id}
                   onClick={() => setSelectedOrganId(org.id)}
-                  className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-serif font-bold transition flex items-center gap-1.5 border ${
+                  className={`pb-2 text-sm font-serif font-bold transition border-b-2 flex items-baseline gap-1.5 ${
                     active
-                      ? 'text-white shadow-sm'
-                      : 'bg-white/85 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-300/70 dark:border-stone-700 hover:bg-stone-100'
+                      ? 'text-stone-950 dark:text-amber-50'
+                      : 'border-transparent text-stone-500 hover:text-stone-900 dark:hover:text-stone-200'
                   }`}
-                  style={active ? { backgroundColor: elColor, borderColor: elColor } : undefined}
+                  style={active ? { borderBottomColor: elColor } : undefined}
                 >
                   <span>{org.name.zh}</span>
-                  <span className="font-sans font-normal text-xs opacity-90">{org.name.en}</span>
+                  <span className="font-sans font-normal text-xs opacity-80">{org.name.en}</span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-stone-200/80 dark:divide-stone-800">
-          {/* Left Pane: Western vs TCM Identity + Clinical Disharmony Cards */}
-          <div className="lg:col-span-5 p-6 sm:p-8 space-y-5 bg-[#FAF6F0]/45 dark:bg-stone-950/45">
-            <div className="skills-card p-5 space-y-4">
-              <div className="flex items-center justify-between">
-                <TermBadge term={activeOrgan.name} lang={lang} size="lg" />
-                <span className="px-3 py-1 rounded-full bg-amber-900/10 dark:bg-amber-400/10 text-xs font-mono text-amber-900 dark:text-amber-300">
-                  表里配腑: {activeOrgan.pairedOrgan.zh} ({activeOrgan.pairedOrgan.en})
-                </span>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:divide-x divide-stone-300/70 dark:divide-stone-800">
+          {/* Left Column: Unboxed Western View & Disharmony Patterns */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="flex items-baseline justify-between border-b border-stone-300/70 dark:border-stone-800 pb-3">
+              <TermBadge term={activeOrgan.name} lang={lang} size="lg" />
+              <span className="text-xs font-mono text-amber-900 dark:text-amber-300">
+                表里配腑: {activeOrgan.pairedOrgan.zh} ({activeOrgan.pairedOrgan.en})
+              </span>
+            </div>
 
-              <div className="p-4 rounded-2xl bg-white/85 dark:bg-stone-900/85 border border-stone-200/80 dark:border-stone-700 space-y-1.5">
-                <div className="flex items-center gap-2">
-                  <VermilionSeal text="西医解剖" />
-                  <span className="text-xs font-mono uppercase tracking-wider text-stone-600 dark:text-stone-400">
-                    Western Anatomical Scope
-                  </span>
-                </div>
-                {renderProse(lang, activeOrgan.westernViewEn, activeOrgan.westernViewZh)}
+            <div className="space-y-1.5">
+              <div className="text-xs font-mono uppercase tracking-wider text-stone-500">
+                西医解剖概念 · Western Anatomical Scope
               </div>
+              {renderProse(lang, activeOrgan.westernViewEn, activeOrgan.westernViewZh)}
+            </div>
 
-              <div className="p-4 rounded-2xl bg-amber-900/6 dark:bg-amber-950/30 border border-amber-800/20 space-y-3">
-                <div className="flex items-center gap-2">
-                  <VermilionSeal text="常见证候" variant="solid" />
-                  <span className="text-xs font-mono uppercase tracking-wider text-stone-700 dark:text-amber-300">
-                    Core Clinical Disharmony Patterns
-                  </span>
-                </div>
-                <div className="divide-y divide-amber-900/15 dark:divide-stone-800">
-                  {activeOrgan.commonPatterns.map((pat) => (
-                    <div key={pat.name.zh} className="py-2.5 first:pt-0 last:pb-0">
-                      <div className="font-serif font-bold text-sm text-stone-900 dark:text-stone-100">
-                        {pat.name.zh} ({pat.name.pinyin}) · {pat.name.en}
-                      </div>
-                      {lang !== 'zh' && (
-                        <p className="text-xs text-stone-700 dark:text-stone-300 mt-0.5">{pat.symptomsEn}</p>
-                      )}
-                      {lang !== 'en' && (
-                        <p className="text-xs text-stone-600 dark:text-stone-400 font-serif mt-0.5">{pat.symptomsZh}</p>
-                      )}
+            <div className="space-y-3 pt-4 border-t border-stone-300/70 dark:border-stone-800">
+              <div className="text-xs font-mono uppercase tracking-wider text-[#B91C1C] dark:text-amber-400">
+                常见临床证候 · Core Clinical Disharmony Patterns
+              </div>
+              <div className="divide-y divide-stone-300/60 dark:divide-stone-800">
+                {activeOrgan.commonPatterns.map((pat) => (
+                  <div key={pat.name.zh} className="py-3 first:pt-1 last:pb-1">
+                    <div className="font-serif font-bold text-sm text-stone-900 dark:text-stone-100">
+                      {pat.name.zh} ({pat.name.pinyin}) · {pat.name.en}
                     </div>
-                  ))}
-                </div>
+                    {lang !== 'zh' && (
+                      <p className="text-xs text-stone-700 dark:text-stone-300 mt-0.5">{pat.symptomsEn}</p>
+                    )}
+                    {lang !== 'en' && (
+                      <p className="text-xs text-stone-600 dark:text-stone-400 font-serif mt-0.5">{pat.symptomsZh}</p>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
 
-            <ClassicalQuoteCard quote={activeOrgan.classicalQuote} lang={lang} />
+            <div className="pt-2">
+              <ClassicalQuoteCard quote={activeOrgan.classicalQuote} lang={lang} />
+            </div>
           </div>
 
-          {/* Right Pane: Core TCM Physiological Pillars */}
-          <div className="lg:col-span-7 p-6 sm:p-8 space-y-4">
-            <div className="flex items-center justify-between pb-2">
-              <div className="flex items-center gap-2">
-                <VermilionSeal text="生理职能" />
-                <h4 className="font-serif font-bold text-lg text-stone-900 dark:text-stone-100">
-                  中医藏象核心职能 · TCM Functional Responsibilities
-                </h4>
-              </div>
-              <span className="px-3 py-1 rounded-full bg-stone-200/70 dark:bg-stone-800 text-xs font-mono text-stone-600 dark:text-stone-400">
+          {/* Right Column: Unboxed Numbered List of TCM Physiological Pillars */}
+          <div className="lg:col-span-7 lg:pl-10 space-y-4">
+            <div className="flex items-baseline justify-between border-b border-stone-300/70 dark:border-stone-800 pb-3">
+              <h4 className="font-serif font-bold text-lg text-stone-900 dark:text-stone-100">
+                中医藏象核心职能 · TCM Functional Responsibilities
+              </h4>
+              <span className="text-xs font-mono text-stone-500">
                 当令时辰: {activeOrgan.peakHours}
               </span>
             </div>
 
-            <div className="space-y-3.5">
+            <div className="divide-y divide-stone-300/70 dark:divide-stone-800">
               {activeOrgan.tcmFunctions.map((fn, idx) => (
-                <div key={fn.title.zh} className="skills-card p-5 space-y-2">
-                  <div className="flex items-center gap-3">
-                    <span className="w-7 h-7 rounded-full bg-[#B91C1C] text-amber-50 font-mono text-xs font-bold flex items-center justify-center shrink-0">
+                <div key={fn.title.zh} className="py-5 first:pt-2 last:pb-1 space-y-2">
+                  <div className="flex items-baseline gap-3">
+                    <span className="font-mono text-xs font-bold text-[#B91C1C] dark:text-amber-400">
                       0{idx + 1}
                     </span>
-                    <h5 className="font-serif font-bold text-base sm:text-lg text-stone-900 dark:text-amber-100">
+                    <h5 className="font-serif font-bold text-lg text-stone-900 dark:text-amber-100">
                       {fn.title.zh}{' '}
                       <span className="text-xs font-mono text-amber-800 dark:text-amber-400 font-normal">
                         ({fn.title.pinyin})
@@ -572,7 +545,7 @@ export default function FoundationsModule({
                       )}
                     </h5>
                   </div>
-                  <div className="pl-10">
+                  <div className="pl-7">
                     {renderProse(lang, fn.descEn, fn.descZh)}
                   </div>
                 </div>
@@ -582,30 +555,27 @@ export default function FoundationsModule({
         </div>
       </section>
 
-      {/* LAB 03: 24-HOUR MERIDIAN QI CLOCK (子午流注) */}
-      <section className="skills-surface overflow-hidden">
-        <div className="skills-lab-header px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <VermilionSeal text="Lab 03 · 子午流注" variant="solid" />
-            <div>
-              <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
-                十二时辰子午流注图 · 24-Hour Meridian Qi Clock
-              </h3>
-              <p className="text-xs text-stone-600 dark:text-stone-400">
-                Explore the 2-hour circadian Qi tidal wave across the 12 Primary Meridians
-              </p>
+      {/* SECTION 03: 24-HOUR MERIDIAN QI CLOCK (子午流注) */}
+      <section className="pt-12 border-t border-stone-300/80 dark:border-stone-800 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-300/80 dark:border-stone-800 pb-4">
+          <div>
+            <div className="text-xs font-mono uppercase tracking-widest text-[#B91C1C] dark:text-amber-400">
+              LAB 03 · TWELVE SHICHEN CIRCADIAN QI TIDAL FLOW
             </div>
+            <h3 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
+              十二时辰子午流注图 · 24-Hour Meridian Qi Clock
+            </h3>
           </div>
 
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 dark:bg-stone-900 border border-stone-300/70 dark:border-stone-700 text-xs font-mono text-stone-800 dark:text-stone-200">
+          <div className="inline-flex items-center gap-2 text-xs font-mono text-stone-600 dark:text-stone-400">
             <Clock className="w-3.5 h-3.5 text-[#B91C1C] dark:text-amber-400" />
             <span>Local Hour: {String(currentHour).padStart(2, '0')}:00 · Click any Shichen</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-stone-200/80 dark:divide-stone-800 items-center">
-          {/* Left Page: Enlarged 520x520 Circular 12-Branch Dial */}
-          <div className="lg:col-span-6 p-6 flex justify-center bg-[#FAF6F0]/45 dark:bg-stone-950/45">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          {/* Left: Enlarged 520x520 Circular 12-Branch Dial */}
+          <div className="lg:col-span-6 flex justify-center">
             <div className="w-full max-w-[540px] aspect-square relative">
               <svg viewBox="0 0 520 520" className="w-full h-full select-none">
                 <circle
@@ -731,52 +701,59 @@ export default function FoundationsModule({
             </div>
           </div>
 
-          {/* Right Page: Selected Shichen Card & 12-Branch Pill Strip */}
-          <div className="lg:col-span-6 p-6 sm:p-8 space-y-5">
-            <div className="skills-card p-6 space-y-4">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div>
-                  <span className="text-xs font-mono uppercase tracking-wider text-[#B91C1C] dark:text-amber-400">
-                    {activeClock.timeRange} · {activeClock.branchZh} ({activeClock.branchPinyin} · {activeClock.animalEn})
-                  </span>
-                  <h4 className="text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-1">
-                    {activeClock.organ.zh} · {activeClock.organ.en} ({activeClock.meridianCode})
-                  </h4>
-                </div>
-                <VermilionSeal text={`${activeClock.branchZh}当令`} variant="solid" />
+          {/* Right: Unboxed Shichen Details & Clean Hairline Strip */}
+          <div className="lg:col-span-6 space-y-6">
+            <div className="border-b border-stone-300/70 dark:border-stone-800 pb-4 flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <span className="text-xs font-mono uppercase tracking-wider text-[#B91C1C] dark:text-amber-400">
+                  {activeClock.timeRange} · {activeClock.branchZh} ({activeClock.branchPinyin} · {activeClock.animalEn})
+                </span>
+                <h4 className="text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-1">
+                  {activeClock.organ.zh} · {activeClock.organ.en} ({activeClock.meridianCode})
+                </h4>
               </div>
+              <VermilionSeal text={`${activeClock.branchZh}当令`} variant="solid" />
+            </div>
 
-              <div className="p-4 rounded-2xl bg-white/85 dark:bg-stone-900/85 border border-stone-200/80 dark:border-stone-700 space-y-1.5">
-                <div className="text-xs font-serif font-bold uppercase tracking-wider text-stone-600 dark:text-stone-400">
+            <div className="space-y-5">
+              <div className="border-l-2 border-stone-800 dark:border-stone-500 pl-4 space-y-1">
+                <div className="text-xs font-mono uppercase tracking-wider text-stone-500">
                   气血当令生理机制 · Physiological Qi Flow
                 </div>
                 {renderProse(lang, activeClock.physiologicalActionEn, activeClock.physiologicalActionZh)}
               </div>
 
-              <div className="p-4 rounded-2xl bg-emerald-900/6 dark:bg-emerald-950/35 border border-emerald-800/20 space-y-1.5">
-                <div className="text-xs font-serif font-bold uppercase tracking-wider text-[#2D6A4F] dark:text-emerald-400">
+              <div className="border-l-2 border-[#2D6A4F] pl-4 space-y-1">
+                <div className="text-xs font-mono uppercase tracking-wider text-[#2D6A4F] dark:text-emerald-400">
                   顺时摄生法要 · Classical Yangsheng Regimen
                 </div>
                 {renderProse(lang, activeClock.yangshengTipEn, activeClock.yangshengTipZh)}
               </div>
             </div>
 
-            {/* 12-Shichen Pill Grid */}
-            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-              {QI_CLOCK_HOURS.map((h, idx) => (
-                <button
-                  key={h.branchZh}
-                  onClick={() => setSelectedClockIdx(idx)}
-                  className={`p-2.5 rounded-2xl text-center border transition ${
-                    idx === selectedClockIdx
-                      ? 'bg-stone-900 text-amber-50 border-stone-900 dark:bg-amber-600 dark:text-stone-950 shadow-xs'
-                      : 'bg-white/80 dark:bg-stone-800/70 border-stone-200/80 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-100'
-                  }`}
-                >
-                  <div className="font-serif font-bold text-xs">{h.branchZh}</div>
-                  <div className="text-[10px] font-mono opacity-80">{h.timeRange.split(' ')[0]}</div>
-                </button>
-              ))}
+            {/* Clean Hairline 12-Shichen Strip (No Box Grid) */}
+            <div className="pt-4 border-t border-stone-300/70 dark:border-stone-800">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-stone-500 mb-3">
+                十二时辰速查 · Twelve Shichen Quick Select
+              </div>
+              <div className="flex flex-wrap gap-x-5 gap-y-2">
+                {QI_CLOCK_HOURS.map((h, idx) => (
+                  <button
+                    key={h.branchZh}
+                    onClick={() => setSelectedClockIdx(idx)}
+                    className={`pb-1 text-left border-b-2 transition ${
+                      idx === selectedClockIdx
+                        ? 'border-[#B91C1C] text-[#B91C1C] dark:text-amber-400 font-bold'
+                        : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-950'
+                    }`}
+                  >
+                    <span className="font-serif text-xs">{h.branchZh}</span>
+                    <span className="text-[10px] font-mono opacity-75 ml-1">
+                      {h.timeRange.split(' ')[0]}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

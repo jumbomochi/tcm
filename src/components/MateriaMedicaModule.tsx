@@ -60,35 +60,35 @@ export default function MateriaMedicaModule({
     if (role.startsWith('Jun')) {
       return {
         seal: '君药',
-        accentBorder: 'border-t-4 border-t-[#B91C1C]',
+        accentBorder: 'border-t-2 border-t-[#B91C1C]',
         roleLabel: '君 · Chief Sovereign Herb'
       };
     }
     if (role.startsWith('Chen')) {
       return {
         seal: '臣药',
-        accentBorder: 'border-t-4 border-t-amber-700',
+        accentBorder: 'border-t-2 border-t-amber-700',
         roleLabel: '臣 · Deputy Minister Herb'
       };
     }
     if (role.startsWith('Zuo')) {
       return {
         seal: '佐药',
-        accentBorder: 'border-t-4 border-t-[#2D6A4F]',
+        accentBorder: 'border-t-2 border-t-[#2D6A4F]',
         roleLabel: '佐 · Assistant Herb'
       };
     }
     return {
       seal: '使药',
-      accentBorder: 'border-t-4 border-t-stone-700',
+      accentBorder: 'border-t-2 border-t-stone-700',
       roleLabel: '使 · Envoy Harmonizer'
     };
   };
 
   return (
-    <div className="space-y-8">
-      {/* Google Skills Track Overview Card */}
-      <div className="skills-surface p-6 sm:p-8">
+    <div className="space-y-14">
+      {/* Unboxed Editorial Track Overview Header */}
+      <header className="pb-10 border-b border-stone-300/80 dark:border-stone-800">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-7 space-y-4">
             <LabMetadataChips
@@ -99,10 +99,10 @@ export default function MateriaMedicaModule({
                 { label: '20 min', tone: 'stone' }
               ]}
             />
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 tracking-wide">
+            <h2 className="text-2xl sm:text-4xl font-serif font-bold text-stone-950 dark:text-stone-100 tracking-wide leading-tight">
               中药四气五味归经与方剂「君臣佐使」拆解器
               {lang !== 'zh' && (
-                <span className="block text-base sm:text-lg font-sans font-normal text-stone-600 dark:text-stone-400 mt-1">
+                <span className="block text-base sm:text-xl font-sans font-normal text-stone-600 dark:text-stone-400 mt-2">
                   Essential Materia Medica Atlas & Jun-Chen-Zuo-Shi Formula Architecture
                 </span>
               )}
@@ -114,46 +114,49 @@ export default function MateriaMedicaModule({
             )}
           </div>
           <div className="lg:col-span-5">
-            <div className="relative rounded-[24px] overflow-hidden border border-stone-300/70 dark:border-stone-700 shadow-md aspect-video bg-stone-200 dark:bg-stone-900">
+            <div className="relative rounded-md overflow-hidden border border-stone-300/80 dark:border-stone-700 shadow-xs aspect-video bg-stone-200 dark:bg-stone-900">
               <img
                 src="/images/materia_medica_scroll.jpg"
                 alt="Materia Medica Botanical Scroll"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-4 py-3 text-xs text-amber-100 font-serif flex justify-between items-center">
+              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-4 py-2.5 text-xs text-amber-100 font-serif flex justify-between items-center">
                 <span>《本草道地饮片图鉴》· Classical Pharmacopeia</span>
                 <VermilionSeal text="四气五味" variant="solid" />
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* LAB 01: ESSENTIAL MATERIA MEDICA (道地本草图鉴) */}
-      <section className="skills-surface overflow-hidden">
-        <div className="skills-lab-header px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <VermilionSeal text="Lab 01 · 神农本草" variant="solid" />
-            <div>
-              <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
-                道地中药饮片与四气五味归经 · Essential Herbs & Five-Flavor Radar
-              </h3>
-              <p className="text-xs text-stone-600 dark:text-stone-400">
-                Filter herbs by thermal nature (四气) and inspect their five-flavor radar profile and slice morphology
-              </p>
+      <section className="space-y-8">
+        <div className="pb-4 border-b border-stone-300/80 dark:border-stone-800 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2.5">
+              <VermilionSeal text="神农本草" variant="solid" />
+              <span className="text-xs font-mono uppercase tracking-widest text-stone-500">
+                Lab 01 · Materia Medica Pharmacopeia
+              </span>
             </div>
+            <h3 className="text-xl sm:text-2xl font-serif font-bold text-stone-950 dark:text-stone-100">
+              道地中药饮片与四气五味归经 · Essential Herbs & Five-Flavor Radar
+            </h3>
+            <p className="text-xs text-stone-600 dark:text-stone-400">
+              Filter herbs by thermal nature (四气) and inspect their five-flavor radar profile and slice morphology
+            </p>
           </div>
 
-          {/* Filter by Thermal Nature (四气) */}
-          <div className="inline-flex p-1 rounded-full bg-white/80 dark:bg-stone-900 border border-stone-300/70 dark:border-stone-700">
+          {/* Minimalist Underline Filter by Thermal Nature (四气) */}
+          <div className="flex items-center gap-4 border-b border-stone-300 dark:border-stone-700">
             {['ALL', 'Warm', 'Neutral', 'Cool', 'Cold'].map((t) => (
               <button
                 key={t}
                 onClick={() => setTempFilter(t)}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition ${
+                className={`pb-2 text-xs font-medium transition border-b-2 -mb-px ${
                   tempFilter === t
-                    ? 'bg-[#2D6A4F] text-white shadow-2xs'
-                    : 'text-stone-700 dark:text-stone-300 hover:text-stone-950'
+                    ? 'border-[#2D6A4F] text-[#2D6A4F] dark:text-emerald-400 font-bold'
+                    : 'border-transparent text-stone-500 hover:text-stone-900 dark:hover:text-stone-200'
                 }`}
               >
                 {t === 'ALL' ? '四气全览 · All' : t}
@@ -162,54 +165,49 @@ export default function MateriaMedicaModule({
           </div>
         </div>
 
-        {/* Herb Catalog Selector Cards */}
-        <div className="px-6 py-4 bg-white/45 dark:bg-stone-900/45 border-b border-stone-200/70 dark:border-stone-800 grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+        {/* Clean Underline Herb Catalog Selector Strip */}
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-stone-300/80 dark:border-stone-800">
           {filteredHerbs.map((herb) => {
             const active = herb.id === selectedHerbId;
             return (
               <button
                 key={herb.id}
                 onClick={() => setSelectedHerbId(herb.id)}
-                className={`p-3.5 rounded-[18px] text-left border transition flex flex-col justify-between ${
+                className={`pb-3 text-left transition border-b-2 -mb-px flex items-center gap-2 ${
                   active
-                    ? 'bg-white dark:bg-stone-800 border-2 border-amber-800 dark:border-amber-400 shadow-sm'
-                    : 'bg-white/75 dark:bg-stone-800/50 border-stone-200/80 dark:border-stone-700 hover:bg-white'
+                    ? 'border-[#B91C1C] text-stone-950 dark:text-amber-50 font-bold'
+                    : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-950'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="font-serif font-bold text-base text-stone-900 dark:text-stone-100">
-                    {herb.name.zh}
+                <span
+                  className="w-2.5 h-2.5 rounded-full shrink-0"
+                  style={{ backgroundColor: herb.botanicalColor }}
+                />
+                <span className="font-serif text-base">{herb.name.zh}</span>
+                {lang !== 'zh' && (
+                  <span className="text-xs text-stone-500 font-normal">
+                    {herb.name.en}
                   </span>
-                  <span
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: herb.botanicalColor }}
-                  />
-                </div>
-                <div className="text-xs text-stone-600 dark:text-stone-300 font-medium mt-0.5">
-                  {herb.name.en}
-                </div>
-                <div className="text-[10px] font-mono text-amber-800 dark:text-amber-400 mt-1">
-                  {herb.category.zh} · {herb.temperature}
-                </div>
+                )}
               </button>
             );
           })}
         </div>
 
         {/* Selected Herb Split-Screen Workspace */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-stone-200/80 dark:divide-stone-800">
-          {/* Left Page: Five Flavors Radar + Thermal Gauge */}
-          <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col items-center justify-between bg-[#FAF6F0]/45 dark:bg-stone-950/45 space-y-5">
-            <div className="w-full flex items-center justify-between">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:divide-x divide-stone-300/70 dark:divide-stone-800 items-start">
+          {/* Left Page: Five Flavors Radar Stage + Thermal Gauge */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="flex items-center justify-between">
               <span className="text-xs font-serif font-bold text-stone-800 dark:text-stone-200">
                 五味雷达图 · Five Flavors Profile
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-900/10 text-xs font-mono text-amber-900 dark:text-amber-300">
+              <span className="text-xs font-mono font-semibold text-amber-900 dark:text-amber-300">
                 {activeHerb.flavors.join(' · ')}
               </span>
             </div>
 
-            <div className="p-4 rounded-[24px] bg-white/80 dark:bg-stone-900/80 border border-stone-200/80 dark:border-stone-800 shadow-2xs">
+            <div className="canvas-stage p-6 flex items-center justify-center">
               <svg viewBox="0 0 200 200" className="w-56 h-56 select-none">
                 {/* Concentric Pentagon Web */}
                 {[22, 45, 68].map((r) => (
@@ -271,7 +269,7 @@ export default function MateriaMedicaModule({
             </div>
 
             {/* Thermal Spectrum Bar (四气：寒、凉、平、温、热) */}
-            <div className="w-full space-y-2 pt-2">
+            <div className="space-y-2 pt-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-serif font-bold text-stone-700 dark:text-stone-300 flex items-center gap-1">
                   <Thermometer className="w-3.5 h-3.5 text-[#B91C1C]" />
@@ -281,7 +279,7 @@ export default function MateriaMedicaModule({
                   {activeHerb.temperature}
                 </span>
               </div>
-              <div className="grid grid-cols-5 gap-1.5 text-[10px] text-center font-mono">
+              <div className="grid grid-cols-5 divide-x divide-stone-300 dark:divide-stone-700 border-y border-stone-300 dark:border-stone-700 text-[10px] text-center font-mono">
                 {[
                   { label: '寒 Cold', score: -2, color: 'bg-blue-900 text-white' },
                   { label: '凉 Cool', score: -1, color: 'bg-sky-700 text-white' },
@@ -291,10 +289,10 @@ export default function MateriaMedicaModule({
                 ].map((lv) => (
                   <div
                     key={lv.label}
-                    className={`py-1.5 rounded-full ${
+                    className={`py-1.5 ${
                       activeHerb.temperatureScore === lv.score
-                        ? `${lv.color} font-bold ring-2 ring-stone-900 dark:ring-white`
-                        : 'bg-stone-200/80 dark:bg-stone-800 text-stone-500'
+                        ? `${lv.color} font-bold`
+                        : 'text-stone-500'
                     }`}
                   >
                     {lv.label}
@@ -304,15 +302,15 @@ export default function MateriaMedicaModule({
             </div>
           </div>
 
-          {/* Right Page: Herb Monograph Card */}
-          <div className="lg:col-span-7 p-6 sm:p-8 space-y-5">
-            <div className="skills-card p-6 space-y-5">
-              <div className="flex flex-wrap items-start justify-between gap-3 border-b border-stone-200/80 dark:border-stone-700 pb-4">
+          {/* Right Page: Unboxed Herb Monograph */}
+          <div className="lg:col-span-7 lg:pl-10 space-y-6 divide-y divide-stone-300/70 dark:divide-stone-800">
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <span className="text-xs font-mono text-amber-800 dark:text-amber-400">
                     {activeHerb.pharmaceuticalLatin} · {activeHerb.category.zh} ({activeHerb.category.en})
                   </span>
-                  <h4 className="text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-1">
+                  <h4 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
                     {activeHerb.name.zh} ({activeHerb.name.pinyin}) · {activeHerb.name.en}
                   </h4>
                 </div>
@@ -325,12 +323,12 @@ export default function MateriaMedicaModule({
                       'Materia Medica'
                     )
                   }
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-stone-300 dark:border-stone-700 bg-white/85 dark:bg-stone-900 text-xs font-medium hover:bg-amber-50 transition"
+                  className="inline-flex items-center gap-1.5 pb-1 border-b border-stone-400 hover:border-[#B91C1C] text-xs font-medium text-stone-700 dark:text-stone-300 transition"
                 >
                   {bookmarks.includes(`herb-${activeHerb.id}`) ? (
                     <>
                       <BookmarkCheck className="w-3.5 h-3.5 text-[#B91C1C]" />
-                      <span>Saved</span>
+                      <span className="text-[#B91C1C] font-bold">Saved</span>
                     </>
                   ) : (
                     <>
@@ -342,25 +340,20 @@ export default function MateriaMedicaModule({
               </div>
 
               {/* Meridians Entered & Dosage Row */}
-              <div className="flex flex-wrap items-center gap-2 text-xs">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
                 <span className="font-serif font-bold text-stone-600 dark:text-stone-400">
                   归经 Meridians Entered:
                 </span>
-                {activeHerb.meridiansEntered.map((m) => (
-                  <span
-                    key={m}
-                    className="px-3 py-0.5 rounded-full bg-amber-900/10 dark:bg-amber-400/10 font-serif font-semibold text-amber-900 dark:text-amber-200"
-                  >
-                    {m}
-                  </span>
-                ))}
+                <span className="font-serif font-bold text-amber-900 dark:text-amber-300">
+                  {activeHerb.meridiansEntered.join(' · ')}
+                </span>
                 <span className="ml-auto font-mono text-stone-600 dark:text-stone-400">
                   煎服剂量 Dosage: <strong>{activeHerb.dosage}</strong>
                 </span>
               </div>
 
               {/* Key Therapeutic Actions */}
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-x-4 gap-y-2">
                 {activeHerb.keyActions.map((act) => (
                   <TermBadge
                     key={act.zh}
@@ -371,32 +364,34 @@ export default function MateriaMedicaModule({
                   />
                 ))}
               </div>
+            </div>
 
-              {/* Prepared Slice (中药饮片) Visual Identification */}
-              <div className="p-4 rounded-2xl bg-white/85 dark:bg-stone-900/85 border border-stone-200/80 dark:border-stone-700 space-y-1">
-                <div className="text-xs font-serif font-bold uppercase tracking-wider text-amber-900 dark:text-amber-400">
-                  道地饮片性状鉴别 · Apothecary Slice Identification
-                </div>
-                {renderProse(lang, activeHerb.visualDescriptionEn, activeHerb.visualDescriptionZh)}
+            {/* Prepared Slice (中药饮片) Visual Identification */}
+            <div className="pt-5 space-y-1.5">
+              <div className="text-xs font-serif font-bold uppercase tracking-wider text-amber-900 dark:text-amber-400">
+                道地饮片性状鉴别 · Apothecary Slice Identification
               </div>
+              {renderProse(lang, activeHerb.visualDescriptionEn, activeHerb.visualDescriptionZh)}
+            </div>
 
-              {/* Clinical Uses */}
-              <div className="p-4 rounded-2xl bg-emerald-900/6 dark:bg-emerald-950/35 border border-emerald-800/20 space-y-1">
-                <div className="text-xs font-serif font-bold uppercase tracking-wider text-[#2D6A4F] dark:text-emerald-400">
-                  临床主治与配伍要旨 · Clinical Applications
-                </div>
-                {renderProse(lang, activeHerb.clinicalUsesEn, activeHerb.clinicalUsesZh)}
+            {/* Clinical Uses */}
+            <div className="pt-5 space-y-1.5">
+              <div className="text-xs font-serif font-bold uppercase tracking-wider text-[#2D6A4F] dark:text-emerald-400">
+                临床主治与配伍要旨 · Clinical Applications
               </div>
+              {renderProse(lang, activeHerb.clinicalUsesEn, activeHerb.clinicalUsesZh)}
+            </div>
 
-              {/* Cautions / Contraindications */}
-              <div className="p-3.5 rounded-2xl bg-red-900/6 dark:bg-red-950/35 border border-red-800/20 flex items-start gap-2.5 text-xs">
-                <AlertCircle className="w-4 h-4 text-[#B91C1C] shrink-0 mt-0.5" />
-                <div>
-                  <strong className="font-serif text-[#B91C1C] dark:text-red-400">使用禁忌 (Contraindications): </strong>
-                  <span className="text-stone-700 dark:text-stone-300">
-                    {lang === 'zh' ? activeHerb.cautionsZh : activeHerb.cautionsEn}
-                  </span>
-                </div>
+            {/* Cautions / Contraindications */}
+            <div className="pt-5 flex items-start gap-2.5 text-xs border-l-2 border-[#B91C1C] pl-3.5">
+              <AlertCircle className="w-4 h-4 text-[#B91C1C] shrink-0 mt-0.5" />
+              <div>
+                <strong className="font-serif text-[#B91C1C] dark:text-red-400">
+                  使用禁忌 (Contraindications):{' '}
+                </strong>
+                <span className="text-stone-700 dark:text-stone-300">
+                  {lang === 'zh' ? activeHerb.cautionsZh : activeHerb.cautionsEn}
+                </span>
               </div>
             </div>
           </div>
@@ -404,30 +399,33 @@ export default function MateriaMedicaModule({
       </section>
 
       {/* LAB 02: JUN-CHEN-ZUO-SHI (君臣佐使) FORMULA DECONSTRUCTOR */}
-      <section className="skills-surface overflow-hidden">
-        <div className="skills-lab-header px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <VermilionSeal text="Lab 02 · 君臣佐使" variant="solid" />
-            <div>
-              <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
-                经典名方「君臣佐使」配伍拆解 · Classical Formula Deconstructor
-              </h3>
-              <p className="text-xs text-stone-600 dark:text-stone-400">
-                Deconstruct how Chief, Deputy, Assistant, and Envoy herbs work in clinical synergy
-              </p>
+      <section className="pt-8 border-t border-stone-300/80 dark:border-stone-800 space-y-8">
+        <div className="pb-4 border-b border-stone-300/80 dark:border-stone-800 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2.5">
+              <VermilionSeal text="君臣佐使" variant="solid" />
+              <span className="text-xs font-mono uppercase tracking-widest text-stone-500">
+                Lab 02 · Classical Formula Architecture
+              </span>
             </div>
+            <h3 className="text-xl sm:text-2xl font-serif font-bold text-stone-950 dark:text-stone-100">
+              经典名方「君臣佐使」配伍拆解 · Classical Formula Deconstructor
+            </h3>
+            <p className="text-xs text-stone-600 dark:text-stone-400">
+              Deconstruct how Chief, Deputy, Assistant, and Envoy herbs work in clinical synergy
+            </p>
           </div>
 
-          {/* Formula Selector Pills */}
-          <div className="flex flex-wrap gap-1.5">
+          {/* Minimalist Underline Formula Selector Tabs */}
+          <div className="flex flex-wrap gap-x-5 gap-y-2 border-b border-stone-300 dark:border-stone-700">
             {CLASSIC_FORMULAS.map((f) => (
               <button
                 key={f.id}
                 onClick={() => setSelectedFormulaId(f.id)}
-                className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-serif font-bold transition border ${
+                className={`pb-2 text-xs sm:text-sm font-serif transition border-b-2 -mb-px ${
                   f.id === selectedFormulaId
-                    ? 'bg-[#B91C1C] text-white border-[#B91C1C] shadow-xs'
-                    : 'bg-white/85 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-300/70 dark:border-stone-700 hover:bg-stone-100'
+                    ? 'border-[#B91C1C] text-[#B91C1C] dark:text-amber-400 font-bold'
+                    : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-950'
                 }`}
               >
                 {f.name.zh} · {f.name.en.split(' ')[0]}
@@ -436,19 +434,19 @@ export default function MateriaMedicaModule({
           </div>
         </div>
 
-        <div className="p-6 sm:p-8 space-y-6">
-          {/* Formula Header Card */}
-          <div className="skills-card p-6 space-y-4">
+        <div className="space-y-8">
+          {/* Open Formula Header */}
+          <div className="space-y-3 pb-6 border-b border-stone-300/70 dark:border-stone-800">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <span className="text-xs font-mono text-amber-800 dark:text-amber-400">
                   典籍出处: {activeFormula.sourceText.zh} ({activeFormula.sourceText.en}) · {activeFormula.category.zh}
                 </span>
-                <h4 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-1">
+                <h4 className="text-2xl sm:text-3xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
                   {activeFormula.name.zh} ({activeFormula.name.pinyin}) · {activeFormula.name.en}
                 </h4>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-4">
                 <TermBadge term={activeFormula.actions} lang={lang} />
                 <TermBadge term={activeFormula.targetPattern} lang={lang} />
               </div>
@@ -456,27 +454,29 @@ export default function MateriaMedicaModule({
 
             {renderProse(lang, activeFormula.indicationsEn, activeFormula.indicationsZh)}
 
-            <div className="text-xs font-mono text-stone-600 dark:text-stone-400 pt-2 border-t border-stone-200/80 dark:border-stone-700">
+            <div className="text-xs font-mono text-stone-600 dark:text-stone-400 pt-1">
               辨证舌脉指征 (Tongue & Pulse): {lang === 'zh' ? activeFormula.tongueAndPulseZh : activeFormula.tongueAndPulseEn}
             </div>
           </div>
 
-          {/* Jun-Chen-Zuo-Shi 4-Column Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {activeFormula.architecture.map((item) => {
+          {/* Open 4-Column Editorial Split for Jun-Chen-Zuo-Shi (Zero Box Cards) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-stone-300/70 dark:divide-stone-800 border-b border-stone-300/70 dark:border-stone-800 pb-6">
+            {activeFormula.architecture.map((item, idx) => {
               const info = getRoleSealInfo(item.role);
               return (
                 <div
                   key={item.herbName.zh}
-                  className={`skills-card p-5 flex flex-col justify-between space-y-4 ${info.accentBorder}`}
+                  className={`pt-4 flex flex-col justify-between space-y-4 ${info.accentBorder} ${
+                    idx > 0 ? 'md:pl-5' : ''
+                  } ${idx < 3 ? 'md:pr-5' : ''}`}
                 >
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between gap-2 border-b border-stone-200/80 dark:border-stone-700 pb-2.5">
+                    <div className="flex items-center justify-between gap-2">
                       <VermilionSeal
                         text={info.seal}
                         variant={item.role.startsWith('Jun') ? 'solid' : 'outline'}
                       />
-                      <span className="px-2.5 py-0.5 rounded-full bg-stone-200/70 dark:bg-stone-800 text-xs font-mono font-bold text-stone-700 dark:text-stone-300">
+                      <span className="text-xs font-mono font-bold text-stone-700 dark:text-stone-300">
                         {item.dosage}
                       </span>
                     </div>
@@ -485,7 +485,7 @@ export default function MateriaMedicaModule({
                       <div className="text-[10px] font-mono uppercase text-stone-500">
                         {info.roleLabel}
                       </div>
-                      <h5 className="font-serif font-bold text-lg text-stone-900 dark:text-stone-100 mt-0.5">
+                      <h5 className="font-serif font-bold text-lg text-stone-950 dark:text-stone-100 mt-0.5">
                         {item.herbName.zh}
                         <span className="block text-xs font-sans font-normal text-stone-600 dark:text-stone-400">
                           {item.herbName.pinyin} · {item.herbName.en}
@@ -499,7 +499,7 @@ export default function MateriaMedicaModule({
                   {ESSENTIAL_HERBS.some((h) => h.id === item.herbId) && (
                     <button
                       onClick={() => setSelectedHerbId(item.herbId)}
-                      className="text-left text-[11px] font-mono text-[#B91C1C] dark:text-amber-400 hover:underline pt-2 border-t border-stone-200/70 dark:border-stone-700"
+                      className="text-left text-[11px] font-mono text-[#B91C1C] dark:text-amber-400 hover:underline pt-2"
                     >
                       ↑ 检视本草饮片 · Inspect {item.herbName.zh.split(' ')[0]}
                     </button>
@@ -509,8 +509,8 @@ export default function MateriaMedicaModule({
             })}
           </div>
 
-          {/* Formula Synergy Masterclass Callout */}
-          <div className="skills-card p-6 space-y-2">
+          {/* Open Left-Bordered Formula Synergy Callout */}
+          <div className="border-l-2 border-[#B91C1C] pl-4 space-y-1.5">
             <div className="flex items-center gap-2">
               <VermilionSeal text="方义配伍" />
               <span className="text-xs font-serif font-bold uppercase tracking-wider text-stone-800 dark:text-amber-300">

@@ -93,7 +93,6 @@ export default function DiagnosticsModule({
       const h = canvas.height;
       ctx.clearRect(0, 0, w, h);
 
-      // Draw Subtle Grid & 3 Depth Lines (Fu 浮, Zhong 中, Chen 沉)
       ctx.strokeStyle = 'rgba(214, 199, 178, 0.2)';
       ctx.lineWidth = 1;
       [0.25, 0.5, 0.75].forEach((ratio) => {
@@ -168,90 +167,83 @@ export default function DiagnosticsModule({
   };
 
   return (
-    <div className="space-y-8">
-      {/* Google Skills Track Overview Card */}
-      <div className="skills-surface p-6 sm:p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-7 space-y-4">
-            <LabMetadataChips
-              chips={[
-                { label: 'Path 03 · 四诊八纲辨证', tone: 'cinnabar' },
-                { label: 'Clinical Simulation Lab', tone: 'amber' },
-                { label: 'Tongue, Pulse & Case Sandbox', tone: 'jade' },
-                { label: '20 min', tone: 'stone' }
-              ]}
-            />
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 tracking-wide">
-              望舌、切脉与八纲脏腑辨证模拟器
-              {lang !== 'zh' && (
-                <span className="block text-base sm:text-lg font-sans font-normal text-stone-600 dark:text-stone-400 mt-1">
-                  Interactive Tongue Inspection, Pulse Oscilloscope & Bian Zheng Clinical Sandbox
-                </span>
-              )}
-            </h2>
-            {renderProse(
-              lang,
-              'TCM diagnosis gathers clues through the Four Examinations (望 Inspection, 闻 Auscultation/Olfaction, 问 Inquiry, 切 Palpation) to synthesize a Root Pattern (证候 Zheng)—revealing the exact location, temperature, and strength of disharmony.',
-              '“望而知之谓之神，切而知之谓之巧。”中医通过望舌、切脉、问诊四诊合参，以八纲（阴阳、表里、寒热、虚实）与脏腑辨证洞察疾病本质。'
+    <div className="space-y-16">
+      {/* UNBOXED EDITORIAL HERO DIRECTLY ON CANVAS */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center pb-12 border-b border-stone-300/80 dark:border-stone-800">
+        <div className="lg:col-span-7 space-y-4">
+          <LabMetadataChips
+            chips={[
+              { label: 'Path 03 · 四诊八纲辨证', tone: 'cinnabar' },
+              { label: 'Clinical Simulation Lab', tone: 'amber' },
+              { label: 'Tongue, Pulse & Case Sandbox', tone: 'jade' },
+              { label: '20 min', tone: 'stone' }
+            ]}
+          />
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-stone-950 dark:text-stone-100 tracking-wide leading-tight">
+            望舌、切脉与八纲脏腑辨证模拟器
+            {lang !== 'zh' && (
+              <span className="block text-lg sm:text-xl font-sans font-normal text-stone-600 dark:text-stone-400 mt-1.5">
+                Interactive Tongue Inspection, Pulse Oscilloscope & Bian Zheng Clinical Sandbox
+              </span>
             )}
-          </div>
-          <div className="lg:col-span-5">
-            <div className="relative rounded-[24px] overflow-hidden border border-stone-300/70 dark:border-stone-700 shadow-md aspect-video bg-stone-200 dark:bg-stone-900">
-              <img
-                src="/images/diagnostics_scroll.jpg"
-                alt="Classical Diagnostics Scroll"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-4 py-3 text-xs text-amber-100 font-serif flex justify-between items-center">
-                <span>《四诊望舌切脉图》· Pulse & Tongue Inspection</span>
-                <VermilionSeal text="寸关尺三部" variant="solid" />
-              </div>
+          </h2>
+          {renderProse(
+            lang,
+            'TCM diagnosis gathers clues through the Four Examinations (望 Inspection, 闻 Auscultation/Olfaction, 问 Inquiry, 切 Palpation) to synthesize a Root Pattern (证候 Zheng)—revealing the exact location, temperature, and strength of disharmony.',
+            '“望而知之谓之神，切而知之谓之巧。”中医通过望舌、切脉、问诊四诊合参，以八纲（阴阳、表里、寒热、虚实）与脏腑辨证洞察疾病本质。'
+          )}
+        </div>
+        <div className="lg:col-span-5">
+          <div className="relative overflow-hidden border border-stone-300 dark:border-stone-700 shadow-md aspect-video bg-stone-200 dark:bg-stone-900">
+            <img
+              src="/images/diagnostics_scroll.jpg"
+              alt="Classical Diagnostics Scroll"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 py-2.5 text-xs text-amber-100 font-serif flex justify-between items-center">
+              <span>《四诊望舌切脉图》· Pulse & Tongue Inspection</span>
+              <VermilionSeal text="寸关尺三部" variant="solid" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* LAB 01: INTERACTIVE TONGUE ATLAS + PULSE OSCILLOSCOPE */}
-      <section className="skills-surface overflow-hidden">
-        <div className="skills-lab-header px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <VermilionSeal text="Lab 01 · 舌脉互参" variant="solid" />
-            <div>
-              <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
-                察舌辨苔与寸关尺脉象实训 · Tongue Topography & Pulse Oscilloscope
-              </h3>
-              <p className="text-xs text-stone-600 dark:text-stone-400">
-                Inspect Zang-Fu reflection zones on the tongue and compare radial pulse waveforms across three depths
-              </p>
-            </div>
+      {/* SECTION 01: TONGUE TOPOGRAPHY + PULSE OSCILLOSCOPE — OPEN TWO-COLUMN SPLIT */}
+      <section className="space-y-8">
+        <div className="border-b border-stone-300/80 dark:border-stone-800 pb-4">
+          <div className="text-xs font-mono uppercase tracking-widest text-[#B91C1C] dark:text-amber-400">
+            LAB 01 · TONGUE TOPOGRAPHY & RADIAL PULSE WAVEFORMS
           </div>
+          <h3 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
+            察舌辨苔与寸关尺脉象实训 · Tongue & Pulse Atlas
+          </h3>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-stone-200/80 dark:divide-stone-800">
-          {/* Left Page: Interactive Tongue Diagnostic SVG Map */}
-          <div className="lg:col-span-6 p-6 sm:p-8 space-y-5">
-            <div className="flex items-center justify-between">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:divide-x divide-stone-300/70 dark:divide-stone-800">
+          {/* Left Column: Tongue Diagnostic SVG Map */}
+          <div className="lg:col-span-6 space-y-6">
+            <div className="flex items-baseline justify-between">
               <div>
                 <h4 className="font-serif font-bold text-lg text-stone-900 dark:text-stone-100">
                   望舌诊图谱 · Interactive Tongue Topography
                 </h4>
                 <p className="text-xs text-stone-500">
-                  Select a tongue presentation pill or click Zang-Fu reflection zones
+                  Select a tongue presentation below or click Zang-Fu reflection zones
                 </p>
               </div>
               <VermilionSeal text="伤寒金镜录" />
             </div>
 
-            {/* Rounded Pill Tongue Selector */}
-            <div className="flex flex-wrap gap-1.5">
+            {/* Clean Underline Tab Strip for Tongue States */}
+            <div className="flex flex-wrap gap-x-5 gap-y-2 border-b border-stone-300/70 dark:border-stone-800">
               {TONGUE_STATES.map((t) => (
                 <button
                   key={t.id}
                   onClick={() => setSelectedTongueId(t.id)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-serif font-bold transition border ${
+                  className={`pb-2 text-xs font-serif font-bold transition border-b-2 ${
                     t.id === selectedTongueId
-                      ? 'bg-[#B91C1C] text-white border-[#B91C1C] shadow-2xs'
-                      : 'bg-white/85 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-300/70 dark:border-stone-700 hover:bg-stone-100'
+                      ? 'border-[#B91C1C] text-[#B91C1C] dark:text-amber-400'
+                      : 'border-transparent text-stone-500 hover:text-stone-900 dark:hover:text-stone-200'
                   }`}
                 >
                   {t.name.zh.split(' · ')[0]}
@@ -259,11 +251,10 @@ export default function DiagnosticsModule({
               ))}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 items-center pt-1">
-              {/* SVG Tongue Visualizer */}
-              <div className="sm:col-span-5 flex flex-col items-center rounded-[22px] bg-[#FAF6F0] dark:bg-stone-950 p-4 border border-stone-200/80 dark:border-stone-800 shadow-2xs">
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
+              {/* Single-Layer SVG Tongue Stage */}
+              <div className="sm:col-span-5 flex flex-col items-center canvas-stage p-4">
                 <svg viewBox="0 0 200 250" className="w-40 h-52 select-none">
-                  {/* Base Tongue Body */}
                   <path
                     d={
                       activeTongue.edgeStyle === 'scalloped'
@@ -275,7 +266,6 @@ export default function DiagnosticsModule({
                     strokeWidth="2.5"
                   />
 
-                  {/* Tongue Coating Layer (舌苔) */}
                   <ellipse
                     cx="100"
                     cy="115"
@@ -285,7 +275,6 @@ export default function DiagnosticsModule({
                     fillOpacity={activeTongue.coatOpacity}
                   />
 
-                  {/* Cracks if Crimson Peeled */}
                   {activeTongue.coatTexture === 'peeled' && (
                     <g stroke="#7F1D1D" strokeWidth="1.8" opacity="0.75">
                       <line x1="100" y1="45" x2="100" y2="195" />
@@ -296,7 +285,6 @@ export default function DiagnosticsModule({
                     </g>
                   )}
 
-                  {/* Stasis Petechiae if Purple */}
                   {activeTongue.id === 'purple-stasis' && (
                     <g fill="#3B0764" opacity="0.8">
                       <circle cx="62" cy="145" r="3" />
@@ -308,14 +296,13 @@ export default function DiagnosticsModule({
                     </g>
                   )}
 
-                  {/* Clickable Zang-Fu Zone Overlays */}
                   <g onClick={() => setSelectedZoneId('root')} className="cursor-pointer">
                     <rect
                       x="65"
                       y="34"
                       width="70"
                       height="36"
-                      rx="10"
+                      rx="6"
                       fill={selectedZoneId === 'root' ? 'rgba(255,255,255,0.28)' : 'transparent'}
                       stroke={selectedZoneId === 'root' ? '#FFFFFF' : 'rgba(255,255,255,0.4)'}
                       strokeDasharray="3 2"
@@ -331,7 +318,7 @@ export default function DiagnosticsModule({
                       y="80"
                       width="64"
                       height="72"
-                      rx="12"
+                      rx="8"
                       fill={selectedZoneId === 'center' ? 'rgba(255,255,255,0.28)' : 'transparent'}
                       stroke={selectedZoneId === 'center' ? '#FFFFFF' : 'rgba(255,255,255,0.4)'}
                       strokeDasharray="3 2"
@@ -367,29 +354,28 @@ export default function DiagnosticsModule({
                 </svg>
               </div>
 
-              {/* Tongue Interpretation Card */}
-              <div className="sm:col-span-7 space-y-3">
-                <div className="skills-card p-4 space-y-2">
-                  <div className="font-serif font-bold text-base text-stone-900 dark:text-stone-100">
+              {/* Unboxed Tongue Interpretation */}
+              <div className="sm:col-span-7 space-y-4">
+                <div className="space-y-2 border-b border-stone-300/70 dark:border-stone-800 pb-4">
+                  <div className="font-serif font-bold text-lg text-stone-900 dark:text-stone-100">
                     {activeTongue.name.zh}
                   </div>
                   <div className="text-xs font-mono text-amber-800 dark:text-amber-400">
                     {activeTongue.name.en}
                   </div>
                   {renderProse(lang, activeTongue.clinicalMeaningEn, activeTongue.clinicalMeaningZh)}
-                  <div className="pt-2 border-t border-stone-200/80 dark:border-stone-700 flex flex-wrap gap-2 text-xs">
-                    <span className="px-2.5 py-0.5 rounded-full bg-red-900/10 text-[#B91C1C] dark:text-red-300 font-semibold">
+                  <div className="pt-2 flex flex-wrap gap-4 text-xs font-serif">
+                    <span className="border-b border-[#B91C1C] text-[#B91C1C] dark:text-red-300 font-bold">
                       主证: {activeTongue.associatedPattern.zh}
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-amber-900/10 text-amber-900 dark:text-amber-300 font-semibold">
+                    <span className="border-b border-amber-800 text-amber-900 dark:text-amber-300 font-bold">
                       主方: {activeTongue.recommendedFormula.zh}
                     </span>
                   </div>
                 </div>
 
-                {/* Clicked Topographical Zone Info */}
-                <div className="p-3.5 rounded-2xl bg-amber-900/8 dark:bg-amber-950/35 border border-amber-800/20 space-y-1">
-                  <div className="text-xs font-serif font-bold text-amber-950 dark:text-amber-200">
+                <div className="border-l-2 border-[#B91C1C] pl-3.5 space-y-1">
+                  <div className="text-xs font-serif font-bold text-stone-900 dark:text-amber-200">
                     脏腑分部 · {activeZone.name.zh} ({activeZone.name.en})
                   </div>
                   {renderProse(lang, activeZone.descEn, activeZone.descZh)}
@@ -398,9 +384,9 @@ export default function DiagnosticsModule({
             </div>
           </div>
 
-          {/* Right Page: Animated Pulse Waveform Visualizer */}
-          <div className="lg:col-span-6 p-6 sm:p-8 space-y-5">
-            <div className="flex items-center justify-between">
+          {/* Right Column: Animated Pulse Waveform Visualizer */}
+          <div className="lg:col-span-6 lg:pl-10 space-y-6">
+            <div className="flex items-baseline justify-between">
               <div>
                 <h4 className="font-serif font-bold text-lg text-stone-900 dark:text-stone-100">
                   寸关尺脉象图谱 · Pulse Waveform Oscilloscope
@@ -412,16 +398,16 @@ export default function DiagnosticsModule({
               <VermilionSeal text="濒湖脉学" />
             </div>
 
-            {/* Rounded Pill Pulse Selector */}
-            <div className="flex flex-wrap gap-1.5">
+            {/* Clean Underline Tab Strip for Pulse Types */}
+            <div className="flex flex-wrap gap-x-5 gap-y-2 border-b border-stone-300/70 dark:border-stone-800">
               {PULSE_TYPES.map((p) => (
                 <button
                   key={p.id}
                   onClick={() => setSelectedPulseId(p.id)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-serif font-bold transition border ${
+                  className={`pb-2 text-xs font-serif font-bold transition border-b-2 ${
                     p.id === selectedPulseId
-                      ? 'bg-stone-900 text-amber-50 border-stone-900 dark:bg-amber-600 dark:text-stone-950 shadow-2xs'
-                      : 'bg-white/85 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-300/70 dark:border-stone-700 hover:bg-stone-100'
+                      ? 'border-stone-900 dark:border-amber-400 text-stone-950 dark:text-amber-200'
+                      : 'border-transparent text-stone-500 hover:text-stone-900 dark:hover:text-stone-200'
                   }`}
                 >
                   {p.name.zh} · {p.name.en.split(' ')[0]}
@@ -429,8 +415,8 @@ export default function DiagnosticsModule({
               ))}
             </div>
 
-            {/* Live Canvas Oscilloscope */}
-            <div className="rounded-[22px] overflow-hidden bg-[#161514] border border-stone-800 p-4 shadow-sm">
+            {/* Single-Layer Live Canvas Oscilloscope */}
+            <div className="bg-[#161514] border border-stone-800 p-4">
               <div className="flex justify-between text-[10px] font-mono text-amber-200/70 mb-1">
                 <span>Depth Level: {activePulse.depthLevel}</span>
                 <span>Cun (寸-Distal) · Guan (关-Middle) · Chi (尺-Proximal)</span>
@@ -448,15 +434,15 @@ export default function DiagnosticsModule({
               </div>
             </div>
 
-            {/* Tactile Metaphor & Clinical Meaning */}
-            <div className="skills-card p-4 space-y-2.5">
-              <div className="flex items-center justify-between">
+            {/* Unboxed Tactile Metaphor & Clinical Meaning */}
+            <div className="space-y-3">
+              <div className="flex items-baseline justify-between border-b border-stone-300/70 dark:border-stone-800 pb-2">
                 <TermBadge term={activePulse.name} lang={lang} />
                 <span className="text-xs font-mono text-amber-800 dark:text-amber-400">
                   {activePulse.depthLevel}
                 </span>
               </div>
-              <div className="p-3 rounded-xl bg-amber-900/8 dark:bg-amber-950/40 border border-amber-800/20 text-xs">
+              <div className="border-l-2 border-amber-700 pl-3.5 text-xs">
                 <span className="font-serif font-bold text-stone-900 dark:text-amber-200">
                   指下体悟 (Classical Tactile Simile): 「{activePulse.tactileMetaphor.zh}」
                 </span>
@@ -472,28 +458,25 @@ export default function DiagnosticsModule({
         </div>
       </section>
 
-      {/* LAB 02: BIAN ZHENG (辨证论治) SYMPTOM SANDBOX & CASE SIMULATOR */}
-      <section className="skills-surface overflow-hidden">
-        <div className="skills-lab-header px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <VermilionSeal text="Lab 02 · 辨证沙盒" variant="solid" />
-            <div>
-              <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
-                四诊合参辨证医案推演 · Bian Zheng Pattern Differentiation Sandbox
-              </h3>
-              <p className="text-xs text-stone-600 dark:text-stone-400">
-                Toggle patient symptoms, tongue, and pulse on the left or load a preset clinical case
-              </p>
+      {/* SECTION 02: BIAN ZHENG (辨证论治) SYMPTOM SANDBOX — OPEN EDITORIAL SPLIT */}
+      <section className="pt-12 border-t border-stone-300/80 dark:border-stone-800 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-300/80 dark:border-stone-800 pb-4">
+          <div>
+            <div className="text-xs font-mono uppercase tracking-widest text-[#B91C1C] dark:text-amber-400">
+              LAB 02 · EIGHT-PRINCIPLE & ZANG-FU CASE DEDUCTION
             </div>
+            <h3 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
+              四诊合参辨证医案推演 · Bian Zheng Pattern Differentiation Sandbox
+            </h3>
           </div>
 
-          {/* Preset Clinical Case Pill Buttons */}
-          <div className="flex flex-wrap gap-1.5">
+          {/* Clean Underline Preset Case Selector */}
+          <div className="flex flex-wrap gap-5 text-xs font-serif">
             {DIAGNOSTIC_CASES.map((c, idx) => (
               <button
                 key={c.id}
                 onClick={() => loadPresetCase(c.id)}
-                className="px-3.5 py-1.5 rounded-full text-xs font-serif font-bold bg-white/85 dark:bg-stone-800 text-stone-800 dark:text-amber-200 border border-stone-300/80 dark:border-stone-700 hover:bg-amber-50 dark:hover:bg-stone-700 transition"
+                className="pb-1 border-b border-stone-400 dark:border-stone-700 text-stone-700 dark:text-amber-200 hover:border-[#B91C1C] hover:text-[#B91C1C] transition"
               >
                 医案 {idx + 1}: {c.title.zh.split('（')[0]}
               </button>
@@ -501,29 +484,30 @@ export default function DiagnosticsModule({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-stone-200/80 dark:divide-stone-800">
-          {/* Left Page: Select Symptoms, Tongue, and Pulse */}
-          <div className="lg:col-span-6 p-6 sm:p-8 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:divide-x divide-stone-300/70 dark:divide-stone-800 items-start">
+          {/* Left Column: Unboxed Symptom Checklist & Selects */}
+          <div className="lg:col-span-6 space-y-6">
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h4 className="font-serif font-bold text-sm uppercase tracking-wider text-stone-800 dark:text-stone-200">
                   1. 问诊症状勾选 · Select Patient Symptoms
                 </h4>
-                <span className="px-2.5 py-0.5 rounded-full bg-amber-900/10 text-xs font-mono text-amber-900 dark:text-amber-300">
+                <span className="text-xs font-mono text-stone-500">
                   Selected: {selectedSymptoms.length}
                 </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {/* Hairline Checklist (Replaces 12 Rounded Boxes) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 border-t border-stone-300/70 dark:border-stone-800">
                 {DIAGNOSTIC_SYMPTOM_OPTIONS.map((sym) => {
                   const checked = selectedSymptoms.includes(sym.id);
                   return (
                     <button
                       key={sym.id}
                       onClick={() => toggleSymptom(sym.id)}
-                      className={`p-3 rounded-2xl text-left border transition flex items-start gap-2.5 ${
+                      className={`py-2.5 px-2 text-left border-b border-stone-300/60 dark:border-stone-800 transition flex items-start gap-2.5 ${
                         checked
-                          ? 'bg-amber-900/10 dark:bg-amber-500/20 border-amber-800/50 dark:border-amber-500 text-stone-900 dark:text-stone-100 shadow-2xs'
-                          : 'bg-white/75 dark:bg-stone-800/50 border-stone-200/80 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-white'
+                          ? 'text-stone-950 dark:text-stone-100 font-semibold'
+                          : 'text-stone-500 dark:text-stone-400 hover:text-stone-900'
                       }`}
                     >
                       <CheckCircle2
@@ -532,9 +516,9 @@ export default function DiagnosticsModule({
                         }`}
                       />
                       <div>
-                        <div className="font-serif font-bold text-xs">{sym.label.zh}</div>
+                        <div className="font-serif text-xs">{sym.label.zh}</div>
                         {lang !== 'zh' && (
-                          <div className="text-[11px] opacity-85">{sym.label.en}</div>
+                          <div className="text-[11px] opacity-80">{sym.label.en}</div>
                         )}
                       </div>
                     </button>
@@ -543,7 +527,7 @@ export default function DiagnosticsModule({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-stone-200/80 dark:border-stone-800">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
               <div>
                 <label className="block font-serif font-bold text-xs uppercase tracking-wider text-stone-700 dark:text-stone-300 mb-1.5">
                   2. 望舌象 · Patient Tongue Sign
@@ -551,7 +535,7 @@ export default function DiagnosticsModule({
                 <select
                   value={sandboxTongueId}
                   onChange={(e) => setSandboxTongueId(e.target.value)}
-                  className="w-full rounded-2xl border border-stone-300 dark:border-stone-700 bg-white/85 dark:bg-stone-900 px-3.5 py-2.5 text-xs font-serif font-bold text-stone-900 dark:text-stone-100"
+                  className="w-full border-b-2 border-stone-400 dark:border-stone-700 bg-transparent py-2 text-xs font-serif font-bold text-stone-900 dark:text-stone-100 focus:outline-none focus:border-[#B91C1C]"
                 >
                   {TONGUE_STATES.map((t) => (
                     <option key={t.id} value={t.id}>
@@ -567,7 +551,7 @@ export default function DiagnosticsModule({
                 <select
                   value={sandboxPulseId}
                   onChange={(e) => setSandboxPulseId(e.target.value)}
-                  className="w-full rounded-2xl border border-stone-300 dark:border-stone-700 bg-white/85 dark:bg-stone-900 px-3.5 py-2.5 text-xs font-serif font-bold text-stone-900 dark:text-stone-100"
+                  className="w-full border-b-2 border-stone-400 dark:border-stone-700 bg-transparent py-2 text-xs font-serif font-bold text-stone-900 dark:text-stone-100 focus:outline-none focus:border-[#B91C1C]"
                 >
                   {PULSE_TYPES.map((p) => (
                     <option key={p.id} value={p.id}>
@@ -579,112 +563,107 @@ export default function DiagnosticsModule({
             </div>
           </div>
 
-          {/* Right Page: Synthesized Pattern Diagnosis & Treatment Output */}
-          <div className="lg:col-span-6 p-6 sm:p-8 bg-[#FAF6F0]/45 dark:bg-stone-950/45">
-            <div className="skills-card p-6 space-y-5">
-              <div className="flex items-start justify-between gap-3 border-b border-stone-200/80 dark:border-stone-700 pb-4">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <VermilionSeal text="辨证断案" variant="solid" />
-                    <span className="text-xs font-mono uppercase tracking-widest text-stone-500">
-                      DEDUCED SYNDROME PATTERN
-                    </span>
-                  </div>
-                  <h4 className="text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-2">
-                    {bestMatchedCase.patternDiagnosis.zh} · {bestMatchedCase.patternDiagnosis.en}
-                  </h4>
-                  <p className="text-xs font-mono text-amber-800 dark:text-amber-400">
-                    ({bestMatchedCase.patternDiagnosis.pinyin})
-                  </p>
+          {/* Right Column: Unboxed Deduced Pattern Diagnosis & Treatment */}
+          <div className="lg:col-span-6 lg:pl-10 space-y-6">
+            <div className="flex items-start justify-between gap-3 border-b border-stone-300/80 dark:border-stone-800 pb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <VermilionSeal text="辨证断案" variant="solid" />
+                  <span className="text-xs font-mono uppercase tracking-widest text-stone-500">
+                    DEDUCED SYNDROME PATTERN
+                  </span>
                 </div>
-
-                <button
-                  onClick={() =>
-                    onToggleBookmark(
-                      `case-${bestMatchedCase.id}`,
-                      `${bestMatchedCase.patternDiagnosis.zh} · ${bestMatchedCase.patternDiagnosis.en}`,
-                      'Diagnostics & Patterns'
-                    )
-                  }
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-stone-300 dark:border-stone-700 bg-white/85 dark:bg-stone-900 text-xs font-medium hover:bg-amber-50 transition"
-                >
-                  {bookmarks.includes(`case-${bestMatchedCase.id}`) ? (
-                    <>
-                      <BookmarkCheck className="w-3.5 h-3.5 text-[#B91C1C]" />
-                      <span>Saved</span>
-                    </>
-                  ) : (
-                    <>
-                      <Bookmark className="w-3.5 h-3.5" />
-                      <span>Save</span>
-                    </>
-                  )}
-                </button>
+                <h4 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-2">
+                  {bestMatchedCase.patternDiagnosis.zh} · {bestMatchedCase.patternDiagnosis.en}
+                </h4>
+                <p className="text-xs font-mono text-amber-800 dark:text-amber-400">
+                  ({bestMatchedCase.patternDiagnosis.pinyin})
+                </p>
               </div>
 
-              {/* Eight Principles Breakdown (八纲辨证) */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {[
-                  { label: '表里 Location', val: bestMatchedCase.eightPrinciples.location },
-                  { label: '寒热 Nature', val: bestMatchedCase.eightPrinciples.nature },
-                  { label: '虚实 Strength', val: bestMatchedCase.eightPrinciples.strength },
-                  { label: '阴阳总纲 Root', val: bestMatchedCase.eightPrinciples.root }
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="p-3 rounded-2xl bg-white/85 dark:bg-stone-900/85 border border-stone-200/80 dark:border-stone-700"
-                  >
-                    <div className="text-[10px] font-mono text-stone-500">{item.label}</div>
-                    <div className="font-serif font-bold text-xs text-stone-900 dark:text-stone-100 mt-0.5">
-                      {item.val.zh}
-                    </div>
-                    {lang !== 'zh' && (
-                      <div className="text-[10px] text-stone-600 dark:text-stone-400">
-                        {item.val.en}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Pathomechanism Analysis (病机分析) */}
-              <div className="p-4 rounded-2xl bg-white/85 dark:bg-stone-900/85 border border-stone-200/80 dark:border-stone-700 space-y-1.5">
-                <div className="text-xs font-serif font-bold uppercase tracking-wider text-[#B91C1C] dark:text-amber-400">
-                  审症求因 · 病机推导 (Pathomechanism Synthesis)
-                </div>
-                {renderProse(
-                  lang,
-                  bestMatchedCase.pathomechanismEn,
-                  bestMatchedCase.pathomechanismZh
+              <button
+                onClick={() =>
+                  onToggleBookmark(
+                    `case-${bestMatchedCase.id}`,
+                    `${bestMatchedCase.patternDiagnosis.zh} · ${bestMatchedCase.patternDiagnosis.en}`,
+                    'Diagnostics & Patterns'
+                  )
+                }
+                className="inline-flex items-center gap-1.5 text-xs font-mono text-stone-600 dark:text-stone-400 hover:text-[#B91C1C] transition"
+              >
+                {bookmarks.includes(`case-${bestMatchedCase.id}`) ? (
+                  <>
+                    <BookmarkCheck className="w-3.5 h-3.5 text-[#B91C1C]" />
+                    <span>Saved</span>
+                  </>
+                ) : (
+                  <>
+                    <Bookmark className="w-3.5 h-3.5" />
+                    <span>Save</span>
+                  </>
                 )}
+              </button>
+            </div>
+
+            {/* Unboxed Hairline Eight Principles Definition List */}
+            <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4 border-y border-stone-300/80 dark:border-stone-800">
+              {[
+                { label: '表里 Location', val: bestMatchedCase.eightPrinciples.location },
+                { label: '寒热 Nature', val: bestMatchedCase.eightPrinciples.nature },
+                { label: '虚实 Strength', val: bestMatchedCase.eightPrinciples.strength },
+                { label: '阴阳总纲 Root', val: bestMatchedCase.eightPrinciples.root }
+              ].map((item) => (
+                <div key={item.label}>
+                  <dt className="text-[10px] font-mono text-stone-500">{item.label}</dt>
+                  <dd className="font-serif font-bold text-xs text-stone-900 dark:text-stone-100 mt-0.5">
+                    {item.val.zh}
+                    {lang !== 'zh' && (
+                      <span className="block font-sans font-normal text-[10px] text-stone-600 dark:text-stone-400">
+                        {item.val.en}
+                      </span>
+                    )}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            {/* Unboxed Pathomechanism Analysis */}
+            <div className="border-l-2 border-[#B91C1C] pl-4 space-y-1.5">
+              <div className="text-xs font-serif font-bold uppercase tracking-wider text-[#B91C1C] dark:text-amber-400">
+                审症求因 · 病机推导 (Pathomechanism Synthesis)
+              </div>
+              {renderProse(
+                lang,
+                bestMatchedCase.pathomechanismEn,
+                bestMatchedCase.pathomechanismZh
+              )}
+            </div>
+
+            {/* Unboxed Treatment Principle + Formula + Acupoints */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-stone-300/80 dark:border-stone-800">
+              <div className="border-l-2 border-[#2D6A4F] pl-4">
+                <div className="text-[11px] font-mono uppercase text-[#2D6A4F] dark:text-emerald-400">
+                  治法纲领 · Treatment Principle
+                </div>
+                <div className="font-serif font-bold text-base text-stone-900 dark:text-stone-100 mt-1">
+                  {bestMatchedCase.treatmentPrinciple.zh}
+                </div>
+                <div className="text-xs text-stone-600 dark:text-stone-300">
+                  {bestMatchedCase.treatmentPrinciple.en}
+                </div>
               </div>
 
-              {/* Treatment Principle + Formula + Acupoints */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="p-4 rounded-2xl bg-emerald-900/6 dark:bg-emerald-950/35 border border-emerald-800/20">
-                  <div className="text-[11px] font-mono uppercase text-[#2D6A4F] dark:text-emerald-400">
-                    治法纲领 · Treatment Principle
-                  </div>
-                  <div className="font-serif font-bold text-base text-stone-900 dark:text-stone-100 mt-1">
-                    {bestMatchedCase.treatmentPrinciple.zh}
-                  </div>
-                  <div className="text-xs text-stone-600 dark:text-stone-300">
-                    {bestMatchedCase.treatmentPrinciple.en}
-                  </div>
+              <div className="border-l-2 border-amber-700 pl-4">
+                <div className="text-[11px] font-mono uppercase text-amber-900 dark:text-amber-400">
+                  代表方剂与配穴 · Formula & Acupoints
                 </div>
-
-                <div className="p-4 rounded-2xl bg-amber-900/6 dark:bg-amber-950/35 border border-amber-800/20">
-                  <div className="text-[11px] font-mono uppercase text-amber-900 dark:text-amber-400">
-                    代表方剂与配穴 · Formula & Acupoints
+                {matchedFormula && (
+                  <div className="font-serif font-bold text-base text-[#B91C1C] dark:text-amber-300 mt-1">
+                    {matchedFormula.name.zh} ({matchedFormula.name.en})
                   </div>
-                  {matchedFormula && (
-                    <div className="font-serif font-bold text-base text-[#B91C1C] dark:text-amber-300 mt-1">
-                      {matchedFormula.name.zh} ({matchedFormula.name.en})
-                    </div>
-                  )}
-                  <div className="text-xs font-mono text-stone-700 dark:text-stone-300 mt-1">
-                    主穴 Acupoints: {bestMatchedCase.recommendedAcupoints.join(' · ')}
-                  </div>
+                )}
+                <div className="text-xs font-mono text-stone-700 dark:text-stone-300 mt-1">
+                  主穴 Acupoints: {bestMatchedCase.recommendedAcupoints.join(' · ')}
                 </div>
               </div>
             </div>
