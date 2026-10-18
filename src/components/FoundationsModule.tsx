@@ -24,11 +24,11 @@ interface FoundationsModuleProps {
 }
 
 const ELEMENT_COORDS: Record<ElementKey, { x: number; y: number }> = {
-  fire: { x: 200, y: 48 },
-  earth: { x: 342, y: 152 },
-  metal: { x: 288, y: 322 },
-  water: { x: 112, y: 322 },
-  wood: { x: 58, y: 152 }
+  fire: { x: 220, y: 68 },
+  earth: { x: 358, y: 168 },
+  metal: { x: 305, y: 330 },
+  water: { x: 135, y: 330 },
+  wood: { x: 82, y: 168 }
 };
 
 export default function FoundationsModule({
@@ -87,14 +87,14 @@ export default function FoundationsModule({
         </div>
 
         <div className="lg:col-span-5">
-          <div className="relative overflow-hidden border border-stone-300 dark:border-stone-700 shadow-md aspect-video bg-stone-200 dark:bg-stone-900">
+          <div className="relative rounded-md overflow-hidden border border-stone-300 dark:border-stone-700 shadow-md aspect-video bg-stone-200 dark:bg-stone-900">
             <img
               src="/images/wuxing_scroll.jpg"
               alt="Wu Xing Classical Scroll"
               className="w-full h-full object-cover"
             />
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 py-2.5 text-xs text-amber-100 font-serif flex justify-between items-center">
-              <span>《五行生克与五脏应象图》· Classical Five-Element Scroll</span>
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-4 py-2.5 text-xs text-amber-100 font-serif flex justify-between items-center gap-3">
+              <span className="truncate">《五行生克与五脏应象图》· Five-Element Scroll</span>
               <VermilionSeal text="宣纸工笔" variant="solid" />
             </div>
           </div>
@@ -105,32 +105,32 @@ export default function FoundationsModule({
       <section className="space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-300/80 dark:border-stone-800 pb-4">
           <div>
-            <div className="text-xs font-mono uppercase tracking-widest text-[#B91C1C] dark:text-amber-400">
-              LAB 01 · FIVE-PHASE SYSTEMIC DYNAMICS
+            <div className="editorial-kicker text-[#B91C1C] dark:text-amber-400">
+              Lab 01 · Five-Phase Systemic Dynamics
             </div>
             <h3 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
               五行生克乘侮图解 · Wu Xing Dynamic Cycle Engine
             </h3>
           </div>
 
-          {/* Minimalist Underline Tab Toggle */}
-          <div className="flex items-center gap-6 text-xs font-serif">
+          {/* Minimalist Underline Tab Toggle with >=40px Tap Targets */}
+          <div className="flex items-center gap-6 text-xs sm:text-sm font-serif">
             <button
               onClick={() => setCycleMode('sheng-ke')}
-              className={`pb-1.5 border-b-2 transition ${
+              className={`py-2 px-1 min-h-[40px] border-b-2 transition ${
                 cycleMode === 'sheng-ke'
                   ? 'border-stone-900 dark:border-amber-400 text-stone-950 dark:text-amber-200 font-bold'
-                  : 'border-transparent text-stone-500 hover:text-stone-900'
+                  : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-900'
               }`}
             >
               生理生克 · Generating & Controlling
             </button>
             <button
               onClick={() => setCycleMode('pathology')}
-              className={`pb-1.5 border-b-2 transition ${
+              className={`py-2 px-1 min-h-[40px] border-b-2 transition ${
                 cycleMode === 'pathology'
                   ? 'border-[#B91C1C] text-[#B91C1C] dark:text-red-400 font-bold'
-                  : 'border-transparent text-stone-500 hover:text-stone-900'
+                  : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-900'
               }`}
             >
               病理乘侮 · Overacting & Rebellion
@@ -141,8 +141,8 @@ export default function FoundationsModule({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left: Single-Layer Interactive SVG Stage */}
           <div className="lg:col-span-5 flex flex-col items-center">
-            <div className="w-full max-w-[380px] aspect-square canvas-stage p-3">
-              <svg viewBox="0 0 400 400" className="w-full h-full select-none">
+            <div className="w-full max-w-[400px] aspect-square canvas-stage p-3">
+              <svg viewBox="0 0 440 410" className="w-full h-full select-none">
                 <defs>
                   <marker
                     id="arrow-sheng"
@@ -169,9 +169,9 @@ export default function FoundationsModule({
                 </defs>
 
                 <circle
-                  cx="200"
-                  cy="202"
-                  r="148"
+                  cx="220"
+                  cy="213"
+                  r="145"
                   fill="none"
                   stroke="#C4B5A3"
                   strokeWidth="1.2"
@@ -185,7 +185,7 @@ export default function FoundationsModule({
                   const dx = to.x - from.x;
                   const dy = to.y - from.y;
                   const dist = Math.sqrt(dx * dx + dy * dy);
-                  const pad = 42;
+                  const pad = 48;
                   const x1 = Number((from.x + (dx / dist) * pad).toFixed(2));
                   const y1 = Number((from.y + (dy / dist) * pad).toFixed(2));
                   const x2 = Number((to.x - (dx / dist) * pad).toFixed(2));
@@ -213,7 +213,7 @@ export default function FoundationsModule({
                   const dx = to.x - from.x;
                   const dy = to.y - from.y;
                   const dist = Math.sqrt(dx * dx + dy * dy);
-                  const pad = 42;
+                  const pad = 48;
                   const x1 = Number((from.x + (dx / dist) * pad).toFixed(2));
                   const y1 = Number((from.y + (dy / dist) * pad).toFixed(2));
                   const x2 = Number((to.x - (dx / dist) * pad).toFixed(2));
@@ -238,6 +238,7 @@ export default function FoundationsModule({
                 {WUXING_ELEMENTS.map((el) => {
                   const pos = ELEMENT_COORDS[el.key];
                   const isSelected = el.key === selectedElementKey;
+                  const compactOrganZh = el.zangOrgan.zh.replace('(心包)', '·心包');
                   return (
                     <g
                       key={el.key}
@@ -252,7 +253,7 @@ export default function FoundationsModule({
                         <circle
                           cx={pos.x}
                           cy={pos.y}
-                          r="42"
+                          r="47"
                           fill="none"
                           stroke={el.colorHex}
                           strokeWidth="2"
@@ -262,26 +263,35 @@ export default function FoundationsModule({
                       <circle
                         cx={pos.x}
                         cy={pos.y}
-                        r="35"
+                        r="41"
                         fill={isSelected ? el.colorHex : '#FAF6F0'}
                         stroke={el.colorHex}
                         strokeWidth="2.5"
                       />
                       <text
                         x={pos.x}
-                        y={pos.y - 4}
+                        y={pos.y - 10}
                         textAnchor="middle"
                         fill={isSelected ? '#FFFFFF' : el.colorHex}
-                        className="font-serif font-bold text-lg"
+                        className="font-serif font-bold text-base"
                       >
-                        {el.name.zh} · {el.zangOrgan.zh}
+                        {el.name.zh}行
                       </text>
                       <text
                         x={pos.x}
-                        y={pos.y + 14}
+                        y={pos.y + 6}
                         textAnchor="middle"
-                        fill={isSelected ? '#FEF3C7' : '#57534E'}
-                        className="text-[10px] font-mono font-semibold"
+                        fill={isSelected ? '#FEF3C7' : '#292524'}
+                        className="font-serif font-semibold text-xs"
+                      >
+                        {compactOrganZh}
+                      </text>
+                      <text
+                        x={pos.x}
+                        y={pos.y + 21}
+                        textAnchor="middle"
+                        fill={isSelected ? '#FDE68A' : '#57534E'}
+                        className="text-[11px] font-sans font-semibold uppercase"
                       >
                         {el.name.en}
                       </text>
@@ -291,7 +301,7 @@ export default function FoundationsModule({
               </svg>
             </div>
 
-            <div className="pt-3 flex flex-wrap justify-center gap-6 text-xs text-stone-600 dark:text-stone-400">
+            <div className="pt-3 flex flex-wrap justify-center gap-6 text-xs text-stone-700 dark:text-stone-300">
               <span className="inline-flex items-center gap-1.5">
                 <span className="w-3.5 h-0.5 bg-[#2D6A4F] inline-block" />
                 <span>相生 · Generating (Mother → Child)</span>
@@ -317,7 +327,7 @@ export default function FoundationsModule({
                   <h4 className="text-xl sm:text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 inline">
                     {activeElement.name.en} Phase ({activeElement.name.pinyin})
                   </h4>
-                  <span className="block sm:inline sm:ml-3 text-xs font-mono text-stone-500">
+                  <span className="block sm:inline sm:ml-3 text-xs font-sans font-semibold text-stone-600 dark:text-stone-400">
                     Zang: {activeElement.zangOrgan.zh} ({activeElement.zangOrgan.en}) · Fu: {activeElement.fuOrgan.zh} ({activeElement.fuOrgan.en})
                   </span>
                 </div>
@@ -331,16 +341,16 @@ export default function FoundationsModule({
                     'Foundations'
                   )
                 }
-                className="inline-flex items-center gap-1.5 text-xs font-mono text-stone-600 dark:text-stone-400 hover:text-[#B91C1C] transition"
+                className="inline-flex items-center gap-1.5 py-2 px-2 min-h-[40px] text-xs font-sans font-semibold text-stone-700 dark:text-stone-300 hover:text-[#B91C1C] transition"
               >
                 {bookmarks.includes(`wuxing-${activeElement.key}`) ? (
                   <>
-                    <BookmarkCheck className="w-3.5 h-3.5 text-[#B91C1C]" />
-                    <span>Saved</span>
+                    <BookmarkCheck className="w-4 h-4 text-[#B91C1C]" />
+                    <span className="text-[#B91C1C] font-bold">Saved</span>
                   </>
                 ) : (
                   <>
-                    <Bookmark className="w-3.5 h-3.5" />
+                    <Bookmark className="w-4 h-4" />
                     <span>Bookmark</span>
                   </>
                 )}
@@ -362,12 +372,12 @@ export default function FoundationsModule({
                 { label: '五气 Climate', val: activeElement.climate }
               ].map((item) => (
                 <div key={item.label}>
-                  <dt className="text-[10px] font-mono uppercase tracking-wider text-stone-500">
+                  <dt className="text-xs font-sans font-semibold uppercase tracking-wider text-stone-600 dark:text-stone-400">
                     {item.label}
                   </dt>
                   <dd className="font-serif font-bold text-sm text-stone-900 dark:text-stone-100 mt-0.5">
                     {item.val.zh}{' '}
-                    <span className="font-sans font-normal text-xs text-stone-600 dark:text-stone-400">
+                    <span className="font-sans font-normal text-xs text-stone-700 dark:text-stone-300">
                       · {item.val.en}
                     </span>
                   </dd>
@@ -386,7 +396,7 @@ export default function FoundationsModule({
                       {WUXING_ELEMENTS.find((e) => e.key === activeElement.generates)?.name.zh}
                     </span>
                   </div>
-                  <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-stone-800 dark:text-stone-200 leading-relaxed">
                     Nourishes{' '}
                     <strong>
                       {WUXING_ELEMENTS.find((e) => e.key === activeElement.generates)?.name.en} (
@@ -404,7 +414,7 @@ export default function FoundationsModule({
                       {WUXING_ELEMENTS.find((e) => e.key === activeElement.controls)?.name.zh}
                     </span>
                   </div>
-                  <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-stone-800 dark:text-stone-200 leading-relaxed">
                     Restrains{' '}
                     <strong>
                       {WUXING_ELEMENTS.find((e) => e.key === activeElement.controls)?.name.en} (
@@ -440,16 +450,16 @@ export default function FoundationsModule({
       <section className="pt-12 border-t border-stone-300/80 dark:border-stone-800 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-300/80 dark:border-stone-800 pb-4">
           <div>
-            <div className="text-xs font-mono uppercase tracking-widest text-[#B91C1C] dark:text-amber-400">
-              LAB 02 · ZANG-FU FUNCTIONAL SYSTEMS VS. ANATOMY
+            <div className="editorial-kicker text-[#B91C1C] dark:text-amber-400">
+              Lab 02 · Zang-Fu Functional Systems vs. Anatomy
             </div>
             <h3 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
               五脏藏象与中西医对照 · Zang-Fu Systems Bridge
             </h3>
           </div>
 
-          {/* Clean Underline Tab Bar for the 5 Zang Organs */}
-          <div className="flex flex-wrap gap-6">
+          {/* Clean Underline Tab Bar for the 5 Zang Organs (>=40px tap targets) */}
+          <div className="flex flex-wrap gap-5">
             {ZANG_FU_ORGANS.map((org) => {
               const elColor = WUXING_ELEMENTS.find((e) => e.key === org.element)?.colorHex || '#2D6A4F';
               const active = org.id === selectedOrganId;
@@ -457,15 +467,15 @@ export default function FoundationsModule({
                 <button
                   key={org.id}
                   onClick={() => setSelectedOrganId(org.id)}
-                  className={`pb-2 text-sm font-serif font-bold transition border-b-2 flex items-baseline gap-1.5 ${
+                  className={`py-2 px-1.5 min-h-[40px] text-sm font-serif font-bold transition border-b-2 flex items-baseline gap-1.5 ${
                     active
                       ? 'text-stone-950 dark:text-amber-50'
-                      : 'border-transparent text-stone-500 hover:text-stone-900 dark:hover:text-stone-200'
+                      : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
                   }`}
                   style={active ? { borderBottomColor: elColor } : undefined}
                 >
                   <span>{org.name.zh}</span>
-                  <span className="font-sans font-normal text-xs opacity-80">{org.name.en}</span>
+                  <span className="font-sans font-normal text-xs opacity-85">{org.name.en}</span>
                 </button>
               );
             })}
@@ -477,20 +487,20 @@ export default function FoundationsModule({
           <div className="lg:col-span-5 space-y-6">
             <div className="flex items-baseline justify-between border-b border-stone-300/70 dark:border-stone-800 pb-3">
               <TermBadge term={activeOrgan.name} lang={lang} size="lg" />
-              <span className="text-xs font-mono text-amber-900 dark:text-amber-300">
+              <span className="text-xs font-sans font-semibold text-amber-900 dark:text-amber-300">
                 表里配腑: {activeOrgan.pairedOrgan.zh} ({activeOrgan.pairedOrgan.en})
               </span>
             </div>
 
             <div className="space-y-1.5">
-              <div className="text-xs font-mono uppercase tracking-wider text-stone-500">
+              <div className="editorial-kicker text-stone-600 dark:text-stone-400">
                 西医解剖概念 · Western Anatomical Scope
               </div>
               {renderProse(lang, activeOrgan.westernViewEn, activeOrgan.westernViewZh)}
             </div>
 
             <div className="space-y-3 pt-4 border-t border-stone-300/70 dark:border-stone-800">
-              <div className="text-xs font-mono uppercase tracking-wider text-[#B91C1C] dark:text-amber-400">
+              <div className="editorial-kicker text-[#B91C1C] dark:text-amber-400">
                 常见临床证候 · Core Clinical Disharmony Patterns
               </div>
               <div className="divide-y divide-stone-300/60 dark:divide-stone-800">
@@ -500,10 +510,10 @@ export default function FoundationsModule({
                       {pat.name.zh} ({pat.name.pinyin}) · {pat.name.en}
                     </div>
                     {lang !== 'zh' && (
-                      <p className="text-xs text-stone-700 dark:text-stone-300 mt-0.5">{pat.symptomsEn}</p>
+                      <p className="text-xs sm:text-sm text-stone-800 dark:text-stone-200 mt-0.5">{pat.symptomsEn}</p>
                     )}
                     {lang !== 'en' && (
-                      <p className="text-xs text-stone-600 dark:text-stone-400 font-serif mt-0.5">{pat.symptomsZh}</p>
+                      <p className="text-xs sm:text-sm text-stone-700 dark:text-stone-300 font-serif mt-0.5">{pat.symptomsZh}</p>
                     )}
                   </div>
                 ))}
@@ -521,7 +531,7 @@ export default function FoundationsModule({
               <h4 className="font-serif font-bold text-lg text-stone-900 dark:text-stone-100">
                 中医藏象核心职能 · TCM Functional Responsibilities
               </h4>
-              <span className="text-xs font-mono text-stone-500">
+              <span className="text-xs font-sans font-semibold text-stone-600 dark:text-stone-400">
                 当令时辰: {activeOrgan.peakHours}
               </span>
             </div>
@@ -530,12 +540,12 @@ export default function FoundationsModule({
               {activeOrgan.tcmFunctions.map((fn, idx) => (
                 <div key={fn.title.zh} className="py-5 first:pt-2 last:pb-1 space-y-2">
                   <div className="flex items-baseline gap-3">
-                    <span className="font-mono text-xs font-bold text-[#B91C1C] dark:text-amber-400">
+                    <span className="font-sans text-xs font-bold text-[#B91C1C] dark:text-amber-400">
                       0{idx + 1}
                     </span>
                     <h5 className="font-serif font-bold text-lg text-stone-900 dark:text-amber-100">
                       {fn.title.zh}{' '}
-                      <span className="text-xs font-mono text-amber-800 dark:text-amber-400 font-normal">
+                      <span className="text-xs font-sans text-amber-900 dark:text-amber-300 font-normal">
                         ({fn.title.pinyin})
                       </span>
                       {lang !== 'zh' && (
@@ -559,16 +569,16 @@ export default function FoundationsModule({
       <section className="pt-12 border-t border-stone-300/80 dark:border-stone-800 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-300/80 dark:border-stone-800 pb-4">
           <div>
-            <div className="text-xs font-mono uppercase tracking-widest text-[#B91C1C] dark:text-amber-400">
-              LAB 03 · TWELVE SHICHEN CIRCADIAN QI TIDAL FLOW
+            <div className="editorial-kicker text-[#B91C1C] dark:text-amber-400">
+              Lab 03 · Twelve Shichen Circadian Qi Tidal Flow
             </div>
             <h3 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
               十二时辰子午流注图 · 24-Hour Meridian Qi Clock
             </h3>
           </div>
 
-          <div className="inline-flex items-center gap-2 text-xs font-mono text-stone-600 dark:text-stone-400">
-            <Clock className="w-3.5 h-3.5 text-[#B91C1C] dark:text-amber-400" />
+          <div className="inline-flex items-center gap-2 text-xs font-sans font-semibold text-stone-700 dark:text-stone-300">
+            <Clock className="w-4 h-4 text-[#B91C1C] dark:text-amber-400" />
             <span>Local Hour: {String(currentHour).padStart(2, '0')}:00 · Click any Shichen</span>
           </div>
         </div>
@@ -626,7 +636,7 @@ export default function FoundationsModule({
                   y="284"
                   textAnchor="middle"
                   fill="#F59E0B"
-                  className="text-[11px] font-mono"
+                  className="text-xs font-sans font-semibold"
                 >
                   {activeClock.timeRange}
                 </text>
@@ -690,7 +700,7 @@ export default function FoundationsModule({
                         y={textY3}
                         textAnchor="middle"
                         fill={isSelected ? '#FDE68A' : '#78716C'}
-                        className="text-[9.5px] font-mono"
+                        className="text-[10px] font-sans font-semibold"
                       >
                         {h.meridianCode}·{h.timeRange.split(' ')[0]}
                       </text>
@@ -705,7 +715,7 @@ export default function FoundationsModule({
           <div className="lg:col-span-6 space-y-6">
             <div className="border-b border-stone-300/70 dark:border-stone-800 pb-4 flex flex-wrap items-start justify-between gap-2">
               <div>
-                <span className="text-xs font-mono uppercase tracking-wider text-[#B91C1C] dark:text-amber-400">
+                <span className="editorial-kicker text-[#B91C1C] dark:text-amber-400">
                   {activeClock.timeRange} · {activeClock.branchZh} ({activeClock.branchPinyin} · {activeClock.animalEn})
                 </span>
                 <h4 className="text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-1">
@@ -717,38 +727,38 @@ export default function FoundationsModule({
 
             <div className="space-y-5">
               <div className="border-l-2 border-stone-800 dark:border-stone-500 pl-4 space-y-1">
-                <div className="text-xs font-mono uppercase tracking-wider text-stone-500">
+                <div className="editorial-kicker text-stone-600 dark:text-stone-400">
                   气血当令生理机制 · Physiological Qi Flow
                 </div>
                 {renderProse(lang, activeClock.physiologicalActionEn, activeClock.physiologicalActionZh)}
               </div>
 
               <div className="border-l-2 border-[#2D6A4F] pl-4 space-y-1">
-                <div className="text-xs font-mono uppercase tracking-wider text-[#2D6A4F] dark:text-emerald-400">
+                <div className="editorial-kicker text-[#2D6A4F] dark:text-emerald-400">
                   顺时摄生法要 · Classical Yangsheng Regimen
                 </div>
                 {renderProse(lang, activeClock.yangshengTipEn, activeClock.yangshengTipZh)}
               </div>
             </div>
 
-            {/* Clean Hairline 12-Shichen Strip (No Box Grid) */}
+            {/* Clean Hairline 12-Shichen Strip (>=40px Tap Targets) */}
             <div className="pt-4 border-t border-stone-300/70 dark:border-stone-800">
-              <div className="text-[11px] font-mono uppercase tracking-wider text-stone-500 mb-3">
+              <div className="editorial-kicker text-stone-600 dark:text-stone-400 mb-2">
                 十二时辰速查 · Twelve Shichen Quick Select
               </div>
-              <div className="flex flex-wrap gap-x-5 gap-y-2">
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                 {QI_CLOCK_HOURS.map((h, idx) => (
                   <button
                     key={h.branchZh}
                     onClick={() => setSelectedClockIdx(idx)}
-                    className={`pb-1 text-left border-b-2 transition ${
+                    className={`py-2 px-2 min-h-[42px] text-left border-b-2 transition ${
                       idx === selectedClockIdx
                         ? 'border-[#B91C1C] text-[#B91C1C] dark:text-amber-400 font-bold'
-                        : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-950'
+                        : 'border-stone-300/60 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:text-stone-950'
                     }`}
                   >
-                    <span className="font-serif text-xs">{h.branchZh}</span>
-                    <span className="text-[10px] font-mono opacity-75 ml-1">
+                    <span className="font-serif text-xs block">{h.branchZh}</span>
+                    <span className="text-xs font-sans opacity-80 block">
                       {h.timeRange.split(' ')[0]}
                     </span>
                   </button>

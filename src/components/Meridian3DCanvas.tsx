@@ -12,6 +12,7 @@ interface Meridian3DCanvasProps {
   selectedMeridianId: string;
   selectedAcupointCode: string;
   onSelectAcupoint: (code: string) => void;
+  onWebGLUnavailable?: () => void;
 }
 
 type StatueFinish = 'bronze' | 'jade' | 'wireframe';
@@ -80,34 +81,63 @@ export default function Meridian3DCanvas({
   acupoints,
   selectedMeridianId,
   selectedAcupointCode,
-  onSelectAcupoint
+  onSelectAcupoint,
+  onWebGLUnavailable
 }: Meridian3DCanvasProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [hoveredCode, setHoveredCode] = useState<string | null>(null);
   const [finish, setFinish] = useState<StatueFinish>('bronze');
   const [cameraPreset, setCameraPreset] = useState<CameraPreset>('full');
+  const [webglError, setWebglError] = useState<boolean>(false);
 
   const onSelectRef = useRef(onSelectAcupoint);
   onSelectRef.current = onSelectAcupoint;
+  const onWebGLUnavailableRef = useRef(onWebGLUnavailable);
+  onWebGLUnavailableRef.current = onWebGLUnavailable;
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
+    // Pre-check WebGL availability to prevent Three.js throwing an unhandled context error
+    try {
+      const testCanvas = document.createElement('canvas');
+      const gl =
+        testCanvas.getContext('webgl2') ||
+        testCanvas.getContext('webgl') ||
+        testCanvas.getContext('experimental-webgl');
+      if (!gl) {
+        setWebglError(true);
+        onWebGLUnavailableRef.current?.();
+        return;
+      }
+    } catch {
+      setWebglError(true);
+      onWebGLUnavailableRef.current?.();
+      return;
+    }
+
     const width = container.clientWidth || 520;
     const height = container.clientHeight || 560;
 
-    // 1. Scene, Camera, Renderer
+    // 1. Scene, Camera, Renderer (wrapped in try/catch for restricted GPU contexts)
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
-    container.innerHTML = '';
-    container.appendChild(renderer.domElement);
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      container.innerHTML = '';
+      container.appendChild(renderer.domElement);
+    } catch {
+      setWebglError(true);
+      onWebGLUnavailableRef.current?.();
+      return;
+    }
 
     // 2. OrbitControls & Camera Preset Positioning
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -478,12 +508,25 @@ export default function Meridian3DCanvas({
 
   const activePt = acupoints.find((p) => p.code === (hoveredCode || selectedAcupointCode));
 
+  if (webglError) {
+    return (
+      <div className="w-full p-6 bg-stone-950 text-amber-100 border border-stone-800 flex flex-col items-center justify-center text-center space-y-2">
+        <p className="font-serif font-bold text-base text-amber-300">
+          当前浏览器未开启 WebGL 三维加速 · 3D WebGL Context Unavailable
+        </p>
+        <p className="text-xs text-stone-300 max-w-md leading-relaxed">
+          已自动为您切换至高精平面经络骨度全览图（2D Anatomical &amp; Bone-Cun Atlas）。所有十四经脉循行、内景支脉与核心要穴定位均可正常交互。
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-[580px] bg-gradient-to-b from-[#161513] via-[#1F1C18] to-[#11100E] border-2 border-stone-800 relative flex flex-col justify-between select-none">
       {/* Top Bar: Camera Region Presets & Material Finish Switcher */}
       <div className="relative z-10 p-2.5 bg-black/75 border-b border-stone-800 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-1">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-amber-400 mr-1">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-xs font-sans font-semibold uppercase tracking-wider text-amber-400 mr-1">
             视角 Region:
           </span>
           {(
@@ -499,7 +542,7 @@ export default function Meridian3DCanvas({
             <button
               key={p.id}
               onClick={() => setCameraPreset(p.id)}
-              className={`px-2 py-0.5 text-[11px] font-serif border transition ${
+              className={`px-2.5 py-1.5 text-xs font-serif border transition ${
                 cameraPreset === p.id
                   ? 'bg-[#9E2A2B] text-white border-[#9E2A2B] font-bold'
                   : 'bg-stone-900 text-stone-300 border-stone-700 hover:border-amber-500/60'
@@ -510,8 +553,8 @@ export default function Meridian3DCanvas({
           ))}
         </div>
 
-        <div className="flex items-center gap-1">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400 mr-1">
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs font-sans font-semibold uppercase tracking-wider text-stone-400 mr-1">
             铜人材质:
           </span>
           {(
@@ -524,7 +567,7 @@ export default function Meridian3DCanvas({
             <button
               key={m.id}
               onClick={() => setFinish(m.id)}
-              className={`px-2 py-0.5 text-[11px] font-serif border transition ${
+              className={`px-2.5 py-1.5 text-xs font-serif border transition ${
                 finish === m.id
                   ? 'bg-amber-600 text-stone-950 border-amber-500 font-bold'
                   : 'bg-stone-900 text-stone-300 border-stone-700 hover:border-amber-500/60'
@@ -544,27 +587,27 @@ export default function Meridian3DCanvas({
         {activePt && (
           <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-amber-100 font-serif border-b border-stone-800 pb-1.5">
             <div>
-              <span className="px-1.5 py-0.5 bg-[#9E2A2B] text-white font-mono font-bold text-[10px] mr-2">
+              <span className="px-1.5 py-0.5 bg-[#9E2A2B] text-white font-sans font-bold text-xs mr-2">
                 {activePt.code}
               </span>
               <span className="font-bold text-amber-300">{activePt.name.zh}</span> (
               {activePt.name.pinyin}) ·{' '}
               <span className="text-stone-300">{activePt.name.en}</span>
             </div>
-            <span className="text-[10px] font-mono text-amber-400/90">
+            <span className="text-xs font-sans text-amber-400/90">
               {activePt.meridianName.zh} · 拖拽旋转 / 滚轮缩放
             </span>
           </div>
         )}
 
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-1.5">
           {acupoints.map((pt) => {
             const isSelected = pt.code === selectedAcupointCode;
             return (
               <button
                 key={pt.code}
                 onClick={() => onSelectAcupoint(pt.code)}
-                className={`px-2 py-0.5 border text-[10px] font-mono transition ${
+                className={`px-2.5 py-1 border text-xs font-sans font-semibold transition ${
                   isSelected
                     ? 'bg-amber-500 text-stone-950 border-amber-400 font-bold'
                     : 'bg-stone-900 text-amber-100/90 border-stone-700 hover:border-amber-500'

@@ -194,14 +194,14 @@ export default function DiagnosticsModule({
           )}
         </div>
         <div className="lg:col-span-5">
-          <div className="relative overflow-hidden border border-stone-300 dark:border-stone-700 shadow-md aspect-video bg-stone-200 dark:bg-stone-900">
+          <div className="relative rounded-md overflow-hidden border border-stone-300 dark:border-stone-700 shadow-md aspect-video bg-stone-200 dark:bg-stone-900">
             <img
               src="/images/diagnostics_scroll.jpg"
               alt="Classical Diagnostics Scroll"
               className="w-full h-full object-cover"
             />
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 py-2.5 text-xs text-amber-100 font-serif flex justify-between items-center">
-              <span>《四诊望舌切脉图》· Pulse & Tongue Inspection</span>
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-4 py-2.5 text-xs text-amber-100 font-serif flex justify-between items-center gap-3">
+              <span className="truncate">《四诊望舌切脉图》· Pulse & Tongue Inspection</span>
               <VermilionSeal text="寸关尺三部" variant="solid" />
             </div>
           </div>
@@ -211,39 +211,39 @@ export default function DiagnosticsModule({
       {/* SECTION 01: TONGUE TOPOGRAPHY + PULSE OSCILLOSCOPE — OPEN TWO-COLUMN SPLIT */}
       <section className="space-y-8">
         <div className="border-b border-stone-300/80 dark:border-stone-800 pb-4">
-          <div className="text-xs font-mono uppercase tracking-widest text-[#B91C1C] dark:text-amber-400">
-            LAB 01 · TONGUE TOPOGRAPHY & RADIAL PULSE WAVEFORMS
+          <div className="editorial-kicker text-[#B91C1C] dark:text-amber-400">
+            Lab 01 · Tongue Topography & Radial Pulse Waveforms
           </div>
           <h3 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
             察舌辨苔与寸关尺脉象实训 · Tongue & Pulse Atlas
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:divide-x divide-stone-300/70 dark:divide-stone-800">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:divide-x divide-stone-300/70 dark:divide-stone-800 items-start">
           {/* Left Column: Tongue Diagnostic SVG Map */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="flex items-baseline justify-between">
+            <div className="flex items-baseline justify-between gap-2">
               <div>
                 <h4 className="font-serif font-bold text-lg text-stone-900 dark:text-stone-100">
                   望舌诊图谱 · Interactive Tongue Topography
                 </h4>
-                <p className="text-xs text-stone-500">
+                <p className="text-xs text-stone-600 dark:text-stone-400">
                   Select a tongue presentation below or click Zang-Fu reflection zones
                 </p>
               </div>
               <VermilionSeal text="伤寒金镜录" />
             </div>
 
-            {/* Clean Underline Tab Strip for Tongue States */}
-            <div className="flex flex-wrap gap-x-5 gap-y-2 border-b border-stone-300/70 dark:border-stone-800">
+            {/* Clean Underline Tab Strip for Tongue States (>=40px tap targets) */}
+            <div className="flex flex-wrap gap-x-4 gap-y-1 border-b border-stone-300/70 dark:border-stone-800">
               {TONGUE_STATES.map((t) => (
                 <button
                   key={t.id}
                   onClick={() => setSelectedTongueId(t.id)}
-                  className={`pb-2 text-xs font-serif font-bold transition border-b-2 ${
+                  className={`py-2 px-1.5 min-h-[40px] text-xs font-serif font-bold transition border-b-2 -mb-px ${
                     t.id === selectedTongueId
                       ? 'border-[#B91C1C] text-[#B91C1C] dark:text-amber-400'
-                      : 'border-transparent text-stone-500 hover:text-stone-900 dark:hover:text-stone-200'
+                      : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-stone-200'
                   }`}
                 >
                   {t.name.zh.split(' · ')[0]}
@@ -251,15 +251,15 @@ export default function DiagnosticsModule({
               ))}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
-              {/* Single-Layer SVG Tongue Stage */}
-              <div className="sm:col-span-5 flex flex-col items-center canvas-stage p-4">
-                <svg viewBox="0 0 200 250" className="w-40 h-52 select-none">
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-start">
+              {/* Enlarged Single-Layer SVG Tongue Stage with Tight ViewBox (Zero Wasted Space Above) */}
+              <div className="sm:col-span-5 flex flex-col items-center justify-center canvas-stage p-3">
+                <svg viewBox="22 14 156 226" className="w-48 h-60 sm:w-52 sm:h-64 select-none">
                   <path
                     d={
                       activeTongue.edgeStyle === 'scalloped'
-                        ? 'M 45,30 Q 100,15 155,30 Q 170,65 158,85 Q 172,110 156,135 Q 168,160 150,185 Q 128,230 100,235 Q 72,230 50,185 Q 32,160 44,135 Q 28,110 42,85 Q 30,65 45,30 Z'
-                        : 'M 45,30 Q 100,15 155,30 C 172,95 165,175 135,215 Q 100,242 65,215 C 35,175 28,95 45,30 Z'
+                        ? 'M 45,28 Q 100,15 155,28 Q 170,65 158,85 Q 172,110 156,135 Q 168,160 150,185 Q 128,230 100,235 Q 72,230 50,185 Q 32,160 44,135 Q 28,110 42,85 Q 30,65 45,28 Z'
+                        : 'M 45,28 Q 100,15 155,28 C 172,95 165,175 135,215 Q 100,238 65,215 C 35,175 28,95 45,28 Z'
                     }
                     fill={activeTongue.bodyColorHex}
                     stroke="#7F1D1D"
@@ -299,7 +299,7 @@ export default function DiagnosticsModule({
                   <g onClick={() => setSelectedZoneId('root')} className="cursor-pointer">
                     <rect
                       x="65"
-                      y="34"
+                      y="32"
                       width="70"
                       height="36"
                       rx="6"
@@ -307,7 +307,7 @@ export default function DiagnosticsModule({
                       stroke={selectedZoneId === 'root' ? '#FFFFFF' : 'rgba(255,255,255,0.4)'}
                       strokeDasharray="3 2"
                     />
-                    <text x="100" y="56" textAnchor="middle" fill="#1C1917" className="text-[11px] font-serif font-bold">
+                    <text x="100" y="54" textAnchor="middle" fill="#1C1917" className="text-[11px] font-serif font-bold">
                       舌根 · 肾
                     </text>
                   </g>
@@ -315,7 +315,7 @@ export default function DiagnosticsModule({
                   <g onClick={() => setSelectedZoneId('center')} className="cursor-pointer">
                     <rect
                       x="68"
-                      y="80"
+                      y="78"
                       width="64"
                       height="72"
                       rx="8"
@@ -323,16 +323,16 @@ export default function DiagnosticsModule({
                       stroke={selectedZoneId === 'center' ? '#FFFFFF' : 'rgba(255,255,255,0.4)'}
                       strokeDasharray="3 2"
                     />
-                    <text x="100" y="120" textAnchor="middle" fill="#1C1917" className="text-[11px] font-serif font-bold">
+                    <text x="100" y="118" textAnchor="middle" fill="#1C1917" className="text-[11px] font-serif font-bold">
                       舌中 · 脾胃
                     </text>
                   </g>
 
                   <g onClick={() => setSelectedZoneId('sides')} className="cursor-pointer">
-                    <text x="50" y="125" textAnchor="middle" fill="#FFFFFF" className="text-[10px] font-serif font-bold">
+                    <text x="50" y="125" textAnchor="middle" fill="#FFFFFF" className="text-[11px] font-serif font-bold">
                       肝胆
                     </text>
-                    <text x="150" y="125" textAnchor="middle" fill="#FFFFFF" className="text-[10px] font-serif font-bold">
+                    <text x="150" y="125" textAnchor="middle" fill="#FFFFFF" className="text-[11px] font-serif font-bold">
                       肝胆
                     </text>
                   </g>
@@ -357,10 +357,10 @@ export default function DiagnosticsModule({
               {/* Unboxed Tongue Interpretation */}
               <div className="sm:col-span-7 space-y-4">
                 <div className="space-y-2 border-b border-stone-300/70 dark:border-stone-800 pb-4">
-                  <div className="font-serif font-bold text-lg text-stone-900 dark:text-stone-100">
+                  <div className="font-serif font-bold text-lg text-stone-950 dark:text-stone-100">
                     {activeTongue.name.zh}
                   </div>
-                  <div className="text-xs font-mono text-amber-800 dark:text-amber-400">
+                  <div className="text-xs font-sans font-semibold text-amber-800 dark:text-amber-400">
                     {activeTongue.name.en}
                   </div>
                   {renderProse(lang, activeTongue.clinicalMeaningEn, activeTongue.clinicalMeaningZh)}
@@ -386,28 +386,28 @@ export default function DiagnosticsModule({
 
           {/* Right Column: Animated Pulse Waveform Visualizer */}
           <div className="lg:col-span-6 lg:pl-10 space-y-6">
-            <div className="flex items-baseline justify-between">
+            <div className="flex items-baseline justify-between gap-2">
               <div>
                 <h4 className="font-serif font-bold text-lg text-stone-900 dark:text-stone-100">
                   寸关尺脉象图谱 · Pulse Waveform Oscilloscope
                 </h4>
-                <p className="text-xs text-stone-500">
+                <p className="text-xs text-stone-600 dark:text-stone-400">
                   Compare tactile pulse waves across Superficial (浮), Middle (中), and Deep (沉) levels
                 </p>
               </div>
               <VermilionSeal text="濒湖脉学" />
             </div>
 
-            {/* Clean Underline Tab Strip for Pulse Types */}
-            <div className="flex flex-wrap gap-x-5 gap-y-2 border-b border-stone-300/70 dark:border-stone-800">
+            {/* Clean Underline Tab Strip for Pulse Types (>=40px tap targets) */}
+            <div className="flex flex-wrap gap-x-4 gap-y-1 border-b border-stone-300/70 dark:border-stone-800">
               {PULSE_TYPES.map((p) => (
                 <button
                   key={p.id}
                   onClick={() => setSelectedPulseId(p.id)}
-                  className={`pb-2 text-xs font-serif font-bold transition border-b-2 ${
+                  className={`py-2 px-1.5 min-h-[40px] text-xs font-serif font-bold transition border-b-2 -mb-px ${
                     p.id === selectedPulseId
                       ? 'border-stone-900 dark:border-amber-400 text-stone-950 dark:text-amber-200'
-                      : 'border-transparent text-stone-500 hover:text-stone-900 dark:hover:text-stone-200'
+                      : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
                   }`}
                 >
                   {p.name.zh} · {p.name.en.split(' ')[0]}
@@ -416,10 +416,10 @@ export default function DiagnosticsModule({
             </div>
 
             {/* Single-Layer Live Canvas Oscilloscope */}
-            <div className="bg-[#161514] border border-stone-800 p-4">
-              <div className="flex justify-between text-[10px] font-mono text-amber-200/70 mb-1">
+            <div className="bg-[#161514] border border-stone-800 rounded-xl p-4">
+              <div className="flex justify-between text-xs font-sans font-medium text-amber-200/80 mb-1">
                 <span>Depth Level: {activePulse.depthLevel}</span>
-                <span>Cun (寸-Distal) · Guan (关-Middle) · Chi (尺-Proximal)</span>
+                <span>Cun (寸) · Guan (关) · Chi (尺)</span>
               </div>
               <canvas
                 ref={canvasRef}
@@ -427,7 +427,7 @@ export default function DiagnosticsModule({
                 height={150}
                 className="w-full h-[140px] block"
               />
-              <div className="flex justify-between text-[10px] font-mono text-stone-400 mt-1 border-t border-stone-800 pt-1.5">
+              <div className="flex justify-between text-xs font-sans text-stone-400 mt-1 border-t border-stone-800 pt-1.5">
                 <span>浮取 (Light Touch)</span>
                 <span>中取 (Moderate)</span>
                 <span>沉取 (Deep Press to Bone)</span>
@@ -438,7 +438,7 @@ export default function DiagnosticsModule({
             <div className="space-y-3">
               <div className="flex items-baseline justify-between border-b border-stone-300/70 dark:border-stone-800 pb-2">
                 <TermBadge term={activePulse.name} lang={lang} />
-                <span className="text-xs font-mono text-amber-800 dark:text-amber-400">
+                <span className="text-xs font-sans font-semibold text-amber-800 dark:text-amber-400">
                   {activePulse.depthLevel}
                 </span>
               </div>
@@ -447,7 +447,7 @@ export default function DiagnosticsModule({
                   指下体悟 (Classical Tactile Simile): 「{activePulse.tactileMetaphor.zh}」
                 </span>
                 {lang !== 'zh' && (
-                  <span className="block text-stone-600 dark:text-stone-300 mt-0.5 italic">
+                  <span className="block text-stone-700 dark:text-stone-300 mt-0.5 italic">
                     {activePulse.tactileMetaphor.en}
                   </span>
                 )}
@@ -462,21 +462,21 @@ export default function DiagnosticsModule({
       <section className="pt-12 border-t border-stone-300/80 dark:border-stone-800 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-stone-300/80 dark:border-stone-800 pb-4">
           <div>
-            <div className="text-xs font-mono uppercase tracking-widest text-[#B91C1C] dark:text-amber-400">
-              LAB 02 · EIGHT-PRINCIPLE & ZANG-FU CASE DEDUCTION
+            <div className="editorial-kicker text-[#B91C1C] dark:text-amber-400">
+              Lab 02 · Eight-Principle & Zang-Fu Case Deduction
             </div>
             <h3 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
               四诊合参辨证医案推演 · Bian Zheng Pattern Differentiation Sandbox
             </h3>
           </div>
 
-          {/* Clean Underline Preset Case Selector */}
-          <div className="flex flex-wrap gap-5 text-xs font-serif">
+          {/* Clean Underline Preset Case Selector (>=40px tap targets) */}
+          <div className="flex flex-wrap gap-4 text-xs font-serif">
             {DIAGNOSTIC_CASES.map((c, idx) => (
               <button
                 key={c.id}
                 onClick={() => loadPresetCase(c.id)}
-                className="pb-1 border-b border-stone-400 dark:border-stone-700 text-stone-700 dark:text-amber-200 hover:border-[#B91C1C] hover:text-[#B91C1C] transition"
+                className="py-2 px-1.5 min-h-[40px] border-b border-stone-400 dark:border-stone-700 text-stone-800 dark:text-amber-200 hover:border-[#B91C1C] hover:text-[#B91C1C] transition"
               >
                 医案 {idx + 1}: {c.title.zh.split('（')[0]}
               </button>
@@ -485,18 +485,18 @@ export default function DiagnosticsModule({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:divide-x divide-stone-300/70 dark:divide-stone-800 items-start">
-          {/* Left Column: Unboxed Symptom Checklist & Selects */}
+          {/* Left Column: Unboxed Symptom Checklist & Full-Width Selects */}
           <div className="lg:col-span-6 space-y-6">
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h4 className="font-serif font-bold text-sm uppercase tracking-wider text-stone-800 dark:text-stone-200">
+                <h4 className="font-serif font-bold text-sm uppercase tracking-wider text-stone-900 dark:text-stone-200">
                   1. 问诊症状勾选 · Select Patient Symptoms
                 </h4>
-                <span className="text-xs font-mono text-stone-500">
+                <span className="text-xs font-sans font-semibold text-stone-600 dark:text-stone-400">
                   Selected: {selectedSymptoms.length}
                 </span>
               </div>
-              {/* Hairline Checklist (Replaces 12 Rounded Boxes) */}
+              {/* Hairline Checklist (>=42px tap targets) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 border-t border-stone-300/70 dark:border-stone-800">
                 {DIAGNOSTIC_SYMPTOM_OPTIONS.map((sym) => {
                   const checked = selectedSymptoms.includes(sym.id);
@@ -504,21 +504,21 @@ export default function DiagnosticsModule({
                     <button
                       key={sym.id}
                       onClick={() => toggleSymptom(sym.id)}
-                      className={`py-2.5 px-2 text-left border-b border-stone-300/60 dark:border-stone-800 transition flex items-start gap-2.5 ${
+                      className={`py-2.5 px-2 min-h-[44px] text-left border-b border-stone-300/60 dark:border-stone-800 transition flex items-start gap-2.5 ${
                         checked
                           ? 'text-stone-950 dark:text-stone-100 font-semibold'
-                          : 'text-stone-500 dark:text-stone-400 hover:text-stone-900'
+                          : 'text-stone-600 dark:text-stone-400 hover:text-stone-950'
                       }`}
                     >
                       <CheckCircle2
                         className={`w-4 h-4 shrink-0 mt-0.5 ${
-                          checked ? 'text-[#B91C1C] dark:text-amber-400' : 'opacity-25'
+                          checked ? 'text-[#B91C1C] dark:text-amber-400' : 'opacity-30'
                         }`}
                       />
                       <div>
-                        <div className="font-serif text-xs">{sym.label.zh}</div>
+                        <div className="font-serif text-xs sm:text-sm">{sym.label.zh}</div>
                         {lang !== 'zh' && (
-                          <div className="text-[11px] opacity-80">{sym.label.en}</div>
+                          <div className="text-xs opacity-85">{sym.label.en}</div>
                         )}
                       </div>
                     </button>
@@ -527,35 +527,36 @@ export default function DiagnosticsModule({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+            {/* Stacked Full-Width Selects so Tongue & Pulse Options Never Truncate */}
+            <div className="space-y-4 pt-2">
               <div>
-                <label className="block font-serif font-bold text-xs uppercase tracking-wider text-stone-700 dark:text-stone-300 mb-1.5">
-                  2. 望舌象 · Patient Tongue Sign
+                <label className="block font-serif font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-300 mb-1.5">
+                  2. 望舌象 · Patient Tongue Presentation
                 </label>
                 <select
                   value={sandboxTongueId}
                   onChange={(e) => setSandboxTongueId(e.target.value)}
-                  className="w-full border-b-2 border-stone-400 dark:border-stone-700 bg-transparent py-2 text-xs font-serif font-bold text-stone-900 dark:text-stone-100 focus:outline-none focus:border-[#B91C1C]"
+                  className="w-full rounded-md border border-stone-300 dark:border-stone-700 bg-white/85 dark:bg-stone-900 px-3 py-2.5 min-h-[44px] text-xs sm:text-sm font-serif font-bold text-stone-900 dark:text-stone-100 focus:outline-none focus:border-[#B91C1C]"
                 >
                   {TONGUE_STATES.map((t) => (
                     <option key={t.id} value={t.id}>
-                      {t.name.zh} · {t.name.en}
+                      {t.name.zh} — {t.name.en}
                     </option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block font-serif font-bold text-xs uppercase tracking-wider text-stone-700 dark:text-stone-300 mb-1.5">
+                <label className="block font-serif font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-300 mb-1.5">
                   3. 切脉象 · Patient Pulse Quality
                 </label>
                 <select
                   value={sandboxPulseId}
                   onChange={(e) => setSandboxPulseId(e.target.value)}
-                  className="w-full border-b-2 border-stone-400 dark:border-stone-700 bg-transparent py-2 text-xs font-serif font-bold text-stone-900 dark:text-stone-100 focus:outline-none focus:border-[#B91C1C]"
+                  className="w-full rounded-md border border-stone-300 dark:border-stone-700 bg-white/85 dark:bg-stone-900 px-3 py-2.5 min-h-[44px] text-xs sm:text-sm font-serif font-bold text-stone-900 dark:text-stone-100 focus:outline-none focus:border-[#B91C1C]"
                 >
                   {PULSE_TYPES.map((p) => (
                     <option key={p.id} value={p.id}>
-                      {p.name.zh} · {p.name.en}
+                      {p.name.zh} — {p.name.en}
                     </option>
                   ))}
                 </select>
@@ -569,14 +570,14 @@ export default function DiagnosticsModule({
               <div>
                 <div className="flex items-center gap-2">
                   <VermilionSeal text="辨证断案" variant="solid" />
-                  <span className="text-xs font-mono uppercase tracking-widest text-stone-500">
-                    DEDUCED SYNDROME PATTERN
+                  <span className="editorial-kicker text-stone-600 dark:text-stone-400">
+                    Deduced Syndrome Pattern
                   </span>
                 </div>
                 <h4 className="text-2xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-2">
                   {bestMatchedCase.patternDiagnosis.zh} · {bestMatchedCase.patternDiagnosis.en}
                 </h4>
-                <p className="text-xs font-mono text-amber-800 dark:text-amber-400">
+                <p className="text-xs font-sans font-semibold text-amber-800 dark:text-amber-400">
                   ({bestMatchedCase.patternDiagnosis.pinyin})
                 </p>
               </div>
@@ -589,16 +590,16 @@ export default function DiagnosticsModule({
                     'Diagnostics & Patterns'
                   )
                 }
-                className="inline-flex items-center gap-1.5 text-xs font-mono text-stone-600 dark:text-stone-400 hover:text-[#B91C1C] transition"
+                className="inline-flex items-center gap-1.5 py-2 px-2 min-h-[40px] text-xs font-sans font-semibold text-stone-700 dark:text-stone-300 hover:text-[#B91C1C] transition"
               >
                 {bookmarks.includes(`case-${bestMatchedCase.id}`) ? (
                   <>
-                    <BookmarkCheck className="w-3.5 h-3.5 text-[#B91C1C]" />
-                    <span>Saved</span>
+                    <BookmarkCheck className="w-4 h-4 text-[#B91C1C]" />
+                    <span className="text-[#B91C1C] font-bold">Saved</span>
                   </>
                 ) : (
                   <>
-                    <Bookmark className="w-3.5 h-3.5" />
+                    <Bookmark className="w-4 h-4" />
                     <span>Save</span>
                   </>
                 )}
@@ -614,11 +615,13 @@ export default function DiagnosticsModule({
                 { label: '阴阳总纲 Root', val: bestMatchedCase.eightPrinciples.root }
               ].map((item) => (
                 <div key={item.label}>
-                  <dt className="text-[10px] font-mono text-stone-500">{item.label}</dt>
-                  <dd className="font-serif font-bold text-xs text-stone-900 dark:text-stone-100 mt-0.5">
+                  <dt className="text-xs font-sans font-semibold text-stone-600 dark:text-stone-400">
+                    {item.label}
+                  </dt>
+                  <dd className="font-serif font-bold text-sm text-stone-900 dark:text-stone-100 mt-0.5">
                     {item.val.zh}
                     {lang !== 'zh' && (
-                      <span className="block font-sans font-normal text-[10px] text-stone-600 dark:text-stone-400">
+                      <span className="block font-sans font-normal text-xs text-stone-700 dark:text-stone-300">
                         {item.val.en}
                       </span>
                     )}
@@ -642,19 +645,19 @@ export default function DiagnosticsModule({
             {/* Unboxed Treatment Principle + Formula + Acupoints */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-stone-300/80 dark:border-stone-800">
               <div className="border-l-2 border-[#2D6A4F] pl-4">
-                <div className="text-[11px] font-mono uppercase text-[#2D6A4F] dark:text-emerald-400">
+                <div className="editorial-kicker text-[#2D6A4F] dark:text-emerald-400">
                   治法纲领 · Treatment Principle
                 </div>
                 <div className="font-serif font-bold text-base text-stone-900 dark:text-stone-100 mt-1">
                   {bestMatchedCase.treatmentPrinciple.zh}
                 </div>
-                <div className="text-xs text-stone-600 dark:text-stone-300">
+                <div className="text-xs text-stone-700 dark:text-stone-300">
                   {bestMatchedCase.treatmentPrinciple.en}
                 </div>
               </div>
 
               <div className="border-l-2 border-amber-700 pl-4">
-                <div className="text-[11px] font-mono uppercase text-amber-900 dark:text-amber-400">
+                <div className="editorial-kicker text-amber-900 dark:text-amber-400">
                   代表方剂与配穴 · Formula & Acupoints
                 </div>
                 {matchedFormula && (
@@ -662,7 +665,7 @@ export default function DiagnosticsModule({
                     {matchedFormula.name.zh} ({matchedFormula.name.en})
                   </div>
                 )}
-                <div className="text-xs font-mono text-stone-700 dark:text-stone-300 mt-1">
+                <div className="text-xs font-sans font-semibold text-stone-700 dark:text-stone-300 mt-1">
                   主穴 Acupoints: {bestMatchedCase.recommendedAcupoints.join(' · ')}
                 </div>
               </div>

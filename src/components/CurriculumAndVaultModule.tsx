@@ -362,7 +362,7 @@ export default function CurriculumAndVaultModule({
             </div>
           </div>
 
-          {/* Right Page: Unboxed Chapter Quiz */}
+          {/* Right Page: Chapter Quiz with Clear Tactile Choice Buttons */}
           <div className="lg:col-span-5 lg:pl-10 space-y-4">
             <div className="flex items-center gap-2">
               <VermilionSeal text="随堂考校" variant="solid" />
@@ -377,33 +377,39 @@ export default function CurriculumAndVaultModule({
               activeChapter.quizQuestion.questionZh
             )}
 
-            <div className="divide-y divide-stone-300/60 dark:divide-stone-800 border-y border-stone-300/70 dark:border-stone-800">
+            <div className="space-y-2.5 pt-1">
               {activeChapter.quizQuestion.options.map((opt, idx) => {
                 const isSelected = selectedQuizAnswer === idx;
                 const isCorrect = idx === activeChapter.quizQuestion.correctIndex;
                 let rowStyle =
-                  'text-stone-800 dark:text-stone-200 hover:bg-stone-900/5';
+                  'border-stone-300 dark:border-stone-700 bg-white/80 dark:bg-stone-900/80 text-stone-900 dark:text-stone-100 hover:border-[#B91C1C] hover:bg-white dark:hover:bg-stone-900';
+                let badgeStyle =
+                  'border-stone-400 dark:border-stone-600 text-stone-700 dark:text-stone-300';
                 if (selectedQuizAnswer !== null) {
                   if (isCorrect) {
                     rowStyle =
-                      'border-l-2 border-l-[#2D6A4F] pl-3 text-[#2D6A4F] dark:text-emerald-300 font-bold';
+                      'border-2 border-[#2D6A4F] bg-emerald-950/10 dark:bg-emerald-950/40 text-[#2D6A4F] dark:text-emerald-200 font-bold';
+                    badgeStyle = 'border-[#2D6A4F] bg-[#2D6A4F] text-white';
                   } else if (isSelected) {
                     rowStyle =
-                      'border-l-2 border-l-[#B91C1C] pl-3 text-[#B91C1C] dark:text-red-300';
+                      'border-2 border-[#B91C1C] bg-red-950/10 dark:bg-red-950/40 text-[#B91C1C] dark:text-red-200';
+                    badgeStyle = 'border-[#B91C1C] bg-[#B91C1C] text-white';
                   }
                 }
                 return (
                   <button
                     key={opt.zh}
                     onClick={() => setSelectedQuizAnswer(idx)}
-                    className={`w-full py-3 text-left text-xs transition flex items-baseline gap-2.5 ${rowStyle}`}
+                    className={`w-full px-3.5 py-3 min-h-[48px] rounded-lg border text-left text-xs transition flex items-start gap-3 cursor-pointer ${rowStyle}`}
                   >
-                    <span className="font-mono text-[11px] text-stone-400">
-                      {String.fromCharCode(65 + idx)}.
+                    <span
+                      className={`w-6 h-6 rounded-sm border flex items-center justify-center font-sans font-bold text-xs shrink-0 mt-0.5 ${badgeStyle}`}
+                    >
+                      {String.fromCharCode(65 + idx)}
                     </span>
                     <div>
                       <div className="font-serif font-bold text-sm">{opt.zh}</div>
-                      {lang !== 'zh' && <div className="opacity-85 mt-0.5">{opt.en}</div>}
+                      {lang !== 'zh' && <div className="opacity-90 mt-0.5">{opt.en}</div>}
                     </div>
                   </button>
                 );

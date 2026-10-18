@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #FAF6F0;
@@ -7,17 +8,16 @@
   --jade: #2D6A4F;
   --amber-gold: #B45309;
   --indigo-ink: #1E3A8A;
-  --hairline: rgba(168, 159, 145, 0.42);
+  --hairline: rgba(168, 159, 145, 0.48);
 
   --font-serif-sc: "Songti SC", "STSong", "Noto Serif SC", "PingFang SC", "Hiragino Mincho ProN", Georgia, serif;
   --font-sans-ui: "Google Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
-  --font-mono-code: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 .dark {
   --background: #121110;
   --foreground: #F5F5F4;
-  --hairline: rgba(87, 83, 78, 0.55);
+  --hairline: rgba(87, 83, 78, 0.65);
 }
 
 @theme inline {
@@ -25,22 +25,31 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans-ui);
   --font-serif: var(--font-serif-sc);
-  --font-mono: var(--font-mono-code);
+  /* Unify font-mono to sans-serif to avoid developer-tool monospace clashing with classical woodblock typography */
+  --font-mono: var(--font-sans-ui);
 }
 
+html,
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans-ui), -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .font-serif-sc {
   font-family: var(--font-serif-sc), Georgia, serif;
 }
 
+/* Soft vertical fade mask for the Shanshui ink-wash background so it never leaves a hard horizontal line */
+.shanshui-backdrop {
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.85) 55%, rgba(0, 0, 0, 0) 96%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.85) 55%, rgba(0, 0, 0, 0) 96%);
+}
+
 /* Single-layer interactive canvas container (only used for interactive SVG/3D/Video stages) */
 .canvas-stage {
-  background: rgba(250, 246, 240, 0.72);
+  background: rgba(250, 246, 240, 0.78);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--hairline);
@@ -48,7 +57,7 @@ body {
 }
 
 .dark .canvas-stage {
-  background: rgba(24, 22, 20, 0.75);
+  background: rgba(24, 22, 20, 0.82);
 }
 
 /* Subtle Cinnabar Stamp Accent (flat & typographic, not a pill button) */
@@ -56,31 +65,44 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.1rem 0.45rem;
+  padding: 0.15rem 0.5rem;
   color: #B91C1C;
-  border: 1px solid rgba(185, 28, 28, 0.45);
+  border: 1px solid rgba(185, 28, 28, 0.5);
   font-family: var(--font-serif-sc), serif;
   font-weight: 700;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
-  line-height: 1.2;
+  line-height: 1.25;
+  flex-shrink: 0;
 }
 
 .dark .seal-stamp {
   color: #FCA5A5;
-  border-color: rgba(239, 68, 68, 0.45);
+  border-color: rgba(239, 68, 68, 0.5);
 }
 
 .seal-stamp-solid {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.12rem 0.5rem;
+  padding: 0.15rem 0.55rem;
   background-color: #B91C1C;
   color: #FAF6F0;
   font-family: var(--font-serif-sc), serif;
   font-weight: 700;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
-  line-height: 1.2;
+  line-height: 1.25;
+  flex-shrink: 0;
+}
+
+/* Small-caps editorial label utility replacing monospace labels */
+.editorial-kicker {
+  font-family: var(--font-sans-ui), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 /* Custom subtle scrollbars */

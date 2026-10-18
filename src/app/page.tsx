@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { LanguageMode } from '@/types/tcm';
 import FoundationsModule from '@/components/FoundationsModule';
 import MeridiansModule from '@/components/MeridiansModule';
@@ -20,7 +20,8 @@ import {
   Sun,
   Bookmark,
   Award,
-  X
+  X,
+  Menu
 } from 'lucide-react';
 
 type ActiveTab =
@@ -30,10 +31,19 @@ type ActiveTab =
   | 'materia-medica'
   | 'media-vault';
 
+const VALID_TABS: ActiveTab[] = [
+  'foundations',
+  'meridians',
+  'diagnostics',
+  'materia-medica',
+  'media-vault'
+];
+
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<ActiveTab>('foundations');
+  const [activeTab, setActiveTabState] = useState<ActiveTab>('foundations');
   const [lang, setLang] = useState<LanguageMode>('dual');
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [bookmarks, setBookmarks] = useState<SavedBookmark[]>([
     { id: 'acupoint-ST36', title: 'ST36 足三里 · Foot Three Miles', category: 'Meridians & Acupoints' },
@@ -49,8 +59,32 @@ export default function HomePage() {
     }
   ]);
 
-  // Load saved state from localStorage
+  // Navigate to a tab and sync ?m= in the browser URL so links are shareable and survive refresh
+  const setActiveTab = useCallback((tab: ActiveTab) => {
+    setActiveTabState(tab);
+    setMobileMenuOpen(false);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('m', tab);
+      window.history.pushState({ tab }, '', url.toString());
+    }
+  }, []);
+
+  // Sync URL query param (?m=...) and saved localStorage on mount & browser back/forward
   useEffect(() => {
+    const syncFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const mParam = params.get('m') as ActiveTab | 'curriculum' | null;
+      if (mParam === 'curriculum') {
+        setActiveTabState('media-vault');
+      } else if (mParam && VALID_TABS.includes(mParam)) {
+        setActiveTabState(mParam);
+      }
+    };
+
+    syncFromUrl();
+    window.addEventListener('popstate', syncFromUrl);
+
     try {
       const savedBookmarks = localStorage.getItem('tcm_bookmarks');
       if (savedBookmarks) setBookmarks(JSON.parse(savedBookmarks));
@@ -58,10 +92,25 @@ export default function HomePage() {
       if (savedChapters) setCompletedChapters(JSON.parse(savedChapters));
       const savedNotes = localStorage.getItem('tcm_notes');
       if (savedNotes) setNotes(JSON.parse(savedNotes));
+      const savedDark = localStorage.getItem('tcm_dark_mode');
+      if (savedDark === 'true') {
+        setDarkMode(true);
+        document.documentElement.classList.add('dark');
+      }
     } catch {
       // ignore storage errors
     }
+
+    return () => window.removeEventListener('popstate', syncFromUrl);
   }, []);
+
+  // Apply .dark class directly to <html> so <body> and all Tailwind v4 dark: classes respond
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode);
+    try {
+      localStorage.setItem('tcm_dark_mode', String(darkMode));
+    } catch {}
+  }, [darkMode]);
 
   const handleToggleBookmark = (id: string, title: string, category: string) => {
     setBookmarks((prev) => {
@@ -229,6 +278,7 @@ export default function HomePage() {
     return items.slice(0, 8);
   }, [searchQuery]);
 
+  // Concise tab titles so all 5 modules fit cleanly across the viewport without clipping
   const navItems: {
     id: ActiveTab;
     num: string;
@@ -238,134 +288,130 @@ export default function HomePage() {
     {
       id: 'foundations',
       num: '01',
-      labelZh: '阴阳五行与藏象',
-      labelEn: 'Foundations & Qi Clock'
+      labelZh: '阴阳五行',
+      labelEn: 'Foundations'
     },
     {
       id: 'meridians',
       num: '02',
-      labelZh: '经络铜人与骨度取穴',
-      labelEn: '2D/3D Meridians Lab'
+      labelZh: '经络铜人',
+      labelEn: 'Meridians Lab'
     },
     {
       id: 'diagnostics',
       num: '03',
-      labelZh: '四诊八纲辨证沙盒',
-      labelEn: 'Diagnostics & Case Lab'
+      labelZh: '四诊辨证',
+      labelEn: 'Diagnostics'
     },
     {
       id: 'materia-medica',
       num: '04',
-      labelZh: '本草饮片与君臣佐使',
-      labelEn: 'Materia Medica & Formulas'
+      labelZh: '本草方剂',
+      labelEn: 'Materia Medica'
     },
     {
       id: 'media-vault',
       num: '05',
-      labelZh: '五章导学与名师讲堂',
-      labelEn: 'Curriculum & Video Lectures'
+      labelZh: '导学讲堂',
+      labelEn: 'Curriculum & Vault'
     }
   ];
 
   return (
-    <div className={darkMode ? 'dark' : ''}>
-      <div className="relative min-h-screen text-stone-900 dark:text-stone-100 transition-colors selection:bg-amber-900/20">
-        {/* Full-Page Fixed Classical Ink-Wash Landscape Background (山水云雾宣纸) */}
-        <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-          <img
-            src="/images/shanshui_bg.jpg"
-            alt=""
-            className="w-full h-full object-cover object-center opacity-85 dark:opacity-22 dark:invert transition-opacity duration-500"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F0]/55 via-[#FAF6F0]/75 to-[#F5EFE6]/85 dark:from-[#121110]/85 dark:via-[#141311]/90 dark:to-[#121110]/95" />
-        </div>
+    <div className="relative min-h-screen text-stone-900 dark:text-stone-100 transition-colors selection:bg-amber-900/20">
+      {/* Full-Page Fixed Classical Ink-Wash Landscape Background with Soft Vertical Gradient Fade */}
+      <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden shanshui-backdrop">
+        <img
+          src="/images/shanshui_bg.jpg"
+          alt=""
+          className="w-full h-full object-cover object-top opacity-80 dark:opacity-20 dark:invert transition-opacity duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F0]/45 via-[#FAF6F0]/75 to-[#FAF6F0] dark:from-[#121110]/80 dark:via-[#121110]/92 dark:to-[#121110]" />
+      </div>
 
-        {/* Minimalist Top Bar + Integrated Underline Tab Strip (Zero Box-Grid Clutter) */}
-        <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FAF6F0]/82 dark:bg-[#141311]/85 border-b border-stone-300/70 dark:border-stone-800">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-3.5 pb-2 flex flex-wrap items-center justify-between gap-4">
-            {/* Brand Identity */}
-            <div className="flex items-center gap-3">
-              <span className="seal-stamp-solid text-xs">内经</span>
-              <div className="flex flex-wrap items-baseline gap-2.5">
-                <h1 className="text-lg sm:text-xl font-serif font-bold tracking-wide text-stone-950 dark:text-amber-50">
-                  本草与经络 · The Neijing Scholar
-                </h1>
-                <span className="hidden lg:inline text-xs font-mono text-stone-500 dark:text-stone-400">
-                  TCM Interactive Learning & Lab Platform
-                </span>
+      {/* Minimalist Top Bar + Integrated Underline Tab Strip */}
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FAF6F0]/88 dark:bg-[#141311]/90 border-b border-stone-300/80 dark:border-stone-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
+          {/* Brand Identity */}
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="seal-stamp-solid text-xs">内经</span>
+            <h1 className="text-base sm:text-xl font-serif font-bold tracking-wide text-stone-950 dark:text-amber-50 truncate">
+              本草与经络 <span className="hidden sm:inline">· The Neijing Scholar</span>
+            </h1>
+          </div>
+
+          {/* Right Controls: Search + Desktop Controls + Mobile Menu Button */}
+          <div className="flex items-center gap-3 sm:gap-5 text-xs">
+            {/* Self-Explanatory Curriculum Progress Indicator (Desktop) */}
+            <button
+              onClick={() => setActiveTab('media-vault')}
+              className="hidden xl:inline-flex items-center gap-2 min-h-[40px] px-2 text-stone-700 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white transition"
+              title="Open 5-Chapter Guided Curriculum"
+            >
+              <Award className="w-4 h-4 text-[#2D6A4F] dark:text-emerald-400" />
+              <span className="font-sans font-medium">
+                Curriculum: <strong>{completedChapters.length}/5 Chapters</strong>
+              </span>
+              <div className="w-14 h-1.5 bg-stone-300 dark:bg-stone-800 overflow-hidden">
+                <div
+                  className="h-full bg-[#2D6A4F] transition-all duration-300"
+                  style={{ width: `${(completedChapters.length / 5) * 100}%` }}
+                />
               </div>
+            </button>
+
+            {/* Minimal Underline Search Input */}
+            <div className="relative">
+              <Search className="w-4 h-4 text-stone-500 absolute left-0 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search 肝, ST36, 逍遥散..."
+                className="pl-6 pr-6 py-2 min-h-[40px] border-b border-stone-400 dark:border-stone-700 bg-transparent text-xs w-36 sm:w-52 focus:outline-none focus:border-[#B91C1C] transition"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 p-1 text-stone-400 hover:text-stone-700"
+                  aria-label="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+
+              {/* Instant Search Dropdown */}
+              {searchResults.length > 0 && (
+                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#FAF6F0] dark:bg-stone-900 border border-stone-300 dark:border-stone-700 shadow-xl divide-y divide-stone-200 dark:divide-stone-800 z-50">
+                  {searchResults.map((res, i) => (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        setActiveTab(res.tab);
+                        setSearchQuery('');
+                      }}
+                      className="w-full text-left px-4 py-3 hover:bg-amber-900/6 dark:hover:bg-stone-800 transition flex items-start justify-between gap-2"
+                    >
+                      <div>
+                        <div className="font-serif font-bold text-xs text-stone-900 dark:text-stone-100">
+                          {res.title}
+                        </div>
+                        <div className="text-xs text-stone-600 dark:text-stone-400 line-clamp-1 mt-0.5">
+                          {res.subtitle}
+                        </div>
+                      </div>
+                      <span className="text-xs font-sans font-semibold text-[#B91C1C] dark:text-amber-400 shrink-0">
+                        {res.category}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Right Controls: Progress + Search + Language + Bookmarks + Theme */}
-            <div className="flex flex-wrap items-center gap-4 text-xs">
-              {/* Minimalist Progress Indicator */}
-              <button
-                onClick={() => setActiveTab('media-vault')}
-                className="hidden xl:inline-flex items-center gap-2 text-stone-600 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white transition"
-                title="View Guided Curriculum Progress"
-              >
-                <Award className="w-3.5 h-3.5 text-[#2D6A4F] dark:text-emerald-400" />
-                <span className="font-mono">
-                  PATH <strong>{completedChapters.length}/5</strong>
-                </span>
-                <div className="w-14 h-1 bg-stone-300 dark:bg-stone-800 overflow-hidden">
-                  <div
-                    className="h-full bg-[#2D6A4F] transition-all duration-300"
-                    style={{ width: `${(completedChapters.length / 5) * 100}%` }}
-                  />
-                </div>
-              </button>
-
-              {/* Minimal Underline Search Input */}
-              <div className="relative">
-                <Search className="w-3.5 h-3.5 text-stone-500 absolute left-0 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search 肝, ST36, 逍遥散..."
-                  className="pl-5 pr-5 py-1 border-b border-stone-400 dark:border-stone-700 bg-transparent text-xs w-40 sm:w-52 focus:outline-none focus:border-[#B91C1C] transition"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                )}
-
-                {/* Instant Search Dropdown */}
-                {searchResults.length > 0 && (
-                  <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#FAF6F0] dark:bg-stone-900 border border-stone-300 dark:border-stone-700 shadow-xl divide-y divide-stone-200 dark:divide-stone-800 z-50">
-                    {searchResults.map((res, i) => (
-                      <button
-                        key={i}
-                        onClick={() => {
-                          setActiveTab(res.tab);
-                          setSearchQuery('');
-                        }}
-                        className="w-full text-left px-4 py-2.5 hover:bg-amber-900/6 dark:hover:bg-stone-800 transition flex items-start justify-between gap-2"
-                      >
-                        <div>
-                          <div className="font-serif font-bold text-xs text-stone-900 dark:text-stone-100">
-                            {res.title}
-                          </div>
-                          <div className="text-[11px] text-stone-500 dark:text-stone-400 line-clamp-1 mt-0.5">
-                            {res.subtitle}
-                          </div>
-                        </div>
-                        <span className="text-[10px] font-mono text-[#B91C1C] dark:text-amber-400 shrink-0">
-                          {res.category}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Clean Text Language Switcher */}
-              <div className="inline-flex items-center gap-2 font-mono">
+            {/* Desktop Language Switcher, Bookmarks & Dark Mode (Hidden on small mobile to prevent wrapping) */}
+            <div className="hidden md:flex items-center gap-3">
+              <div className="inline-flex items-center gap-1.5 font-sans font-semibold">
                 {(
                   [
                     { id: 'dual', label: '双语' },
@@ -377,10 +423,10 @@ export default function HomePage() {
                     {idx > 0 && <span className="text-stone-300 dark:text-stone-700">/</span>}
                     <button
                       onClick={() => setLang(mode.id)}
-                      className={`pb-0.5 transition ${
+                      className={`px-2 py-2 min-h-[40px] transition ${
                         lang === mode.id
                           ? 'text-[#B91C1C] dark:text-amber-400 font-bold border-b-2 border-[#B91C1C] dark:border-amber-400'
-                          : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                          : 'text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-white'
                       }`}
                     >
                       {mode.label}
@@ -389,51 +435,120 @@ export default function HomePage() {
                 ))}
               </div>
 
-              {/* Bookmark Link */}
               <button
                 onClick={() => setActiveTab('media-vault')}
-                className="inline-flex items-center gap-1 text-stone-600 dark:text-stone-300 hover:text-[#B91C1C] transition"
+                className="inline-flex items-center gap-1.5 px-2.5 py-2 min-h-[40px] text-stone-700 dark:text-stone-300 hover:text-[#B91C1C] transition"
                 title="Saved Bookmarks & Study Notes"
               >
-                <Bookmark className="w-3.5 h-3.5 text-[#B91C1C] dark:text-amber-400" />
-                <span className="font-mono">({bookmarks.length})</span>
+                <Bookmark className="w-4 h-4 text-[#B91C1C] dark:text-amber-400" />
+                <span className="font-sans font-semibold">({bookmarks.length})</span>
               </button>
 
-              {/* Theme Mode Toggle */}
               <button
                 onClick={() => setDarkMode(!darkMode)}
-                className="text-stone-600 dark:text-amber-300 hover:text-stone-950 transition"
+                className="inline-flex items-center justify-center w-10 h-10 text-stone-700 dark:text-amber-300 hover:text-stone-950 dark:hover:text-white transition"
                 aria-label="Toggle Light / Dark Mode"
+                title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               >
                 {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
             </div>
-          </div>
 
-          {/* Single Clean Horizontal Underline Tab Bar (Google Skills Style) */}
-          <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-6 sm:gap-8 overflow-x-auto no-scrollbar">
+            {/* Mobile Controls Menu Toggle (< md) */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden inline-flex items-center justify-center w-10 h-10 text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700 rounded-md"
+              aria-label="Open Settings & Language Menu"
+            >
+              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Collapsible Mobile Drawer for Language, Theme, Curriculum & Bookmarks */}
+        {mobileMenuOpen && (
+          <div className="md:hidden px-4 py-3 bg-[#FAF6F0] dark:bg-stone-900 border-t border-stone-300/70 dark:border-stone-800 space-y-3 text-xs">
+            <div className="flex items-center justify-between">
+              <span className="font-serif font-bold text-stone-700 dark:text-stone-300">
+                语言模式 · Language:
+              </span>
+              <div className="inline-flex items-center gap-2">
+                {(
+                  [
+                    { id: 'dual', label: '双语 Dual' },
+                    { id: 'en', label: 'English' },
+                    { id: 'zh', label: '中文' }
+                  ] as const
+                ).map((mode) => (
+                  <button
+                    key={mode.id}
+                    onClick={() => setLang(mode.id)}
+                    className={`px-3 py-2 min-h-[40px] rounded-md border font-semibold ${
+                      lang === mode.id
+                        ? 'border-[#B91C1C] bg-[#B91C1C] text-white'
+                        : 'border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300'
+                    }`}
+                  >
+                    {mode.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-2 border-t border-stone-200 dark:border-stone-800">
+              <button
+                onClick={() => setActiveTab('media-vault')}
+                className="inline-flex items-center gap-2 min-h-[40px] text-stone-700 dark:text-stone-300 font-medium"
+              >
+                <Award className="w-4 h-4 text-[#2D6A4F]" />
+                <span>Curriculum: {completedChapters.length}/5 Chapters</span>
+                <span className="text-stone-400">·</span>
+                <Bookmark className="w-4 h-4 text-[#B91C1C]" />
+                <span>Saved ({bookmarks.length})</span>
+              </button>
+
+              <button
+                onClick={() => setDarkMode(!darkMode)}
+                className="inline-flex items-center gap-2 px-3 py-2 min-h-[40px] rounded-md border border-stone-300 dark:border-stone-700 text-stone-800 dark:text-amber-300 font-semibold"
+              >
+                {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                <span>{darkMode ? 'Light' : 'Dark'}</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Single Clean Horizontal Underline Tab Bar — All 5 Tabs Fit Without Clipping */}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 border-t border-stone-200/70 dark:border-stone-800/80">
+          <nav
+            aria-label="Learning Modules"
+            className="grid grid-cols-5 sm:flex sm:items-center sm:justify-between md:justify-start md:gap-8 overflow-x-auto"
+          >
             {navItems.map((item) => {
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`py-2.5 text-left whitespace-nowrap border-b-2 transition-colors flex items-baseline gap-2 ${
+                  title={`${item.num} ${item.labelZh} · ${item.labelEn}`}
+                  className={`py-2.5 px-1.5 sm:px-2 min-h-[44px] text-center sm:text-left border-b-2 transition-colors flex flex-col sm:flex-row sm:items-baseline justify-center sm:gap-2 ${
                     isActive
                       ? 'border-[#B91C1C] dark:border-amber-400 text-stone-950 dark:text-amber-50'
-                      : 'border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+                      : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-stone-200'
                   }`}
                 >
                   <span
-                    className={`text-[11px] font-mono ${
-                      isActive ? 'text-[#B91C1C] dark:text-amber-400 font-bold' : 'opacity-60'
+                    className={`text-xs font-sans font-bold ${
+                      isActive ? 'text-[#B91C1C] dark:text-amber-400' : 'opacity-65'
                     }`}
                   >
                     {item.num}
                   </span>
-                  <span className="font-serif font-bold text-sm">{item.labelZh}</span>
+                  <span className="font-serif font-bold text-xs sm:text-sm leading-tight">
+                    {item.labelZh}
+                  </span>
                   {lang !== 'zh' && (
-                    <span className="text-xs font-sans hidden md:inline opacity-80">
+                    <span className="text-xs font-sans hidden lg:inline opacity-85">
                       {item.labelEn}
                     </span>
                   )}
@@ -441,70 +556,70 @@ export default function HomePage() {
               );
             })}
           </nav>
-        </header>
+        </div>
+      </header>
 
-        {/* Main Open-Canvas Content Workspace */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-          {activeTab === 'foundations' && (
-            <FoundationsModule
-              lang={lang}
-              bookmarks={bookmarks.map((b) => b.id)}
-              onToggleBookmark={handleToggleBookmark}
-            />
-          )}
+      {/* Main Open-Canvas Content Workspace */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+        {activeTab === 'foundations' && (
+          <FoundationsModule
+            lang={lang}
+            bookmarks={bookmarks.map((b) => b.id)}
+            onToggleBookmark={handleToggleBookmark}
+          />
+        )}
 
-          {activeTab === 'meridians' && (
-            <MeridiansModule
-              lang={lang}
-              bookmarks={bookmarks.map((b) => b.id)}
-              onToggleBookmark={handleToggleBookmark}
-            />
-          )}
+        {activeTab === 'meridians' && (
+          <MeridiansModule
+            lang={lang}
+            bookmarks={bookmarks.map((b) => b.id)}
+            onToggleBookmark={handleToggleBookmark}
+          />
+        )}
 
-          {activeTab === 'diagnostics' && (
-            <DiagnosticsModule
-              lang={lang}
-              bookmarks={bookmarks.map((b) => b.id)}
-              onToggleBookmark={handleToggleBookmark}
-            />
-          )}
+        {activeTab === 'diagnostics' && (
+          <DiagnosticsModule
+            lang={lang}
+            bookmarks={bookmarks.map((b) => b.id)}
+            onToggleBookmark={handleToggleBookmark}
+          />
+        )}
 
-          {activeTab === 'materia-medica' && (
-            <MateriaMedicaModule
-              lang={lang}
-              bookmarks={bookmarks.map((b) => b.id)}
-              onToggleBookmark={handleToggleBookmark}
-            />
-          )}
+        {activeTab === 'materia-medica' && (
+          <MateriaMedicaModule
+            lang={lang}
+            bookmarks={bookmarks.map((b) => b.id)}
+            onToggleBookmark={handleToggleBookmark}
+          />
+        )}
 
-          {activeTab === 'media-vault' && (
-            <CurriculumAndVaultModule
-              lang={lang}
-              completedChapters={completedChapters}
-              onToggleChapterComplete={handleToggleChapterComplete}
-              onNavigateModule={(mod) => setActiveTab(mod)}
-              bookmarks={bookmarks}
-              onRemoveBookmark={handleRemoveBookmark}
-              notes={notes}
-              onAddNote={handleAddNote}
-              onDeleteNote={handleDeleteNote}
-            />
-          )}
-        </main>
+        {activeTab === 'media-vault' && (
+          <CurriculumAndVaultModule
+            lang={lang}
+            completedChapters={completedChapters}
+            onToggleChapterComplete={handleToggleChapterComplete}
+            onNavigateModule={(mod) => setActiveTab(mod)}
+            bookmarks={bookmarks}
+            onRemoveBookmark={handleRemoveBookmark}
+            notes={notes}
+            onAddNote={handleAddNote}
+            onDeleteNote={handleDeleteNote}
+          />
+        )}
+      </main>
 
-        {/* Minimalist Hairline Footer */}
-        <footer className="max-w-7xl mx-auto px-4 sm:px-6 py-8 border-t border-stone-300/70 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500 dark:text-stone-400">
-          <div className="flex items-center gap-3">
-            <span className="seal-stamp">杏林实训</span>
-            <span>
-              <strong>《本草与经络 · The Neijing Scholar》</strong> — Interactive Traditional Chinese Medicine Learning & Lab Platform
-            </span>
-          </div>
-          <div className="font-serif">
-            据《黄帝内经》《针灸甲乙经》《伤寒杂病论》《神农本草经》考订
-          </div>
-        </footer>
-      </div>
+      {/* Minimalist Hairline Footer */}
+      <footer className="max-w-7xl mx-auto px-4 sm:px-6 py-8 border-t border-stone-300/70 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-600 dark:text-stone-400">
+        <div className="flex items-center gap-3">
+          <span className="seal-stamp">杏林实训</span>
+          <span>
+            <strong>《本草与经络 · The Neijing Scholar》</strong> — Interactive Traditional Chinese Medicine Learning & Lab Platform
+          </span>
+        </div>
+        <div className="font-serif">
+          据《黄帝内经》《针灸甲乙经》《伤寒杂病论》《神农本草经》考订
+        </div>
+      </footer>
     </div>
   );
 }

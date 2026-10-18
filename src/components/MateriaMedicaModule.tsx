@@ -120,8 +120,8 @@ export default function MateriaMedicaModule({
                 alt="Materia Medica Botanical Scroll"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-4 py-2.5 text-xs text-amber-100 font-serif flex justify-between items-center">
-                <span>《本草道地饮片图鉴》· Classical Pharmacopeia</span>
+              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-4 py-2.5 text-xs text-amber-100 font-serif flex justify-between items-center gap-3">
+                <span className="truncate">《本草道地饮片图鉴》· Classical Pharmacopeia</span>
                 <VermilionSeal text="四气五味" variant="solid" />
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function MateriaMedicaModule({
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5">
               <VermilionSeal text="神农本草" variant="solid" />
-              <span className="text-xs font-mono uppercase tracking-widest text-stone-500">
+              <span className="editorial-kicker text-stone-600 dark:text-stone-400">
                 Lab 01 · Materia Medica Pharmacopeia
               </span>
             </div>
@@ -147,16 +147,16 @@ export default function MateriaMedicaModule({
             </p>
           </div>
 
-          {/* Minimalist Underline Filter by Thermal Nature (四气) */}
-          <div className="flex items-center gap-4 border-b border-stone-300 dark:border-stone-700">
+          {/* Minimalist Underline Filter by Thermal Nature (四气) (>=40px tap targets) */}
+          <div className="flex flex-wrap items-center gap-4 border-b border-stone-300 dark:border-stone-700">
             {['ALL', 'Warm', 'Neutral', 'Cool', 'Cold'].map((t) => (
               <button
                 key={t}
                 onClick={() => setTempFilter(t)}
-                className={`pb-2 text-xs font-medium transition border-b-2 -mb-px ${
+                className={`py-2 px-1.5 min-h-[40px] text-xs font-medium transition border-b-2 -mb-px ${
                   tempFilter === t
                     ? 'border-[#2D6A4F] text-[#2D6A4F] dark:text-emerald-400 font-bold'
-                    : 'border-transparent text-stone-500 hover:text-stone-900 dark:hover:text-stone-200'
+                    : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-stone-200'
                 }`}
               >
                 {t === 'ALL' ? '四气全览 · All' : t}
@@ -165,18 +165,18 @@ export default function MateriaMedicaModule({
           </div>
         </div>
 
-        {/* Clean Underline Herb Catalog Selector Strip */}
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-stone-300/80 dark:border-stone-800">
+        {/* Clean Underline Herb Catalog Selector Strip (>=40px tap targets) */}
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 border-b border-stone-300/80 dark:border-stone-800">
           {filteredHerbs.map((herb) => {
             const active = herb.id === selectedHerbId;
             return (
               <button
                 key={herb.id}
                 onClick={() => setSelectedHerbId(herb.id)}
-                className={`pb-3 text-left transition border-b-2 -mb-px flex items-center gap-2 ${
+                className={`py-2.5 px-1.5 min-h-[42px] text-left transition border-b-2 -mb-px flex items-center gap-2 ${
                   active
                     ? 'border-[#B91C1C] text-stone-950 dark:text-amber-50 font-bold'
-                    : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-950'
+                    : 'border-transparent text-stone-700 dark:text-stone-300 hover:text-stone-950'
                 }`}
               >
                 <span
@@ -185,7 +185,7 @@ export default function MateriaMedicaModule({
                 />
                 <span className="font-serif text-base">{herb.name.zh}</span>
                 {lang !== 'zh' && (
-                  <span className="text-xs text-stone-500 font-normal">
+                  <span className="text-xs text-stone-600 dark:text-stone-400 font-normal">
                     {herb.name.en}
                   </span>
                 )}
@@ -202,13 +202,13 @@ export default function MateriaMedicaModule({
               <span className="text-xs font-serif font-bold text-stone-800 dark:text-stone-200">
                 五味雷达图 · Five Flavors Profile
               </span>
-              <span className="text-xs font-mono font-semibold text-amber-900 dark:text-amber-300">
+              <span className="text-xs font-sans font-semibold text-amber-900 dark:text-amber-300">
                 {activeHerb.flavors.join(' · ')}
               </span>
             </div>
 
             <div className="canvas-stage p-6 flex items-center justify-center">
-              <svg viewBox="0 0 200 200" className="w-56 h-56 select-none">
+              <svg viewBox="0 0 220 220" className="w-60 h-60 select-none">
                 {/* Concentric Pentagon Web */}
                 {[22, 45, 68].map((r) => (
                   <polygon
@@ -216,8 +216,8 @@ export default function MateriaMedicaModule({
                     points={radarAxes
                       .map((ax) => {
                         const rad = (ax.angle * Math.PI) / 180;
-                        return `${Number((100 + r * Math.cos(rad)).toFixed(2))},${Number(
-                          (100 + r * Math.sin(rad)).toFixed(2)
+                        return `${Number((110 + r * Math.cos(rad)).toFixed(2))},${Number(
+                          (110 + r * Math.sin(rad)).toFixed(2)
                         )}`;
                       })
                       .join(' ')}
@@ -230,15 +230,15 @@ export default function MateriaMedicaModule({
                 {/* Axis Lines & Labels */}
                 {radarAxes.map((ax) => {
                   const rad = (ax.angle * Math.PI) / 180;
-                  const xEnd = Number((100 + 68 * Math.cos(rad)).toFixed(2));
-                  const yEnd = Number((100 + 68 * Math.sin(rad)).toFixed(2));
-                  const xLbl = Number((100 + 86 * Math.cos(rad)).toFixed(2));
-                  const yLbl = Number((100 + 86 * Math.sin(rad) + 3).toFixed(2));
+                  const xEnd = Number((110 + 68 * Math.cos(rad)).toFixed(2));
+                  const yEnd = Number((110 + 68 * Math.sin(rad)).toFixed(2));
+                  const xLbl = Number((110 + 88 * Math.cos(rad)).toFixed(2));
+                  const yLbl = Number((110 + 88 * Math.sin(rad) + 3).toFixed(2));
                   return (
                     <g key={ax.key}>
                       <line
-                        x1="100"
-                        y1="100"
+                        x1="110"
+                        y1="110"
                         x2={xEnd}
                         y2={yEnd}
                         stroke="#D6C7B2"
@@ -249,7 +249,7 @@ export default function MateriaMedicaModule({
                         y={yLbl}
                         textAnchor="middle"
                         fill="#44403C"
-                        className="text-[9px] font-serif font-bold"
+                        className="text-[10px] font-serif font-bold"
                       >
                         {ax.labelZh}
                       </text>
@@ -259,7 +259,16 @@ export default function MateriaMedicaModule({
 
                 {/* Herb Flavor Polygon */}
                 <polygon
-                  points={radarPoints}
+                  points={radarAxes
+                    .map((ax) => {
+                      const val = activeHerb.flavorRadar[ax.key] || 10;
+                      const r = (val / 100) * 68;
+                      const rad = (ax.angle * Math.PI) / 180;
+                      const x = Number((110 + r * Math.cos(rad)).toFixed(2));
+                      const y = Number((110 + r * Math.sin(rad)).toFixed(2));
+                      return `${x},${y}`;
+                    })
+                    .join(' ')}
                   fill={activeHerb.botanicalColor}
                   fillOpacity="0.38"
                   stroke={activeHerb.botanicalColor}
@@ -275,11 +284,11 @@ export default function MateriaMedicaModule({
                   <Thermometer className="w-3.5 h-3.5 text-[#B91C1C]" />
                   <span>四气寒热属性 · Thermal Nature:</span>
                 </span>
-                <span className="font-mono font-bold text-amber-900 dark:text-amber-300">
+                <span className="font-sans font-bold text-amber-900 dark:text-amber-300">
                   {activeHerb.temperature}
                 </span>
               </div>
-              <div className="grid grid-cols-5 divide-x divide-stone-300 dark:divide-stone-700 border-y border-stone-300 dark:border-stone-700 text-[10px] text-center font-mono">
+              <div className="grid grid-cols-5 divide-x divide-stone-300 dark:divide-stone-700 border-y border-stone-300 dark:border-stone-700 text-xs text-center font-sans font-medium">
                 {[
                   { label: '寒 Cold', score: -2, color: 'bg-blue-900 text-white' },
                   { label: '凉 Cool', score: -1, color: 'bg-sky-700 text-white' },
@@ -289,10 +298,10 @@ export default function MateriaMedicaModule({
                 ].map((lv) => (
                   <div
                     key={lv.label}
-                    className={`py-1.5 ${
+                    className={`py-2 ${
                       activeHerb.temperatureScore === lv.score
                         ? `${lv.color} font-bold`
-                        : 'text-stone-500'
+                        : 'text-stone-600 dark:text-stone-400'
                     }`}
                   >
                     {lv.label}
@@ -416,16 +425,16 @@ export default function MateriaMedicaModule({
             </p>
           </div>
 
-          {/* Minimalist Underline Formula Selector Tabs */}
-          <div className="flex flex-wrap gap-x-5 gap-y-2 border-b border-stone-300 dark:border-stone-700">
+          {/* Minimalist Underline Formula Selector Tabs (>=40px tap targets) */}
+          <div className="flex flex-wrap gap-x-4 gap-y-1 border-b border-stone-300 dark:border-stone-700">
             {CLASSIC_FORMULAS.map((f) => (
               <button
                 key={f.id}
                 onClick={() => setSelectedFormulaId(f.id)}
-                className={`pb-2 text-xs sm:text-sm font-serif transition border-b-2 -mb-px ${
+                className={`py-2 px-1.5 min-h-[40px] text-xs sm:text-sm font-serif transition border-b-2 -mb-px ${
                   f.id === selectedFormulaId
                     ? 'border-[#B91C1C] text-[#B91C1C] dark:text-amber-400 font-bold'
-                    : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-950'
+                    : 'border-transparent text-stone-700 dark:text-stone-300 hover:text-stone-950'
                 }`}
               >
                 {f.name.zh} · {f.name.en.split(' ')[0]}
@@ -439,7 +448,7 @@ export default function MateriaMedicaModule({
           <div className="space-y-3 pb-6 border-b border-stone-300/70 dark:border-stone-800">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <span className="text-xs font-mono text-amber-800 dark:text-amber-400">
+                <span className="text-xs font-sans font-semibold text-amber-800 dark:text-amber-400">
                   典籍出处: {activeFormula.sourceText.zh} ({activeFormula.sourceText.en}) · {activeFormula.category.zh}
                 </span>
                 <h4 className="text-2xl sm:text-3xl font-serif font-bold text-stone-950 dark:text-stone-100 mt-1">
@@ -454,7 +463,7 @@ export default function MateriaMedicaModule({
 
             {renderProse(lang, activeFormula.indicationsEn, activeFormula.indicationsZh)}
 
-            <div className="text-xs font-mono text-stone-600 dark:text-stone-400 pt-1">
+            <div className="text-xs font-sans font-medium text-stone-700 dark:text-stone-300 pt-1">
               辨证舌脉指征 (Tongue & Pulse): {lang === 'zh' ? activeFormula.tongueAndPulseZh : activeFormula.tongueAndPulseEn}
             </div>
           </div>
@@ -476,13 +485,13 @@ export default function MateriaMedicaModule({
                         text={info.seal}
                         variant={item.role.startsWith('Jun') ? 'solid' : 'outline'}
                       />
-                      <span className="text-xs font-mono font-bold text-stone-700 dark:text-stone-300">
+                      <span className="text-xs font-sans font-bold text-stone-700 dark:text-stone-300">
                         {item.dosage}
                       </span>
                     </div>
 
                     <div>
-                      <div className="text-[10px] font-mono uppercase text-stone-500">
+                      <div className="editorial-kicker text-stone-600 dark:text-stone-400">
                         {info.roleLabel}
                       </div>
                       <h5 className="font-serif font-bold text-lg text-stone-950 dark:text-stone-100 mt-0.5">
@@ -499,7 +508,7 @@ export default function MateriaMedicaModule({
                   {ESSENTIAL_HERBS.some((h) => h.id === item.herbId) && (
                     <button
                       onClick={() => setSelectedHerbId(item.herbId)}
-                      className="text-left text-[11px] font-mono text-[#B91C1C] dark:text-amber-400 hover:underline pt-2"
+                      className="text-left py-2 min-h-[40px] text-xs font-sans font-semibold text-[#B91C1C] dark:text-amber-400 hover:underline"
                     >
                       ↑ 检视本草饮片 · Inspect {item.herbName.zh.split(' ')[0]}
                     </button>
