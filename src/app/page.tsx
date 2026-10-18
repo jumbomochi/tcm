@@ -10,6 +10,7 @@ import CurriculumAndVaultModule, {
   SavedBookmark,
   StudyNote
 } from '@/components/CurriculumAndVaultModule';
+import WelcomeSplash from '@/components/WelcomeSplash';
 import { WUXING_ELEMENTS, ZANG_FU_ORGANS } from '@/data/foundationsData';
 import { KEY_ACUPOINTS } from '@/data/meridiansData';
 import { DIAGNOSTIC_CASES } from '@/data/diagnosticsData';
@@ -43,6 +44,7 @@ export default function HomePage() {
   const [activeTab, setActiveTabState] = useState<ActiveTab>('foundations');
   const [lang, setLang] = useState<LanguageMode>('dual');
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [showSplash, setShowSplash] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [bookmarks, setBookmarks] = useState<SavedBookmark[]>([
@@ -70,11 +72,28 @@ export default function HomePage() {
     }
   }, []);
 
+  const handleEnterFromSplash = useCallback(
+    (targetTab?: ActiveTab) => {
+      setShowSplash(false);
+      try {
+        localStorage.setItem('tcm_visited_splash', 'true');
+      } catch {}
+      if (targetTab) {
+        setActiveTab(targetTab);
+      }
+    },
+    [setActiveTab]
+  );
+
   // Sync URL query param (?m=...) and saved localStorage on mount & browser back/forward
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const hasExplicitModuleParam = params.has('m');
+    const forceSplash = params.get('splash') === '1';
+
     const syncFromUrl = () => {
-      const params = new URLSearchParams(window.location.search);
-      const mParam = params.get('m') as ActiveTab | 'curriculum' | null;
+      const currentParams = new URLSearchParams(window.location.search);
+      const mParam = currentParams.get('m') as ActiveTab | 'curriculum' | null;
       if (mParam === 'curriculum') {
         setActiveTabState('media-vault');
       } else if (mParam && VALID_TABS.includes(mParam)) {
@@ -86,6 +105,10 @@ export default function HomePage() {
     window.addEventListener('popstate', syncFromUrl);
 
     try {
+      const hasVisitedSplash = localStorage.getItem('tcm_visited_splash');
+      if (forceSplash || (!hasVisitedSplash && !hasExplicitModuleParam)) {
+        setShowSplash(true);
+      }
       const savedBookmarks = localStorage.getItem('tcm_bookmarks');
       if (savedBookmarks) setBookmarks(JSON.parse(savedBookmarks));
       const savedChapters = localStorage.getItem('tcm_chapters');
@@ -319,6 +342,15 @@ export default function HomePage() {
 
   return (
     <div className="relative min-h-screen text-stone-900 dark:text-stone-100 transition-colors selection:bg-amber-900/20">
+      {/* First-Time Visitor Frontispiece Splash Page (展卷入杏林) */}
+      {showSplash && (
+        <WelcomeSplash
+          lang={lang}
+          onSelectLang={setLang}
+          onEnter={handleEnterFromSplash}
+        />
+      )}
+
       {/* Full-Page Fixed Classical Ink-Wash Landscape Background with Soft Vertical Gradient Fade */}
       <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden shanshui-backdrop">
         <img
@@ -332,13 +364,17 @@ export default function HomePage() {
       {/* Minimalist Top Bar + Integrated Underline Tab Strip */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FAF6F0]/88 dark:bg-[#141311]/90 border-b border-stone-300/80 dark:border-stone-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
-          {/* Brand Identity */}
-          <div className="flex items-center gap-2.5 min-w-0">
+          {/* Brand Identity (Click to Reopen Welcome Frontispiece) */}
+          <button
+            onClick={() => setShowSplash(true)}
+            title="Open Welcome Frontispiece · 展卷扉页"
+            className="flex items-center gap-2.5 min-w-0 text-left hover:opacity-85 transition cursor-pointer"
+          >
             <span className="seal-stamp-solid text-xs">内经</span>
             <h1 className="text-base sm:text-xl font-serif font-bold tracking-wide text-stone-950 dark:text-amber-50 truncate">
               本草与经络 <span className="hidden sm:inline">· The Neijing Scholar</span>
             </h1>
-          </div>
+          </button>
 
           {/* Right Controls: Search + Desktop Controls + Mobile Menu Button */}
           <div className="flex items-center gap-3 sm:gap-5 text-xs">
