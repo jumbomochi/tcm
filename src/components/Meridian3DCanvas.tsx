@@ -15,6 +15,9 @@ interface Meridian3DCanvasProps {
   onWebGLUnavailable?: () => void;
 }
 
+const QI_TRAIL_LENGTH = 10;
+const QI_TRAIL_GAP = 0.012; // fraction of the channel length between tail beads
+
 type StatueFinish = 'bronze' | 'jade' | 'wireframe';
 type CameraPreset = 'full' | 'head' | 'torso' | 'arm' | 'leg' | 'posterior';
 
@@ -323,7 +326,7 @@ export default function Meridian3DCanvas({
     // 6. Surface-Hugging Meridian Channels, Waypoint Pearls & Flowing Qi Particles
     const meridianGroup = new THREE.Group();
     const animatedPulses: {
-      mesh: THREE.Mesh;
+      meshes: THREE.Mesh[]; // comet head first, then fading tail beads
       curve: THREE.CatmullRomCurve3;
       speed: number;
       offset: number;
@@ -364,17 +367,29 @@ export default function Meridian3DCanvas({
             meridianGroup.add(nodeMesh);
           });
 
-          // Add flowing Qi particles along the meridian curve
+          // Add flowing Qi comets (glowing head + fading tail) along the meridian curve
           const pulseCount = isSingleFocus ? 3 : 1;
           for (let k = 0; k < pulseCount; k++) {
-            const pulseGeo = new THREE.SphereGeometry(isSingleFocus ? 0.024 : 0.016, 14, 14);
-            const pulseMat = new THREE.MeshBasicMaterial({
-              color: 0xfef08a
+            const meshes = Array.from({ length: QI_TRAIL_LENGTH }, (_, i) => {
+              const fade = 1 - i / QI_TRAIL_LENGTH;
+              const beadGeo = new THREE.SphereGeometry(
+                (isSingleFocus ? 0.024 : 0.016) * (0.35 + 0.65 * fade),
+                12,
+                12
+              );
+              const beadMat = new THREE.MeshBasicMaterial({
+                color: i === 0 ? 0xfef9c3 : new THREE.Color(elHex).lerp(new THREE.Color(0xfef08a), fade),
+                transparent: true,
+                opacity: fade,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+              });
+              const bead = new THREE.Mesh(beadGeo, beadMat);
+              meridianGroup.add(bead);
+              return bead;
             });
-            const pulseMesh = new THREE.Mesh(pulseGeo, pulseMat);
-            meridianGroup.add(pulseMesh);
             animatedPulses.push({
-              mesh: pulseMesh,
+              meshes,
               curve,
               speed: 0.22,
               offset: k / pulseCount
@@ -484,15 +499,20 @@ export default function Meridian3DCanvas({
     // 10. Animation Loop (Flowing Qi Particles + Billboard Halo Ring)
     let frameId: number;
     let startTime: number | null = null;
+    // Freeze qi comets in place for users who ask for reduced motion
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const animate = (now: number) => {
       if (startTime === null) startTime = now;
-      const elapsedSec = Math.max(0, (now - startTime) / 1000);
+      const elapsedSec = reduceMotion ? 0.6 : Math.max(0, (now - startTime) / 1000);
 
       animatedPulses.forEach((p) => {
-        const rawT = (elapsedSec * p.speed + p.offset) % 1;
-        const t = Math.min(0.9999, Math.max(0, rawT < 0 ? rawT + 1 : rawT));
-        const pos = p.curve.getPointAt(t);
-        if (pos) p.mesh.position.copy(pos);
+        const head = (elapsedSec * p.speed + p.offset) % 1;
+        p.meshes.forEach((bead, i) => {
+          // Tail beads trail the head; hidden until the head has travelled far enough
+          const t = head - i * QI_TRAIL_GAP;
+          bead.visible = t >= 0;
+          if (bead.visible) bead.position.copy(p.curve.getPointAt(Math.min(t, 0.9999)));
+        });
       });
 
       haloRings.forEach((ring) => {
@@ -515,6 +535,13 @@ export default function Meridian3DCanvas({
       renderer.domElement.removeEventListener('mousemove', handlePointerMove);
       renderer.domElement.removeEventListener('click', handleClick);
       controls.dispose();
+      // Scene is rebuilt on every selection change, so free GPU buffers each time
+      scene.traverse((obj) => {
+        if (obj instanceof THREE.Mesh) {
+          obj.geometry.dispose();
+          (Array.isArray(obj.material) ? obj.material : [obj.material]).forEach((m) => m.dispose());
+        }
+      });
       renderer.dispose();
       renderer.forceContextLoss();
     };
