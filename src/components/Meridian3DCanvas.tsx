@@ -99,18 +99,19 @@ export default function Meridian3DCanvas({
     const container = containerRef.current;
     if (!container) return;
 
-    // Pre-check WebGL availability to prevent Three.js throwing an unhandled context error
+    // Pre-check WebGL availability and release temporary context immediately
     try {
       const testCanvas = document.createElement('canvas');
-      const gl =
-        testCanvas.getContext('webgl2') ||
+      const gl = (testCanvas.getContext('webgl2') ||
         testCanvas.getContext('webgl') ||
-        testCanvas.getContext('experimental-webgl');
+        testCanvas.getContext('experimental-webgl')) as WebGLRenderingContext | null;
       if (!gl) {
         setWebglError(true);
         onWebGLUnavailableRef.current?.();
         return;
       }
+      const loseCtx = gl.getExtension('WEBGL_lose_context');
+      loseCtx?.loseContext();
     } catch {
       setWebglError(true);
       onWebGLUnavailableRef.current?.();
@@ -118,11 +119,11 @@ export default function Meridian3DCanvas({
     }
 
     const width = container.clientWidth || 520;
-    const height = container.clientHeight || 560;
+    const height = container.clientHeight || 420;
 
     // 1. Scene, Camera, Renderer (wrapped in try/catch for restricted GPU contexts)
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 100);
 
     let renderer: THREE.WebGLRenderer;
     try {
@@ -166,12 +167,12 @@ export default function Meridian3DCanvas({
           controls.target.set(-0.15, -0.55, 0.08);
           break;
         case 'posterior':
-          camera.position.set(0, 0.55, -3.35);
-          controls.target.set(0, 0.42, 0);
+          camera.position.set(0, 0.45, -3.45);
+          controls.target.set(0, 0.40, 0);
           break;
         case 'full':
         default:
-          camera.position.set(0, 0.48, 3.45);
+          camera.position.set(0, 0.45, 3.45);
           controls.target.set(0, 0.40, 0);
           break;
       }
@@ -180,18 +181,18 @@ export default function Meridian3DCanvas({
     applyPreset(cameraPreset);
 
     // 3. Museum Studio Lighting for Patinated Bronze / Celadon Jade
-    const ambientLight = new THREE.AmbientLight(0xfff8e7, 0.95);
+    const ambientLight = new THREE.AmbientLight(0xfff8e7, 1.05);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffedd5, 1.85);
+    const keyLight = new THREE.DirectionalLight(0xffedd5, 1.95);
     keyLight.position.set(2.8, 4.2, 3.8);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x93c5fd, 0.9);
+    const rimLight = new THREE.DirectionalLight(0x93c5fd, 0.95);
     rimLight.position.set(-3.2, 2.5, -3.5);
     scene.add(rimLight);
 
-    const warmFillLight = new THREE.PointLight(0xd97706, 0.85, 6);
+    const warmFillLight = new THREE.PointLight(0xd97706, 0.9, 6);
     warmFillLight.position.set(0, -0.6, 2.2);
     scene.add(warmFillLight);
 
@@ -199,27 +200,29 @@ export default function Meridian3DCanvas({
     let bodyMat: THREE.Material;
     if (finish === 'bronze') {
       bodyMat = new THREE.MeshStandardMaterial({
-        color: 0x7c6340,
-        roughness: 0.34,
-        metalness: 0.72,
+        color: 0x8a6d46,
+        roughness: 0.32,
+        metalness: 0.68,
         transparent: true,
-        opacity: 0.88
+        opacity: 0.9
       });
     } else if (finish === 'jade') {
-      bodyMat = new THREE.MeshPhysicalMaterial({
-        color: 0xa7c4b5,
-        roughness: 0.22,
-        metalness: 0.08,
-        transmission: 0.35,
+      bodyMat = new THREE.MeshStandardMaterial({
+        color: 0x7eb8a2,
+        emissive: 0x16382c,
+        emissiveIntensity: 0.35,
+        roughness: 0.2,
+        metalness: 0.1,
         transparent: true,
-        opacity: 0.52
+        opacity: 0.58,
+        depthWrite: false
       });
     } else {
       bodyMat = new THREE.MeshBasicMaterial({
-        color: 0xb49b78,
+        color: 0xc8b08a,
         wireframe: true,
         transparent: true,
-        opacity: 0.36
+        opacity: 0.42
       });
     }
 
@@ -333,6 +336,7 @@ export default function Meridian3DCanvas({
         WUXING_ELEMENTS.find((e) => e.key === ch.element)?.colorHex || '#C83E31';
 
       const buildChannelBranch = (pts: [number, number, number][], opacityScale = 1) => {
+        if (!pts || pts.length < 2) return;
         const vectors = pts.map((p) => new THREE.Vector3(p[0], p[1], p[2]));
         const curve = new THREE.CatmullRomCurve3(vectors);
         const radius = isSingleFocus ? 0.012 : isSelected ? 0.0085 : 0.0035;
@@ -463,27 +467,32 @@ export default function Meridian3DCanvas({
     renderer.domElement.addEventListener('mousemove', handlePointerMove);
     renderer.domElement.addEventListener('click', handleClick);
 
-    // 9. Resize Handler
+    // 9. ResizeObserver + Window Resize Handler so canvas always fits flex container
     const handleResize = () => {
       if (!container) return;
       const newW = container.clientWidth || 520;
-      const newH = container.clientHeight || 560;
+      const newH = container.clientHeight || 420;
       camera.aspect = newW / newH;
       camera.updateProjectionMatrix();
       renderer.setSize(newW, newH);
     };
     window.addEventListener('resize', handleResize);
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined' ? new ResizeObserver(handleResize) : null;
+    resizeObserver?.observe(container);
 
     // 10. Animation Loop (Flowing Qi Particles + Billboard Halo Ring)
     let frameId: number;
-    const startTime = performance.now();
+    let startTime: number | null = null;
     const animate = (now: number) => {
-      const elapsedSec = (now - startTime) / 1000;
+      if (startTime === null) startTime = now;
+      const elapsedSec = Math.max(0, (now - startTime) / 1000);
 
       animatedPulses.forEach((p) => {
-        const t = (elapsedSec * p.speed + p.offset) % 1;
+        const rawT = (elapsedSec * p.speed + p.offset) % 1;
+        const t = Math.min(0.9999, Math.max(0, rawT < 0 ? rawT + 1 : rawT));
         const pos = p.curve.getPointAt(t);
-        p.mesh.position.copy(pos);
+        if (pos) p.mesh.position.copy(pos);
       });
 
       haloRings.forEach((ring) => {
@@ -494,15 +503,20 @@ export default function Meridian3DCanvas({
       renderer.render(scene, camera);
       frameId = requestAnimationFrame(animate);
     };
+
+    // Perform an immediate initial render before frame 1
+    renderer.render(scene, camera);
     frameId = requestAnimationFrame(animate);
 
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener('resize', handleResize);
+      resizeObserver?.disconnect();
       renderer.domElement.removeEventListener('mousemove', handlePointerMove);
       renderer.domElement.removeEventListener('click', handleClick);
       controls.dispose();
       renderer.dispose();
+      renderer.forceContextLoss();
     };
   }, [meridians, acupoints, selectedMeridianId, selectedAcupointCode, finish, cameraPreset]);
 
@@ -523,26 +537,26 @@ export default function Meridian3DCanvas({
 
   return (
     <div className="w-full h-[580px] bg-gradient-to-b from-[#161513] via-[#1F1C18] to-[#11100E] border-2 border-stone-800 relative flex flex-col justify-between select-none">
-      {/* Top Bar: Camera Region Presets & Material Finish Switcher */}
-      <div className="relative z-10 p-2.5 bg-black/75 border-b border-stone-800 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-xs font-sans font-semibold uppercase tracking-wider text-amber-400 mr-1">
-            视角 Region:
+      {/* Top Bar: Compact Camera Region Presets & Material Finish Switcher */}
+      <div className="relative z-10 px-2.5 py-2 bg-black/80 border-b border-stone-800 flex flex-wrap items-center justify-between gap-1.5">
+        <div className="flex flex-wrap items-center gap-1">
+          <span className="text-[11px] font-sans font-semibold uppercase tracking-wider text-amber-400 mr-0.5">
+            视角:
           </span>
           {(
             [
-              { id: 'full', label: '全身 Full' },
-              { id: 'head', label: '头项 Head' },
-              { id: 'torso', label: '胸腹 Torso' },
-              { id: 'arm', label: '上肢手 Arm' },
-              { id: 'leg', label: '下肢足 Leg' },
-              { id: 'posterior', label: '背脊督脉 Back' }
+              { id: 'full', label: '全身' },
+              { id: 'head', label: '头项' },
+              { id: 'torso', label: '胸腹' },
+              { id: 'arm', label: '上肢' },
+              { id: 'leg', label: '下肢' },
+              { id: 'posterior', label: '背督' }
             ] as const
           ).map((p) => (
             <button
               key={p.id}
               onClick={() => setCameraPreset(p.id)}
-              className={`px-2.5 py-1.5 text-xs font-serif border transition ${
+              className={`px-2 py-1 text-xs font-serif border transition ${
                 cameraPreset === p.id
                   ? 'bg-[#9E2A2B] text-white border-[#9E2A2B] font-bold'
                   : 'bg-stone-900 text-stone-300 border-stone-700 hover:border-amber-500/60'
@@ -553,21 +567,21 @@ export default function Meridian3DCanvas({
           ))}
         </div>
 
-        <div className="flex items-center gap-1.5">
-          <span className="text-xs font-sans font-semibold uppercase tracking-wider text-stone-400 mr-1">
-            铜人材质:
+        <div className="flex items-center gap-1">
+          <span className="text-[11px] font-sans font-semibold uppercase tracking-wider text-stone-400 mr-0.5">
+            材质:
           </span>
           {(
             [
-              { id: 'bronze', label: '天圣古铜' },
-              { id: 'jade', label: '青玉透视' },
-              { id: 'wireframe', label: '白描骨度' }
+              { id: 'bronze', label: '古铜' },
+              { id: 'jade', label: '青玉' },
+              { id: 'wireframe', label: '白描' }
             ] as const
           ).map((m) => (
             <button
               key={m.id}
               onClick={() => setFinish(m.id)}
-              className={`px-2.5 py-1.5 text-xs font-serif border transition ${
+              className={`px-2 py-1 text-xs font-serif border transition ${
                 finish === m.id
                   ? 'bg-amber-600 text-stone-950 border-amber-500 font-bold'
                   : 'bg-stone-900 text-stone-300 border-stone-700 hover:border-amber-500/60'
@@ -579,35 +593,35 @@ export default function Meridian3DCanvas({
         </div>
       </div>
 
-      {/* 3D WebGL Canvas */}
-      <div ref={containerRef} className="w-full flex-1 min-h-0" />
+      {/* 3D WebGL Canvas (Interactive Tiansheng Bronze Statue) */}
+      <div ref={containerRef} className="w-full flex-1 min-h-[340px] relative overflow-hidden" />
 
       {/* Bottom Floating Acupoint Directory & Active Point Readout */}
-      <div className="relative z-10 p-2.5 bg-black/80 border-t border-stone-800 space-y-2">
+      <div className="relative z-10 px-2.5 py-2 bg-black/80 border-t border-stone-800 space-y-1.5">
         {activePt && (
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-amber-100 font-serif border-b border-stone-800 pb-1.5">
+          <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs text-amber-100 font-serif border-b border-stone-800 pb-1">
             <div>
-              <span className="px-1.5 py-0.5 bg-[#9E2A2B] text-white font-sans font-bold text-xs mr-2">
+              <span className="px-1.5 py-0.5 bg-[#9E2A2B] text-white font-sans font-bold text-xs mr-1.5">
                 {activePt.code}
               </span>
               <span className="font-bold text-amber-300">{activePt.name.zh}</span> (
               {activePt.name.pinyin}) ·{' '}
               <span className="text-stone-300">{activePt.name.en}</span>
             </div>
-            <span className="text-xs font-sans text-amber-400/90">
+            <span className="text-[11px] font-sans text-amber-400/90">
               {activePt.meridianName.zh} · 拖拽旋转 / 滚轮缩放
             </span>
           </div>
         )}
 
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1">
           {acupoints.map((pt) => {
             const isSelected = pt.code === selectedAcupointCode;
             return (
               <button
                 key={pt.code}
                 onClick={() => onSelectAcupoint(pt.code)}
-                className={`px-2.5 py-1 border text-xs font-sans font-semibold transition ${
+                className={`px-2 py-0.5 border text-xs font-sans font-semibold transition ${
                   isSelected
                     ? 'bg-amber-500 text-stone-950 border-amber-400 font-bold'
                     : 'bg-stone-900 text-amber-100/90 border-stone-700 hover:border-amber-500'
