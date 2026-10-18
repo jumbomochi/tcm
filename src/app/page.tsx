@@ -341,7 +341,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="relative min-h-screen text-stone-900 dark:text-stone-100 transition-colors selection:bg-amber-900/20">
+    <div className="relative isolate min-h-screen text-stone-900 dark:text-stone-100 transition-colors selection:bg-amber-900/20">
       {/* First-Time Visitor Frontispiece Splash Page (展卷入杏林) */}
       {showSplash && (
         <WelcomeSplash
@@ -352,13 +352,13 @@ export default function HomePage() {
       )}
 
       {/* Full-Page Fixed Classical Ink-Wash Landscape Background with Soft Vertical Gradient Fade */}
-      <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden shanshui-backdrop">
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden shanshui-backdrop">
         <img
           src="/images/shanshui_bg.jpg"
           alt=""
-          className="w-full h-full object-cover object-top opacity-80 dark:opacity-20 dark:invert transition-opacity duration-500"
+          className="w-full h-full object-cover object-top opacity-90 dark:opacity-25 dark:invert transition-opacity duration-500"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F0]/45 via-[#FAF6F0]/75 to-[#FAF6F0] dark:from-[#121110]/80 dark:via-[#121110]/92 dark:to-[#121110]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F0]/45 via-[#FAF6F0]/72 to-[#FAF6F0]/92 dark:from-[#121110]/75 dark:via-[#121110]/88 dark:to-[#121110]/96" />
       </div>
 
       {/* Minimalist Top Bar + Integrated Underline Tab Strip */}
@@ -596,7 +596,7 @@ export default function HomePage() {
       </header>
 
       {/* Main Open-Canvas Content Workspace */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
         {activeTab === 'foundations' && (
           <FoundationsModule
             lang={lang}
@@ -645,7 +645,7 @@ export default function HomePage() {
       </main>
 
       {/* Minimalist Hairline Footer */}
-      <footer className="max-w-7xl mx-auto px-4 sm:px-6 py-8 border-t border-stone-300/70 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-600 dark:text-stone-400">
+      <footer className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8 border-t border-stone-300/70 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-600 dark:text-stone-400">
         <div className="flex items-center gap-3">
           <span className="seal-stamp">杏林实训</span>
           <span>
