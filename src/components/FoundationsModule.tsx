@@ -17,10 +17,14 @@ import {
   BookmarkCheck
 } from 'lucide-react';
 
+import { ShichenInfo } from '@/utils/qiClock';
+
 interface FoundationsModuleProps {
   lang: LanguageMode;
   bookmarks: string[];
   onToggleBookmark: (id: string, title: string, category: string) => void;
+  qiClock?: ShichenInfo;
+  onJumpToMeridian?: (meridianId: string) => void;
 }
 
 const ELEMENT_COORDS: Record<ElementKey, { x: number; y: number }> = {
@@ -34,9 +38,15 @@ const ELEMENT_COORDS: Record<ElementKey, { x: number; y: number }> = {
 export default function FoundationsModule({
   lang,
   bookmarks,
-  onToggleBookmark
+  onToggleBookmark,
+  qiClock,
+  onJumpToMeridian
 }: FoundationsModuleProps) {
   const [selectedElementKey, setSelectedElementKey] = useState<ElementKey>('wood');
+  const [inkBurst, setInkBurst] = useState<{ key: ElementKey; id: number }>({
+    key: 'wood',
+    id: 0
+  });
   const [cycleMode, setCycleMode] = useState<'sheng-ke' | 'pathology'>('sheng-ke');
   const [selectedOrganId, setSelectedOrganId] = useState<string>('liver');
   const [selectedClockIdx, setSelectedClockIdx] = useState<number>(3);
@@ -87,11 +97,11 @@ export default function FoundationsModule({
         </div>
 
         <div className="lg:col-span-5">
-          <div className="relative rounded-md overflow-hidden border border-stone-300 dark:border-stone-700 shadow-md aspect-video bg-stone-200 dark:bg-stone-900">
+          <div className="relative rounded-md overflow-hidden border border-stone-300 dark:border-stone-700 shadow-md aspect-video bg-[#F3ECE1] dark:bg-stone-950">
             <img
               src="/images/wuxing_scroll.jpg"
               alt="Wu Xing Classical Scroll"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover hero-scroll-img"
             />
             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-4 py-2.5 text-xs text-amber-100 font-serif flex justify-between items-center gap-3">
               <span className="truncate">《五行生克与五脏应象图》· Five-Element Scroll</span>
@@ -139,7 +149,7 @@ export default function FoundationsModule({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          {/* Left: Single-Layer Interactive SVG Stage */}
+          {/* Left: Single-Layer Interactive SVG Stage with Ink-Wash Motion */}
           <div className="lg:col-span-5 flex flex-col items-center">
             <div className="w-full max-w-[400px] aspect-square canvas-stage p-3">
               <svg viewBox="0 0 440 410" className="w-full h-full select-none">
@@ -149,8 +159,8 @@ export default function FoundationsModule({
                     viewBox="0 0 10 10"
                     refX="8"
                     refY="5"
-                    markerWidth="6"
-                    markerHeight="6"
+                    markerWidth="6.5"
+                    markerHeight="6.5"
                     orient="auto-start-reverse"
                   >
                     <path d="M 0 1 L 10 5 L 0 9 z" fill="#2D6A4F" />
@@ -160,80 +170,133 @@ export default function FoundationsModule({
                     viewBox="0 0 10 10"
                     refX="8"
                     refY="5"
-                    markerWidth="6"
-                    markerHeight="6"
+                    markerWidth="6.5"
+                    markerHeight="6.5"
                     orient="auto-start-reverse"
                   >
                     <path d="M 0 1 L 10 5 L 0 9 z" fill="#B91C1C" />
                   </marker>
                 </defs>
 
+                {/* Outer Brush Circle */}
                 <circle
                   cx="220"
                   cy="213"
-                  r="145"
+                  r="146"
                   fill="none"
                   stroke="#C4B5A3"
                   strokeWidth="1.2"
-                  strokeDasharray="5 4"
+                  strokeDasharray="6 4"
                 />
 
+                {/* Curved Outer Generating (相生) Cycle Arrows */}
                 {WUXING_ELEMENTS.map((el) => {
                   const from = ELEMENT_COORDS[el.key];
                   const to = ELEMENT_COORDS[el.generates];
-                  const isHighlighted = el.key === selectedElementKey || el.generates === selectedElementKey;
+                  const isHighlighted =
+                    el.key === selectedElementKey || el.generates === selectedElementKey;
                   const dx = to.x - from.x;
                   const dy = to.y - from.y;
                   const dist = Math.sqrt(dx * dx + dy * dy);
-                  const pad = 48;
+                  const pad = 47;
                   const x1 = Number((from.x + (dx / dist) * pad).toFixed(2));
                   const y1 = Number((from.y + (dy / dist) * pad).toFixed(2));
                   const x2 = Number((to.x - (dx / dist) * pad).toFixed(2));
                   const y2 = Number((to.y - (dy / dist) * pad).toFixed(2));
 
+                  // Outward curve control point along the circle perimeter
+                  const midX = (x1 + x2) / 2;
+                  const midY = (y1 + y2) / 2;
+                  const outX = midX - 220;
+                  const outY = midY - 213;
+                  const outLen = Math.sqrt(outX * outX + outY * outY) || 1;
+                  const cx = Number((midX + (outX / outLen) * 26).toFixed(2));
+                  const cy = Number((midY + (outY / outLen) * 26).toFixed(2));
+                  const pathD = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`;
+
                   return (
-                    <line
-                      key={`sheng-${el.key}`}
-                      x1={x1}
-                      y1={y1}
-                      x2={x2}
-                      y2={y2}
-                      stroke="#2D6A4F"
-                      strokeWidth={isHighlighted ? 3.2 : 1.5}
-                      strokeOpacity={isHighlighted ? 0.95 : 0.35}
-                      markerEnd="url(#arrow-sheng)"
-                    />
+                    <g key={`sheng-${el.key}`}>
+                      <path
+                        d={pathD}
+                        fill="none"
+                        stroke="#2D6A4F"
+                        strokeWidth={isHighlighted ? 3.2 : 1.6}
+                        strokeOpacity={isHighlighted ? 0.92 : 0.35}
+                        markerEnd="url(#arrow-sheng)"
+                      />
+                      {isHighlighted && (
+                        <path
+                          d={pathD}
+                          fill="none"
+                          stroke="#6EE7B7"
+                          strokeWidth="2"
+                          strokeDasharray="6 8"
+                          className="animate-qi-dash"
+                        />
+                      )}
+                    </g>
                   );
                 })}
 
+                {/* Inner Star Controlling (相克 / 乘侮) Cycle Arrows */}
                 {WUXING_ELEMENTS.map((el) => {
                   const from = ELEMENT_COORDS[el.key];
                   const to = ELEMENT_COORDS[el.controls];
-                  const isHighlighted = el.key === selectedElementKey || el.controls === selectedElementKey;
+                  const isHighlighted =
+                    el.key === selectedElementKey || el.controls === selectedElementKey;
                   const dx = to.x - from.x;
                   const dy = to.y - from.y;
                   const dist = Math.sqrt(dx * dx + dy * dy);
-                  const pad = 48;
+                  const pad = 47;
                   const x1 = Number((from.x + (dx / dist) * pad).toFixed(2));
                   const y1 = Number((from.y + (dy / dist) * pad).toFixed(2));
                   const x2 = Number((to.x - (dx / dist) * pad).toFixed(2));
                   const y2 = Number((to.y - (dy / dist) * pad).toFixed(2));
 
                   return (
-                    <line
-                      key={`ke-${el.key}`}
-                      x1={x1}
-                      y1={y1}
-                      x2={x2}
-                      y2={y2}
-                      stroke="#B91C1C"
-                      strokeWidth={isHighlighted ? 2.8 : 1.4}
-                      strokeDasharray={cycleMode === 'pathology' ? '5 3' : undefined}
-                      strokeOpacity={isHighlighted ? 0.9 : 0.3}
-                      markerEnd="url(#arrow-ke)"
-                    />
+                    <g key={`ke-${el.key}`}>
+                      <line
+                        x1={x1}
+                        y1={y1}
+                        x2={x2}
+                        y2={y2}
+                        stroke="#B91C1C"
+                        strokeWidth={isHighlighted ? 2.8 : 1.3}
+                        strokeDasharray={cycleMode === 'pathology' ? '5 3' : undefined}
+                        strokeOpacity={isHighlighted ? 0.9 : 0.28}
+                        markerEnd="url(#arrow-ke)"
+                      />
+                      {isHighlighted && (
+                        <line
+                          x1={x1}
+                          y1={y1}
+                          x2={x2}
+                          y2={y2}
+                          stroke="#FCA5A5"
+                          strokeWidth="1.8"
+                          strokeDasharray="5 9"
+                          className="animate-qi-dash"
+                        />
+                      )}
+                    </g>
                   );
                 })}
+
+                {/* Organic Ink-Wash Spread (水墨晕染) when clicking an element */}
+                {inkBurst.id > 0 && (
+                  <circle
+                    key={`burst-${inkBurst.id}`}
+                    cx={ELEMENT_COORDS[inkBurst.key].x}
+                    cy={ELEMENT_COORDS[inkBurst.key].y}
+                    r="44"
+                    fill={
+                      WUXING_ELEMENTS.find((e) => e.key === inkBurst.key)?.colorHex || '#2D6A4F'
+                    }
+                    fillOpacity="0.4"
+                    filter="url(#ink-bleed)"
+                    className="animate-ink-spread pointer-events-none"
+                  />
+                )}
 
                 {WUXING_ELEMENTS.map((el) => {
                   const pos = ELEMENT_COORDS[el.key];
@@ -244,6 +307,7 @@ export default function FoundationsModule({
                       key={el.key}
                       onClick={() => {
                         setSelectedElementKey(el.key);
+                        setInkBurst({ key: el.key, id: Date.now() });
                         const matchingOrgan = ZANG_FU_ORGANS.find((o) => o.element === el.key);
                         if (matchingOrgan) setSelectedOrganId(matchingOrgan.id);
                       }}
@@ -256,8 +320,9 @@ export default function FoundationsModule({
                           r="47"
                           fill="none"
                           stroke={el.colorHex}
-                          strokeWidth="2"
-                          strokeDasharray="4 2"
+                          strokeWidth="2.2"
+                          strokeDasharray="5 3"
+                          filter="url(#woodblock-rough)"
                         />
                       )}
                       <circle
@@ -577,9 +642,26 @@ export default function FoundationsModule({
             </h3>
           </div>
 
-          <div className="inline-flex items-center gap-2 text-xs font-sans font-semibold text-stone-700 dark:text-stone-300">
-            <Clock className="w-4 h-4 text-[#B91C1C] dark:text-amber-400" />
-            <span>Local Hour: {String(currentHour).padStart(2, '0')}:00 · Click any Shichen</span>
+          <div className="flex flex-wrap items-center gap-3 text-xs font-sans font-semibold text-stone-700 dark:text-stone-300">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#B91C1C] dark:bg-amber-400 animate-pulse" />
+              <Clock className="w-4 h-4 text-[#B91C1C] dark:text-amber-400" />
+              <span>
+                本地时间 {String(currentHour).padStart(2, '0')}:00
+                {qiClock && ` · ${qiClock.branchZh}当令 (${qiClock.meridianId} → ${qiClock.nextMeridianId})`}
+              </span>
+            </span>
+            {qiClock && (
+              <button
+                onClick={() => {
+                  const idx = QI_CLOCK_HOURS.findIndex((h) => h.meridianCode === qiClock.meridianId);
+                  if (idx !== -1) setSelectedClockIdx(idx);
+                }}
+                className="px-2.5 py-1 border border-stone-400 dark:border-stone-700 hover:border-[#B91C1C] text-stone-800 dark:text-stone-200 transition"
+              >
+                同步当前时辰 · Sync Now
+              </button>
+            )}
           </div>
         </div>
 
@@ -605,6 +687,27 @@ export default function FoundationsModule({
                   strokeWidth="1.5"
                   strokeDasharray="4 4"
                 />
+                {/* Animated Qi Flow Arc from Selected Shichen to Next Shichen */}
+                {(() => {
+                  const nextIdx = (selectedClockIdx + 1) % 12;
+                  const a1 = ((selectedClockIdx * 30 - 60) * Math.PI) / 180;
+                  const a2 = ((nextIdx * 30 - 60) * Math.PI) / 180;
+                  const r = 182;
+                  const x1 = Number((260 + r * Math.cos(a1)).toFixed(2));
+                  const y1 = Number((260 + r * Math.sin(a1)).toFixed(2));
+                  const x2 = Number((260 + r * Math.cos(a2)).toFixed(2));
+                  const y2 = Number((260 + r * Math.sin(a2)).toFixed(2));
+                  return (
+                    <path
+                      d={`M ${x1},${y1} A ${r},${r} 0 0,1 ${x2},${y2}`}
+                      fill="none"
+                      stroke="#B91C1C"
+                      strokeWidth="3.5"
+                      strokeDasharray="6 6"
+                      className="animate-qi-dash"
+                    />
+                  );
+                })()}
                 <circle
                   cx="260"
                   cy="260"
@@ -651,6 +754,7 @@ export default function FoundationsModule({
                   const textY2 = Number((cy + 5).toFixed(2));
                   const textY3 = Number((cy + 19).toFixed(2));
                   const isSelected = i === selectedClockIdx;
+                  const isLiveNow = qiClock?.meridianId === h.meridianCode;
                   const elColor =
                     WUXING_ELEMENTS.find((e) => e.key === h.element)?.colorHex || '#B45309';
                   const meridianShortZh = h.organ.zh.replace('当令', '');
@@ -669,6 +773,17 @@ export default function FoundationsModule({
                         stroke={isSelected ? elColor : '#E7E0D6'}
                         strokeWidth={isSelected ? '3' : '1.2'}
                       />
+                      {isLiveNow && (
+                        <circle
+                          cx={cx}
+                          cy={cy}
+                          r="46"
+                          fill="none"
+                          stroke="#B91C1C"
+                          strokeWidth="1.8"
+                          strokeDasharray="4 3"
+                        />
+                      )}
                       <circle
                         cx={cx}
                         cy={cy}
@@ -684,7 +799,7 @@ export default function FoundationsModule({
                         fill={isSelected ? '#FEF3C7' : '#78716C'}
                         className="font-serif font-bold text-[11px]"
                       >
-                        {h.branchZh}
+                        {h.branchZh}{isLiveNow ? '·今' : ''}
                       </text>
                       <text
                         x={cx}
@@ -722,7 +837,18 @@ export default function FoundationsModule({
                   {activeClock.organ.zh} · {activeClock.organ.en} ({activeClock.meridianCode})
                 </h4>
               </div>
-              <VermilionSeal text={`${activeClock.branchZh}当令`} variant="solid" />
+              <div className="flex items-center gap-2">
+                <VermilionSeal text={`${activeClock.branchZh}当令`} variant="solid" />
+                {onJumpToMeridian && (
+                  <button
+                    onClick={() => onJumpToMeridian(activeClock.meridianCode)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] bg-stone-900 dark:bg-amber-500 text-amber-50 dark:text-stone-950 text-xs font-serif font-bold hover:bg-[#B91C1C] transition"
+                  >
+                    <span>在铜人经络图查看 {activeClock.meridianCode}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
             </div>
 
             <div className="space-y-5">

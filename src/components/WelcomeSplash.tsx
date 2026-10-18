@@ -95,9 +95,9 @@ export default function WelcomeSplash({
         <img
           src="/images/shanshui_bg.jpg"
           alt=""
-          className="w-full h-full object-cover object-top opacity-90 dark:opacity-25 dark:invert"
+          className="w-full h-full object-cover object-top opacity-90 dark:opacity-65 dark:invert dark:sepia-[0.25] dark:hue-rotate-180"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F0]/55 via-[#FAF6F0]/80 to-[#FAF6F0]/95 dark:from-[#121110]/75 dark:via-[#121110]/90 dark:to-[#121110]/98" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F0]/50 via-[#FAF6F0]/78 to-[#FAF6F0]/94 dark:from-[#121110]/30 dark:via-[#121110]/55 dark:to-[#121110]/82" />
       </div>
 
       <div className="max-w-6xl mx-auto px-5 sm:px-8 py-8 sm:py-12 min-h-screen flex flex-col justify-between">

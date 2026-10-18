@@ -43,6 +43,7 @@ interface MeridiansModuleProps {
   lang: LanguageMode;
   bookmarks: string[];
   onToggleBookmark: (id: string, title: string, category: string) => void;
+  externalMeridianId?: string | null;
 }
 
 /**
@@ -254,7 +255,8 @@ function RegionalAcupointCloseUp({
 export default function MeridiansModule({
   lang,
   bookmarks,
-  onToggleBookmark
+  onToggleBookmark,
+  externalMeridianId
 }: MeridiansModuleProps) {
   const [viewerMode, setViewerMode] = useState<'both' | '2d' | '3d'>('both');
   const [svgViewSide, setSvgViewSide] = useState<'anterior' | 'posterior'>('anterior');
@@ -298,6 +300,13 @@ export default function MeridiansModule({
       }
     }
   };
+
+  // Header Qi Clock badge requests a meridian: apply it on mount and whenever the request changes
+  const [appliedExternalId, setAppliedExternalId] = useState<string | null>(null);
+  if (externalMeridianId && externalMeridianId !== appliedExternalId) {
+    setAppliedExternalId(externalMeridianId);
+    handleSelectMeridian(externalMeridianId);
+  }
 
   return (
     <div className="space-y-14">

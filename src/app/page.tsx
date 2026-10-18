@@ -15,6 +15,7 @@ import { WUXING_ELEMENTS, ZANG_FU_ORGANS } from '@/data/foundationsData';
 import { KEY_ACUPOINTS } from '@/data/meridiansData';
 import { DIAGNOSTIC_CASES } from '@/data/diagnosticsData';
 import { ESSENTIAL_HERBS, CLASSIC_FORMULAS } from '@/data/materiaMedicaData';
+import { getCurrentQiClock, ShichenInfo } from '@/utils/qiClock';
 import {
   Search,
   Moon,
@@ -22,7 +23,8 @@ import {
   Bookmark,
   Award,
   X,
-  Menu
+  Menu,
+  Clock
 } from 'lucide-react';
 
 type ActiveTab =
@@ -47,6 +49,10 @@ export default function HomePage() {
   const [showSplash, setShowSplash] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [inkSweepKey, setInkSweepKey] = useState<number>(0);
+  // null until mounted: local time must come from the visitor's browser, not the prerender
+  const [qiClock, setQiClock] = useState<ShichenInfo | null>(null);
+  const [externalMeridianRequest, setExternalMeridianRequest] = useState<string | null>(null);
   const [bookmarks, setBookmarks] = useState<SavedBookmark[]>([
     { id: 'acupoint-ST36', title: 'ST36 足三里 · Foot Three Miles', category: 'Meridians & Acupoints' },
     { id: 'herb-ren-shen', title: '人参 · Ginseng Root', category: 'Materia Medica' }
@@ -61,9 +67,23 @@ export default function HomePage() {
     }
   ]);
 
+  // Keep visitor's local-time Circadian Qi Clock ticked live every 30 seconds
+  useEffect(() => {
+    setQiClock(getCurrentQiClock(new Date()));
+    const timer = setInterval(() => {
+      setQiClock(getCurrentQiClock(new Date()));
+    }, 30000);
+    return () => clearInterval(timer);
+  }, []);
+
   // Navigate to a tab and sync ?m= in the browser URL so links are shareable and survive refresh
   const setActiveTab = useCallback((tab: ActiveTab) => {
-    setActiveTabState(tab);
+    setActiveTabState((prev) => {
+      if (prev !== tab) {
+        setInkSweepKey((k) => k + 1);
+      }
+      return tab;
+    });
     setMobileMenuOpen(false);
     if (typeof window !== 'undefined') {
       const url = new URL(window.location.href);
@@ -71,6 +91,14 @@ export default function HomePage() {
       window.history.pushState({ tab }, '', url.toString());
     }
   }, []);
+
+  const handleJumpToQiMeridian = useCallback(
+    (meridianId: string) => {
+      setExternalMeridianRequest(meridianId);
+      setActiveTab('meridians');
+    },
+    [setActiveTab]
+  );
 
   const handleEnterFromSplash = useCallback(
     (targetTab?: ActiveTab) => {
@@ -342,6 +370,42 @@ export default function HomePage() {
 
   return (
     <div className="relative isolate min-h-screen text-stone-900 dark:text-stone-100 transition-colors selection:bg-amber-900/20">
+      {/* Global SVG Ink-Wash & Woodblock Displacement Filters */}
+      <svg className="sr-only" aria-hidden="true">
+        <defs>
+          <filter id="ink-bleed" x="-25%" y="-25%" width="150%" height="150%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.045"
+              numOctaves="3"
+              result="noise"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="9"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+          <filter id="woodblock-rough" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence
+              type="turbulence"
+              baseFrequency="0.06"
+              numOctaves="2"
+              result="grain"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="grain"
+              scale="1.8"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </defs>
+      </svg>
+
       {/* First-Time Visitor Frontispiece Splash Page (展卷入杏林) */}
       {showSplash && (
         <WelcomeSplash
@@ -351,18 +415,32 @@ export default function HomePage() {
         />
       )}
 
+      {/* Ink-Wash Brush Sweep Overlay on Module Switch */}
+      {inkSweepKey > 0 && (
+        <div
+          key={inkSweepKey}
+          aria-hidden="true"
+          className="fixed inset-0 z-40 pointer-events-none overflow-hidden flex items-center"
+        >
+          <div
+            style={{ filter: 'url(#ink-bleed)' }}
+            className="w-full h-full bg-gradient-to-r from-stone-900/25 via-[#9E2A2B]/15 to-transparent dark:from-amber-500/20 dark:via-stone-900/45 dark:to-transparent animate-ink-sweep"
+          />
+        </div>
+      )}
+
       {/* Full-Page Fixed Classical Ink-Wash Landscape Background with Soft Vertical Gradient Fade */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden shanshui-backdrop">
         <img
           src="/images/shanshui_bg.jpg"
           alt=""
-          className="w-full h-full object-cover object-top opacity-90 dark:opacity-25 dark:invert transition-opacity duration-500"
+          className="w-full h-full object-cover object-top opacity-90 dark:opacity-65 dark:invert dark:sepia-[0.25] dark:hue-rotate-180 transition-opacity duration-500"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F0]/45 via-[#FAF6F0]/72 to-[#FAF6F0]/92 dark:from-[#121110]/75 dark:via-[#121110]/88 dark:to-[#121110]/96" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF6F0]/45 via-[#FAF6F0]/72 to-[#FAF6F0]/92 dark:from-[#121110]/30 dark:via-[#121110]/55 dark:to-[#121110]/82" />
       </div>
 
       {/* Minimalist Top Bar + Integrated Underline Tab Strip */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FAF6F0]/88 dark:bg-[#141311]/90 border-b border-stone-300/80 dark:border-stone-800">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FAF6F0]/88 dark:bg-[#141311]/88 border-b border-stone-300/80 dark:border-stone-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
           {/* Brand Identity (Click to Reopen Welcome Frontispiece) */}
           <button
@@ -376,8 +454,24 @@ export default function HomePage() {
             </h1>
           </button>
 
-          {/* Right Controls: Search + Desktop Controls + Mobile Menu Button */}
-          <div className="flex items-center gap-3 sm:gap-5 text-xs">
+          {/* Right Controls: Live Qi Clock + Search + Desktop Controls + Mobile Menu Button */}
+          <div className="flex items-center gap-2.5 sm:gap-4 text-xs">
+            {/* Live Local-Time Circadian Qi Clock Badge (Links Module 01 Clock -> Module 02 Statue) */}
+            {qiClock && <button
+              onClick={() => handleJumpToQiMeridian(qiClock.meridianId)}
+              title={`实时子午流注 (${qiClock.timeRange}): 当前 ${qiClock.organZh} 当令，气血正流注向 ${qiClock.nextMeridianId} · Click to inspect on 3D/2D Statue`}
+              className="hidden lg:inline-flex items-center gap-1.5 min-h-[38px] px-2.5 py-1 border border-stone-300/90 dark:border-stone-700 bg-[#FAF6F0]/70 dark:bg-stone-900/80 hover:border-[#B91C1C] dark:hover:border-amber-400 transition rounded-sm"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#B91C1C] dark:bg-amber-400 animate-pulse" />
+              <Clock className="w-3.5 h-3.5 text-[#B91C1C] dark:text-amber-400" />
+              <span className="font-serif font-bold text-stone-900 dark:text-amber-100">
+                {qiClock.branchZh}当令
+              </span>
+              <span className="font-sans font-bold text-[#B91C1C] dark:text-amber-400">
+                {qiClock.meridianId} → {qiClock.nextMeridianId}
+              </span>
+            </button>}
+
             {/* Self-Explanatory Curriculum Progress Indicator (Desktop) */}
             <button
               onClick={() => setActiveTab('media-vault')}
@@ -404,7 +498,7 @@ export default function HomePage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search 肝, ST36, 逍遥散..."
-                className="pl-6 pr-6 py-2 min-h-[40px] border-b border-stone-400 dark:border-stone-700 bg-transparent text-xs w-36 sm:w-52 focus:outline-none focus:border-[#B91C1C] transition"
+                className="pl-6 pr-6 py-2 min-h-[40px] border-b border-stone-400 dark:border-stone-700 bg-transparent text-xs w-36 sm:w-48 focus:outline-none focus:border-[#B91C1C] transition"
               />
               {searchQuery && (
                 <button
@@ -501,7 +595,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Collapsible Mobile Drawer for Language, Theme, Curriculum & Bookmarks */}
+        {/* Collapsible Mobile Drawer for Language, Theme, Live Qi Clock, Curriculum & Bookmarks */}
         {mobileMenuOpen && (
           <div className="md:hidden px-4 py-3 bg-[#FAF6F0] dark:bg-stone-900 border-t border-stone-300/70 dark:border-stone-800 space-y-3 text-xs">
             <div className="flex items-center justify-between">
@@ -530,6 +624,18 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
+
+            {qiClock && <div className="flex items-center justify-between pt-2 border-t border-stone-200 dark:border-stone-800">
+              <button
+                onClick={() => handleJumpToQiMeridian(qiClock.meridianId)}
+                className="inline-flex items-center gap-1.5 min-h-[40px] text-[#B91C1C] dark:text-amber-400 font-serif font-bold"
+              >
+                <Clock className="w-4 h-4" />
+                <span>
+                  实时流注: {qiClock.branchZh} · {qiClock.organZh} ({qiClock.meridianId} → {qiClock.nextMeridianId})
+                </span>
+              </button>
+            </div>}
 
             <div className="flex items-center justify-between pt-2 border-t border-stone-200 dark:border-stone-800">
               <button
@@ -602,6 +708,8 @@ export default function HomePage() {
             lang={lang}
             bookmarks={bookmarks.map((b) => b.id)}
             onToggleBookmark={handleToggleBookmark}
+            qiClock={qiClock ?? undefined}
+            onJumpToMeridian={handleJumpToQiMeridian}
           />
         )}
 
@@ -610,6 +718,7 @@ export default function HomePage() {
             lang={lang}
             bookmarks={bookmarks.map((b) => b.id)}
             onToggleBookmark={handleToggleBookmark}
+            externalMeridianId={externalMeridianRequest}
           />
         )}
 
