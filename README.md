@@ -6,7 +6,7 @@
 
 ---
 
-## ✨ Key Modules & Features
+## Key Modules & Features
 
 ### 01 · 阴阳五行与藏象流注 — Foundations, Zang-Fu & 24h Qi Clock
 - **Wu Xing (Five-Phase) Cycles (`五行生克乘侮`)**: Interactive diagram visualizing Generating (*Sheng* 生), Controlling (*Ke* 克), Overacting (*Cheng* 乘), and Insulting (*Wu* 侮) relationships across Wood, Fire, Earth, Metal, and Water.
@@ -31,14 +31,14 @@
 - **5-Chapter Mastery Curriculum**: Structured learning path with key takeaways, interactive self-assessment quizzes, and local mastery tracking.
 - **Concept Graph & Media Vault**: Curated lectures from leading TCM universities (YouTube & Bilibili integration), plus persistent local bookmarks and clinical study notes (`医案札记`).
 
-### 🌐 Platform-Wide Experience
+### Platform-Wide Experience
 - **Trilingual Reading Modes**: Seamlessly switch between **Dual (`双语`)**, **English (`EN`)**, and **Chinese (`中文`)** views with Pinyin annotations.
 - **Scholarly Ink-Wash Aesthetic**: Custom Shanshui ink-wash backgrounds, seal stamps (`篆刻`), and full support for **Light (`宣纸`)** and **Dark (`玄墨`)** modes.
 - **Global Omnisearch & Deep Linking**: Instant search across organs, acupoints, herbs, formulas, and clinical cases, plus shareable URL query parameters (`?m=foundations`, `?m=meridians`, etc.).
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Turbopack)
 - **UI Library**: [React 19](https://react.dev/) & TypeScript 5
@@ -48,7 +48,7 @@
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 src/
@@ -79,7 +79,7 @@ src/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - **Node.js** 20+ and **npm**
@@ -113,6 +113,6 @@ npm run start
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This project is designed for **educational, cultural, and scholarly reference only**. Nothing contained in this application constitutes medical advice, clinical diagnosis, or treatment prescription. Always consult a licensed healthcare practitioner or qualified Traditional Chinese Medicine physician for medical conditions.
